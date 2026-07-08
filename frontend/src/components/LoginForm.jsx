@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import authenticateLogin from '../api/authenticateLogin';
 import handleChange from '../utils/handleChange';
 
-function LoginForm({ setUser, setError }) {
+function LoginForm({ setError }) {
     const [loginData, setLoginData] = useState({
         username: '',
         password: '',
     });
+
+    const navigate = useNavigate();
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -20,7 +22,8 @@ function LoginForm({ setUser, setError }) {
                 setError(error);
             };
 
-            setUser(user);
+            // setUser(user);
+            navigate('/user');
         } catch (err) {
             setError(err);
         };

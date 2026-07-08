@@ -14,6 +14,8 @@ async function getUserById(id) {
     const user = await prisma.user.findUnique({
         where: { id: id },
     });
+
+    return user;
 };
 
 async function createNewUser(firstName, lastName, username, password, city, birthDate) {
