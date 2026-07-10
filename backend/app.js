@@ -7,6 +7,7 @@ const prisma = require('./config/db');
 const cors = require('cors')
 
 const userRouter = require('./routes/userRouter');
+const postRouter = require('./routes/postRouter');
 const errorHandler = require('./middleware/errorHandler');
 
 const PORT = process.env.PORT || 3000
@@ -41,6 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api/users', userRouter);
+app.use('/api/posts', postRouter);
 app.use('/{*splat}', (req, res, next) => {
   const error = new Error('Invalid URL');
   error.status = 404;

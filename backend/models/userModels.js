@@ -13,6 +13,9 @@ async function getUserByUsername(username) {
 async function getUserById(id) {
     const user = await prisma.user.findUnique({
         where: { id: id },
+        include: {
+            posts: true,
+        },
     });
 
     return user;
