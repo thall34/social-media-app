@@ -1,27 +1,73 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router';
 import deletePost from '../api/deletePost';
+import getLikesForPost from '../api/getLikesForPost';
+import addLikeToPost from '../api/addLikeToPost';
+import removeLikeFromPost from '../api/removeLikeFromPost';
 import Comment from './Comment';
 
 function Post({ userId, post, setPosts, setError }) {
     const [comments, setComments] = useState(post.comments);
+    const [likes, setLikes] = useState([]);
+
+    const createdDate = new Date(post.createdAt);
 
     async function handleDeletePost(id) {
-    try {
-      await deletePost(id, userId);
-      setPosts((prevPosts) => {
-          return prevPosts.filter((post) => post.id !== id);
-      });
-    } catch(err) {
-      setError(err);
+        try {
+            await deletePost(id, userId);
+            setPosts((prevPosts) => {
+                return prevPosts.filter((post) => post.id !== id);
+            });
+        } catch (err) {
+            setError(err);
+        };
     };
-  };
 
-  const createdDate = new Date(post.createdAt);
+    async function handleLikePost(id) {
+        try {
+            const like = await addLikeToPost(id, userId);
+            setLikes((prevLikes) => [
+                ...prevLikes, {
+                    userId: like.newLike.userId,
+                },
+            ]);
+        } catch(err) {
+            setError(err);
+        };
+    };
+
+    async function handleRemoveLike(id) {
+        try {
+            const removedLike = await removeLikeFromPost(id, userId);
+            setLikes((prevLikes) => {
+                return prevLikes.filter((like) => like.userId !== userId);
+            });
+        } catch(err) {
+            setError(err);
+        };
+    };
+
+    useEffect(() => {
+        async function initializePost() {
+            try {
+                const postLikes = await getLikesForPost(post.id);
+                setLikes(postLikes.likes);
+            } catch(err) {
+                setError(err);
+            };
+        };
+
+        initializePost();
+    }, []);
 
     return (
         <div>
-            <span>{post.text} {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+            <span>{post.text} {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })} Likes: {likes.length}</span>
+            {likes.some(like => like.userId === userId) ? (
+                <button onClick={() => handleRemoveLike(post.id)}>Liked</button>
+            ) : (
+                <button onClick={() => handleLikePost(post.id)}>Like</button>    
+            )}
             <Link to={`/user/post/${post.id}/update`}>
                 <button>Edit Post</button>
             </Link>

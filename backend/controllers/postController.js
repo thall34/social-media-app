@@ -1,7 +1,7 @@
 const db = require('../models/postModels');
 const { validationResult, matchedData } = require('express-validator');
 
-async function getPostById(req, res, next) {
+async function getPost(req, res, next) {
     const id = req.validatedId;
 
     try {
@@ -116,9 +116,60 @@ async function deletePost(req, res, next) {
     };
 };
 
+async function getLikesForPost(req, res, next) {
+    const id = req.validatedId;
+    
+    try {
+        const likes = await db.getLikesForPostById(id);
+        return res.status(200).json({
+            message: 'Successfully retrieved likes',
+            likes: likes,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function addLikeToPost(req, res, next) {
+    const id = req.validatedId;
+    const userId = req.validatedUserId;
+
+    try {
+        const newLike = await db.addLikeToPostById(id, userId);
+        if (!newLike) {
+            return res.status(400).json({
+                message: 'Failed adding like to post',
+            });
+        };
+
+        return res.status(200).json({
+            message: 'Successfully added like to post',
+            newLike: newLike,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function removeLikeFromPost(req, res, next) {
+    const id = req.validatedId;
+    const userId = req.validatedUserId;
+
+    try {
+        const removedLike = await db.removeLikeFromPostById(id, userId);
+        console.log(removedLike);
+        return res.sendStatus(204);
+    } catch(err) {
+        next(err);
+    };
+};
+
 module.exports = {
-    getPostById,
+    getPost,
     createPost,
     updatePost,
     deletePost,
+    getLikesForPost,
+    addLikeToPost,
+    removeLikeFromPost,
 }
