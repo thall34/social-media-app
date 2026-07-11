@@ -121,12 +121,12 @@ async function updateUser(req, res, next) {
         if (password !== '') {
             const hashedPassword = await bcrypt.hash(password, 10);
             const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, id);
-            res.status(200).json(updatedUser);
+            return res.status(200).json(updatedUser);
         };
 
         const user = await db.getUserById(id);
         const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, id);
-        res.status(200).json(updatedUser);
+        return res.status(200).json(updatedUser);
     } catch(err) {
         next(err);
     };

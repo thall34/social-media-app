@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router';
 import NewPost from './NewPost';
+import Post from './Post';
 import getCurrentUser from '../api/getCurrentUser';
 import logOutUser from '../api/logOutUser';
-import deletePost from '../api/deletePost';
+import deleteUser from '../api/deleteUser';
+import formatBirthday from '../utils/formatBirthday';
 
 function UserPage() {
   const [user, setUser] = useState(null);
@@ -22,12 +24,19 @@ function UserPage() {
     };
   };
 
-  async function handleDeletePost(id) {
+  async function handleDeleteUser() {
     try {
-      await deletePost(id, user.id);
-      setPosts((prevPosts) => {
-          return prevPosts.filter((post) => post.id !== id);
-      });
+      const success = await deleteUser(user.id);
+
+      if (!success) {
+        const error = new Error('Error Deleting User');
+        error.status = 400;
+        setError(error);
+        return;
+      };
+
+      await logOutUser();
+      navigate('/');
     } catch(err) {
       setError(err);
     };
@@ -71,28 +80,21 @@ function UserPage() {
 
   if (user) {
     const activeDate = new Date(user.createdAt);
-    const birthDate = new Date(user.birthDate);
 
     return (
       <div>
         <div>
             <h1>{user.firstName} {user.lastName}</h1>
-            <p>Active since {activeDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}</p>
+            <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
             <p>{user.city}</p>
-            <p>{birthDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}</p>
+            <p>{formatBirthday(user.birthDate)}</p>
         </div>
         {posts.length > 0 ? (
-            <ul>
+            <div>
                 {posts.map((post) => (
-                    <li key={post.id}>
-                      {post.text}
-                      <Link to={`/user/post/update/${post.id}`}>
-                        <button>Edit Post</button>
-                      </Link>
-                      <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
-                    </li>
+                    <Post key={post.id} userId={user.id} post={post} setPosts={setPosts} setError={setError} />
                 ))}
-            </ul>
+            </div>
         ) : (
             <>
                 <h3>No posts yet</h3>
@@ -101,6 +103,10 @@ function UserPage() {
         <Link to='/user/post/new'>
           <button>Create New Post</button>
         </Link>
+        <Link to='/user/update'>
+          <button>Edit User Profile</button>
+        </Link>
+        <button onClick={handleDeleteUser}>Delete User</button>
         <button onClick={handleLogout}>Log Out</button>
       </div>
     )

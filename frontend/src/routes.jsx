@@ -3,6 +3,7 @@ import UserPage from './components/UserPage';
 import RegistrationForm from './components/RegistrationForm';
 import NewPost from './components/NewPost';
 import UpdatePost from './components/UpdatePost';
+import UpdateUser from './components/UpdateUser';
 
 const routes = [
     {
@@ -16,6 +17,10 @@ const routes = [
     {
         path: '/user/new',
         element: <RegistrationForm />
+    },
+    {
+        path: '/user/update',
+        element: <UpdateUser />
     },
     {
         path: '/user/post/new',
