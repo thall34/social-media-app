@@ -8,6 +8,7 @@ const cors = require('cors')
 
 const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
+const commentRouter = require('./routes/commentRouter');
 const errorHandler = require('./middleware/errorHandler');
 
 const PORT = process.env.PORT || 3000
@@ -43,6 +44,7 @@ app.use(passport.session());
 
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/comments', commentRouter);
 app.use('/{*splat}', (req, res, next) => {
   const error = new Error('Invalid URL');
   error.status = 404;

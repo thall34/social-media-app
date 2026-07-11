@@ -1,0 +1,30 @@
+import { Link } from 'react-router';
+import deleteComment from '../api/deleteComment';
+
+function Comment({ userId, postId, comment, setComments, setError }) {
+
+    async function handleDeleteComment(id) {
+        try {
+            await deleteComment(id, userId);
+            setComments((prevComments) => {
+                return prevComments.filter((comment) => comment.id !== id);
+            });
+        } catch (err) {
+            setError(err);
+        };
+    };
+
+    const createdDate = new Date(comment.createdAt);
+
+    return (
+        <div>
+            <span>{comment.text} {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+            <Link to={`/user/post/${postId}/comment/${comment.id}/update`}>
+                <button>Edit Comment</button>
+            </Link>
+            <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
+        </div>
+    )
+};
+
+export default Comment;

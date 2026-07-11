@@ -2,4 +2,7 @@
 Last big project of full stack javascript course
 
 To Do List:
-Add comment CRUD functions for posts, make comment a component too
+
+Add liking to posts
+Add follow to users
+Reformat pages to be more facebook-like

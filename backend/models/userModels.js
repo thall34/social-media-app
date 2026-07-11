@@ -14,7 +14,11 @@ async function getUserById(id) {
     const user = await prisma.user.findUnique({
         where: { id: id },
         include: {
-            posts: true,
+            posts: {
+                include: {
+                    comments: true,
+                },
+            },
         },
     });
 

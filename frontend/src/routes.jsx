@@ -4,6 +4,8 @@ import RegistrationForm from './components/RegistrationForm';
 import NewPost from './components/NewPost';
 import UpdatePost from './components/UpdatePost';
 import UpdateUser from './components/UpdateUser';
+import NewComment from './components/NewComment';
+import UpdateComment from './components/UpdateComment';
 
 const routes = [
     {
@@ -27,8 +29,16 @@ const routes = [
         element: <NewPost />
     },
     {
-        path: '/user/post/update/:postId',
+        path: '/user/post/:postId/update',
         element: <UpdatePost />
+    },
+    {
+        path: '/user/post/:postId/comment/new',
+        element: <NewComment />
+    },
+    {
+        path: '/user/post/:postId/comment/:commentId/update',
+        element: <UpdateComment />
     },
 ];
 

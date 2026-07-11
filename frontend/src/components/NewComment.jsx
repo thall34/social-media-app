@@ -1,28 +1,27 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router';
 import getCurrentUser from '../api/getCurrentUser';
-import getCurrentPost from '../api/getCurrentPost';
-import updatePost from '../api/updatePost';
+import createNewComment from '../api/createNewComment';
 import handleChange from '../utils/handleChange';
 
-function UpdatePost() {
+function NewComment() {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [postData, setPostData] = useState({
+    const [commentData, setCommentData] = useState({
         text: '',
     });
 
     const navigate = useNavigate();
     const { postId } = useParams();
 
-    async function handleUpdatePost(e) {
+    async function handleNewComment(e) {
         e.preventDefault();
 
         try {
-            const success = await updatePost(user.id, postId, postData);
+            const success = await createNewComment(user.id, postId, commentData);
             if (!success) {
-                const error = new Error('Error updating post');
+                const error = new Error('Error creating post');
                 error.status = 400;
                 setError(error);
             };
@@ -37,9 +36,7 @@ function UpdatePost() {
     async function initializePage() {
       try {
         const currentUser = await getCurrentUser();
-        const currentPost = await getCurrentPost(postId);
         setUser(currentUser);
-        setPostData({ text: currentPost.post.text });
       } catch (err) {
         setUser(null);
       } finally {
@@ -51,13 +48,13 @@ function UpdatePost() {
   }, []);
 
     return (
-        <form onSubmit={(e) => handleUpdatePost(e)}>
-            <h3>Update Post</h3>
+        <form onSubmit={(e) => handleNewComment(e)}>
+            <h3>New Comment</h3>
             <label htmlFor="text">Text: </label>
-            <input type="text" name='text' id='text' value={postData.text} onChange={(e) => handleChange(e, setPostData)}/>
-            <button type='submit'>Submit Updated Post</button>
+            <input type="text" name='text' id='text' value={commentData.text} onChange={(e) => handleChange(e, setCommentData)}/>
+            <button type='submit'>Submit New Comment</button>
         </form>
     )
 };
 
-export default UpdatePost;
+export default NewComment;
