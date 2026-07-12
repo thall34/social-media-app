@@ -91,8 +91,6 @@ function UserPage() {
     )
   };
 
-  console.log(user)
-
   if (user) {
     const activeDate = new Date(user.createdAt);
 

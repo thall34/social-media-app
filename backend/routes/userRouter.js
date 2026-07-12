@@ -14,6 +14,8 @@ userRouter.get('/:id/pool', isAuthenticated, validateId, userController.getPeerP
 userRouter.get('/:id', isAuthenticated, validateId, userController.findUser);
 userRouter.post('/', validateUser, userController.createUser);
 userRouter.put('/:id', isAuthenticated, validateId, isOwner, validateUpdateUser, userController.updateUser);
+userRouter.delete('/follow-request/cancel/:userId/:id', isAuthenticated, validateUserId, validateId, userController.removeFollowRequestFromUser);
+userRouter.delete('/follow-request/decline/:userId/:id', isAuthenticated, validateUserId, validateId, userController.declineFollowRequestFromUser);
 userRouter.delete('/follow/:userId/:id', isAuthenticated, validateUserId, validateId, userController.removeFollower);
 userRouter.delete('/:id', isAuthenticated, validateId, isOwner, userController.deleteUser);
 userRouter.post('/login', validateLogin, userController.logInUser);

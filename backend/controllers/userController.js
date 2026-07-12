@@ -179,7 +179,19 @@ async function addFollowRequestToUser(req, res, next) {
 
         return res.status(200).json({
             message: 'Successfully sent follow request',
+            request: request,
         });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function removeFollowRequestFromUser(req, res, next) {
+    const userId = req.validatedUserId;
+    const id = req.validatedId;
+    try {
+        await db.removeFollowRequestFromUser(userId, id);
+        return res.sendStatus(204);
     } catch(err) {
         next(err);
     };
@@ -200,6 +212,17 @@ async function addFollowerAndRemoveRequest(req, res, next) {
             message: 'Successfully added follower',
             follower: request,
         });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function declineFollowRequestFromUser(req, res, next) {
+    const userId = req.validatedUserId;
+    const id = req.validatedId;
+    try {
+        await db.declineFollowRequestFromUser(userId, id);
+        return res.sendStatus(204);
     } catch(err) {
         next(err);
     };
@@ -226,6 +249,8 @@ module.exports = {
     sendUserDetails,
     getPeerPool,
     addFollowRequestToUser,
+    removeFollowRequestFromUser,
     addFollowerAndRemoveRequest,
+    declineFollowRequestFromUser,
     removeFollower,
 }

@@ -107,6 +107,19 @@ async function addFollowRequestToUser(followingUserId, followedUserId) {
     return followRequest;
 };
 
+async function removeFollowRequestFromUser(followingUserId, followedUserId) {
+    const removeFollowRequest = await prisma.followRequest.delete({
+        where: {
+            followedUserId_followingUserId: {
+                followedUserId: followedUserId,
+                followingUserId: followingUserId,
+            },
+        },
+    });
+
+    return removeFollowRequest;
+};
+
 async function addFollowerAndRemoveRequest(followedUserId, followingUserId) {
     const addFollower = await prisma.follow.create({
         data: {
@@ -125,6 +138,19 @@ async function addFollowerAndRemoveRequest(followedUserId, followingUserId) {
     });
 
     return addFollower;
+};
+
+async function declineFollowRequestFromUser(followedUserId, followingUserId) {
+    const deleteFollowRequest = await prisma.followRequest.delete({
+        where: {
+            followedUserId_followingUserId: {
+                followedUserId: followedUserId,
+                followingUserId: followingUserId,
+            },
+        },
+    });
+
+    return deleteFollowRequest;
 };
 
 async function removeFollower(followedUserId, followingUserId) {
@@ -148,6 +174,8 @@ module.exports = {
     deleteUserById,
     getPeerPool,
     addFollowRequestToUser,
+    removeFollowRequestFromUser,
     addFollowerAndRemoveRequest,
+    declineFollowRequestFromUser,
     removeFollower,
 };
