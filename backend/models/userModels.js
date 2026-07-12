@@ -4,7 +4,7 @@ const prisma = require('../config/db');
 
 async function getUserByUsername(username) {
     const user = await prisma.user.findUnique({
-        where: { email: username},
+        where: { email: username },
     });
 
     return user;
@@ -17,6 +17,18 @@ async function getUserById(id) {
             posts: {
                 include: {
                     comments: true,
+                },
+            },
+            following: true,
+            followers: true,
+            following_request: {
+                select: {
+                    followedUserId: true,
+                },
+            },
+            followed_request: {
+                select: {
+                    followingUserId: true,
                 },
             },
         },
@@ -64,10 +76,78 @@ async function deleteUserById(id) {
     return deletedUser;
 };
 
+async function getPeerPool(id) {
+    const users = await prisma.user.findMany({
+        where: {
+            NOT: {
+                id: id,
+            },
+        },
+        take: 9,
+        include: {
+            posts: {
+                include: {
+                    comments: true,
+                },
+            },
+        },
+    });
+
+    return users;
+};
+
+async function addFollowRequestToUser(followingUserId, followedUserId) {
+    const followRequest = await prisma.followRequest.create({
+        data: {
+            followedUserId: followedUserId,
+            followingUserId: followingUserId,
+        },
+    });
+
+    return followRequest;
+};
+
+async function addFollowerAndRemoveRequest(followedUserId, followingUserId) {
+    const addFollower = await prisma.follow.create({
+        data: {
+            followedUserId: followedUserId,
+            followingUserId: followingUserId,
+        },
+    });
+
+    const deleteFollowRequest = await prisma.followRequest.delete({
+        where: {
+            followedUserId_followingUserId: {
+                followedUserId: followedUserId,
+                followingUserId: followingUserId,
+            },
+        },
+    });
+
+    return addFollower;
+};
+
+async function removeFollower(followedUserId, followingUserId) {
+    const deleteFollower = await prisma.follow.delete({
+        where: {
+            followedUserId_followingUserId: {
+                followedUserId: followedUserId,
+                followingUserId: followingUserId,
+            },
+        },
+    });
+
+    return deleteFollower;
+};
+
 module.exports = {
     getUserByUsername,
     getUserById,
     createNewUser,
     updateUserById,
     deleteUserById,
+    getPeerPool,
+    addFollowRequestToUser,
+    addFollowerAndRemoveRequest,
+    removeFollower,
 };

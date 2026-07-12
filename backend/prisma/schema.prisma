@@ -26,6 +26,8 @@ model User {
 
   followers Follow[] @relation("followers")
   following Follow[] @relation("following")
+  followed_request FollowRequest[] @relation("followed_request")
+  following_request FollowRequest[] @relation("following_request")
 
   posts Post[]
   comments Comment[]
@@ -41,6 +43,19 @@ model Follow {
 
   followed User @relation("followers", fields: [followedUserId], references: [id], onDelete: Cascade)
   following User @relation("following", fields: [followingUserId], references: [id], onDelete: Cascade)
+
+  @@unique([followedUserId, followingUserId])
+}
+
+model FollowRequest {
+  id Int @id @default(autoincrement())
+  followedUserId Int
+  followingUserId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  followed_request User @relation("followed_request", fields: [followedUserId], references: [id], onDelete: Cascade)
+  following_request User @relation("following_request", fields: [followingUserId], references: [id], onDelete: Cascade)
 
   @@unique([followedUserId, followingUserId])
 }

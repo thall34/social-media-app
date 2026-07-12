@@ -152,6 +152,70 @@ async function sendUserDetails(req, res, next) {
     };
 };
 
+async function getPeerPool(req, res, next) {
+    const id = req.validatedId;
+
+    try {
+        const users = await db.getPeerPool(id);
+        return res.status(200).json({
+            message: 'Successfully retrieved users',
+            users: users,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function addFollowRequestToUser(req, res, next) {
+    const userId = req.validatedUserId;
+    const id = req.validatedId;
+    try {
+        const request = await db.addFollowRequestToUser(userId, id);
+        if (!request) {
+            return res.status(400).json({
+                message: 'Failed sending follow request',
+            });
+        };
+
+        return res.status(200).json({
+            message: 'Successfully sent follow request',
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function addFollowerAndRemoveRequest(req, res, next) {
+    const userId = req.validatedUserId;
+    const id = req.validatedId;
+    try {
+        const request = await db.addFollowerAndRemoveRequest(userId, id);
+        if (!request) {
+            return res.status(400).json({
+                message: 'Failed adding follower',
+            });
+        };
+
+        return res.status(200).json({
+            message: 'Successfully added follower',
+            follower: request,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function removeFollower(req, res, next) {
+    const userId = req.validatedUserId;
+    const id = req.validatedId;
+    try {
+        await db.removeFollower(userId, id);
+        return res.sendStatus(204);
+    } catch(err) {
+        next(err);
+    };
+};
+
 module.exports = {
     logInUser,
     logOutUser,
@@ -160,4 +224,8 @@ module.exports = {
     updateUser,
     deleteUser,
     sendUserDetails,
+    getPeerPool,
+    addFollowRequestToUser,
+    addFollowerAndRemoveRequest,
+    removeFollower,
 }

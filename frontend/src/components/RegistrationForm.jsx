@@ -58,7 +58,7 @@ function RegistrationForm() {
                 <h1>Register New User</h1>
                 <label htmlFor="firstName">First Name: </label>
                 <input type="text" name="firstName" id="firstName" value={newUserData.firstName} onChange={(e) => handleChange(e, setNewUserData)} />
-                <label htmlFor="lastName">First Name: </label>
+                <label htmlFor="lastName">Last Name: </label>
                 <input type="text" name="lastName" id="lastName" value={newUserData.lastName} onChange={(e) => handleChange(e, setNewUserData)} />
                 <label htmlFor="username">Email: </label>
                 <input type="text" name="username" id="username" value={newUserData.username} onChange={(e) => handleChange(e, setNewUserData)} />
