@@ -22,8 +22,7 @@ function LoginForm({ setError }) {
                 setError(error);
             };
 
-            // setUser(user);
-            navigate('/user');
+            navigate('/user/posts');
         } catch (err) {
             setError(err);
         };

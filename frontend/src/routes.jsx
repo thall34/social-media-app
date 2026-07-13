@@ -1,11 +1,12 @@
 import App from './components/App';
-import UserPage from './components/UserPage';
 import RegistrationForm from './components/RegistrationForm';
 import NewPost from './components/NewPost';
 import UpdatePost from './components/UpdatePost';
 import UpdateUser from './components/UpdateUser';
 import NewComment from './components/NewComment';
 import UpdateComment from './components/UpdateComment';
+import UserPosts from './components/UserPosts';
+import UserNetwork from './components/UserNetwork';
 
 const routes = [
     {
@@ -13,8 +14,12 @@ const routes = [
         element: <App />
     },
     {
-        path: '/user',
-        element: <UserPage />
+        path: '/user/posts',
+        element: <UserPosts />
+    },
+    {
+        path: '/user/network',
+        element: <UserNetwork />
     },
     {
         path: '/user/new',

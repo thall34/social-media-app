@@ -10,6 +10,7 @@ const validateLogin = require('../middleware/validateLogin');
 const validateUpdateUser = require('../middleware/validateUpdateUser');
 
 userRouter.get('/me', userController.sendUserDetails);
+userRouter.get('/peer/:id/pool', isAuthenticated, validateId, userController.getPeerPool);
 userRouter.get('/:id/pool', isAuthenticated, validateId, userController.getPeerPool);
 userRouter.get('/:id', isAuthenticated, validateId, userController.findUser);
 userRouter.post('/', validateUser, userController.createUser);

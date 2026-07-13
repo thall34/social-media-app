@@ -17,7 +17,7 @@ function App() {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
         if (currentUser) {
-          navigate('/user');
+          navigate('/user/posts');
         }
       } catch (err) {
         setUser(null);
@@ -46,10 +46,6 @@ function App() {
         </Link>
       </div>
     )
-  };
-
-  if (user) {
-    navigate('/user')
   };
 
   return (

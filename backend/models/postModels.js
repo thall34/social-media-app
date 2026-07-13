@@ -69,6 +69,20 @@ async function getAllPostsForUserById(id) {
     return posts;
 };
 
+async function getPostsForPeerById(id) {
+    const posts = await prisma.post.findMany({
+        where: { authorId: id },
+        include: {
+            comments: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+
+    return posts;
+};
+
 async function getLikesForPostById(id) {
     const likes = await prisma.like.findMany({
         where: {
@@ -112,6 +126,7 @@ module.exports = {
     updatePostById,
     deletePostById,
     getAllPostsForUserById,
+    getPostsForPeerById,
     getLikesForPostById,
     addLikeToPostById,
     removeLikeFromPostById,

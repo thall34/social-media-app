@@ -41,7 +41,7 @@ function UpdateUser() {
                 birthDate: '',
             });
 
-            navigate('/user');
+            navigate('/user/posts');
         } catch (err) {
             setError(err);
         };
@@ -98,7 +98,7 @@ function UpdateUser() {
                 <input type="date" name="birthDate" id="birthDate" value={userData.birthDate} onChange={(e) => handleChange(e, setUserData)} />
                 <button type="submit">Update User</button>
             </form>
-            <Link to='/user'>
+            <Link to='/user/posts'>
                 <button>Back to User Page</button>
             </Link>
         </div>

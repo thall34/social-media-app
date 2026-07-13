@@ -143,6 +143,19 @@ async function getAllPostsForUser(req, res, next) {
     };
 };
 
+async function getPostsForPeer(req, res, next) {
+    const id = req.validatedId;
+    try {
+        const posts = await db.getPostsForPeerById(id);
+        return res.status(200).json({
+            message: 'Successfully retrieved posts',
+            posts: posts,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
 async function addLikeToPost(req, res, next) {
     const id = req.validatedId;
     const userId = req.validatedUserId;
@@ -182,6 +195,7 @@ module.exports = {
     updatePost,
     deletePost,
     getAllPostsForUser,
+    getPostsForPeer,
     getLikesForPost,
     addLikeToPost,
     removeLikeFromPost,

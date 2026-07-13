@@ -83,7 +83,6 @@ async function getPeerPool(id) {
                 id: id,
             },
         },
-        take: 9,
         include: {
             posts: {
                 include: {
