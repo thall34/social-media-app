@@ -4,6 +4,7 @@ import NewPost from './NewPost';
 import Post from './Post';
 import Peer from './Peer';
 import getCurrentUser from '../api/getCurrentUser';
+import getAllPostsForUser from '../api/getAllPostsForUser';
 import logOutUser from '../api/logOutUser';
 import deleteUser from '../api/deleteUser';
 import getPeerPool from '../api/getPeerPool';
@@ -53,10 +54,10 @@ function UserPage() {
     async function initializePage() {
       try {
         const currentUser = await getCurrentUser();
-        const currentPosts = currentUser.posts;
+        const currentPosts = await getAllPostsForUser(currentUser.id);
         const currentPeerPool = await getPeerPool(currentUser.id);
         setUser(currentUser);
-        setPosts(currentPosts);
+        setPosts(currentPosts.posts);
         setPeerPool(currentPeerPool.users);
         setRequestSentPool(currentUser.following_request);
         setRequestReceivedPool(currentUser.followed_request);

@@ -6,8 +6,9 @@ const validateId = require('../middleware/validateId');
 const validateUserId = require('../middleware/validateUserId');
 const validatePost = require('../middleware/validatePost');
 
-postRouter.get('/:id', isAuthenticated, validateId, postController.getPost);
+postRouter.get('/all/:userId', isAuthenticated, validateUserId, postController.getAllPostsForUser);
 postRouter.get('/likes/:id', isAuthenticated, validateId, postController.getLikesForPost);
+postRouter.get('/:id', isAuthenticated, validateId, postController.getPost);
 postRouter.post('/:userId', isAuthenticated, validateUserId, validatePost, postController.createPost);
 postRouter.post('/likes/:id/:userId', isAuthenticated, validateId, validateUserId, postController.addLikeToPost);
 postRouter.put('/:id/:userId', isAuthenticated, validateId, validateUserId, validatePost, postController.updatePost);

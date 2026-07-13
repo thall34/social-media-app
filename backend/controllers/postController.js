@@ -130,6 +130,19 @@ async function getLikesForPost(req, res, next) {
     };
 };
 
+async function getAllPostsForUser(req, res, next) {
+    const userId = req.validatedUserId;
+    try {
+        const posts = await db.getAllPostsForUserById(userId);
+        return res.status(200).json({
+            message: 'Successfully retrieved posts',
+            posts: posts,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
 async function addLikeToPost(req, res, next) {
     const id = req.validatedId;
     const userId = req.validatedUserId;
@@ -157,7 +170,6 @@ async function removeLikeFromPost(req, res, next) {
 
     try {
         const removedLike = await db.removeLikeFromPostById(id, userId);
-        console.log(removedLike);
         return res.sendStatus(204);
     } catch(err) {
         next(err);
@@ -169,6 +181,7 @@ module.exports = {
     createPost,
     updatePost,
     deletePost,
+    getAllPostsForUser,
     getLikesForPost,
     addLikeToPost,
     removeLikeFromPost,

@@ -16,6 +16,9 @@ function App() {
       try {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
+        if (currentUser) {
+          navigate('/user');
+        }
       } catch (err) {
         setUser(null);
       } finally {

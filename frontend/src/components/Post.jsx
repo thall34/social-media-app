@@ -68,10 +68,16 @@ function Post({ userId, post, setPosts, setError }) {
             ) : (
                 <button onClick={() => handleLikePost(post.id)}>Like</button>    
             )}
-            <Link to={`/user/post/${post.id}/update`}>
-                <button>Edit Post</button>
-            </Link>
-            <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
+            {post.authorId === userId ? (
+            <>
+                <Link to={`/user/post/${post.id}/update`}>
+                    <button>Edit Post</button>
+                </Link>
+                <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
+            </>
+            ) : (
+                <></>
+            )}
             {comments.length > 0 ? (
                 <div>
                     {comments.map((comment) => (

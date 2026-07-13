@@ -19,10 +19,16 @@ function Comment({ userId, postId, comment, setComments, setError }) {
     return (
         <div>
             <span>{comment.text} {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</span>
-            <Link to={`/user/post/${postId}/comment/${comment.id}/update`}>
-                <button>Edit Comment</button>
-            </Link>
-            <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
+            {comment.authorId === userId ? (
+                <>
+                    <Link to={`/user/post/${postId}/comment/${comment.id}/update`}>
+                        <button>Edit Comment</button>
+                    </Link>
+                    <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
+                </>
+            ) : (
+                <></>
+            )}
         </div>
     )
 };

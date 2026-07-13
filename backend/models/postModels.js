@@ -38,6 +38,37 @@ async function deletePostById(id) {
     return deletedPost;
 };
 
+async function getAllPostsForUserById(id) {
+    const followers = await prisma.user.findUnique({
+        where: { id: id },
+        select: {
+            following: {
+                select: {
+                    followedUserId: true,
+                },
+            },
+        },
+    });
+
+    const followerIds = followers.following.map(follower => follower.followedUserId);
+
+    const posts = await prisma.post.findMany({
+        where: {
+            authorId: {
+                in: [id, ...followerIds],
+            },
+        },
+        include: {
+            comments: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+
+    return posts;
+};
+
 async function getLikesForPostById(id) {
     const likes = await prisma.like.findMany({
         where: {
@@ -80,6 +111,7 @@ module.exports = {
     createNewPost, 
     updatePostById,
     deletePostById,
+    getAllPostsForUserById,
     getLikesForPostById,
     addLikeToPostById,
     removeLikeFromPostById,

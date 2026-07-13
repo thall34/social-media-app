@@ -1,5 +1,4 @@
 async function deleteComment(id, userId) {
-    console.log(id, userId)
     try {
         const response = await fetch(`http://localhost:3000/api/comments/${id}/${userId}`,
             {
