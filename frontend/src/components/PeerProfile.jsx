@@ -70,8 +70,8 @@ function PeerProfile() {
         return (
             <div>
                 <h1>{error.message}</h1>
-                <Link to='/'>
-                    <button onClick={() => setError(null)}>Back to Homepage</button>
+                <Link to='/user/posts'>
+                    <button onClick={() => setError(null)}>Back to User Posts</button>
                 </Link>
             </div>
         )
@@ -102,11 +102,11 @@ function PeerProfile() {
                 </div>
                 <h3>Posts</h3>
                 {posts.length > 0 ? (
-                    <div>
+                    <>
                         {posts.map((post) => (
                             <Post key={post.id} userId={user.id} post={post} setPosts={setPosts} setError={setError} />
                         ))}
-                    </div>
+                    </>
                 ) : (
                     <>
                         <h3>No posts yet</h3>

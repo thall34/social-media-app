@@ -48,12 +48,17 @@ function NewComment() {
   }, []);
 
     return (
-        <form onSubmit={(e) => handleNewComment(e)}>
-            <h3>New Comment</h3>
-            <label htmlFor="text">Text: </label>
-            <input type="text" name='text' id='text' value={commentData.text} onChange={(e) => handleChange(e, setCommentData)}/>
-            <button type='submit'>Submit New Comment</button>
-        </form>
+        <div>
+            <form onSubmit={(e) => handleNewComment(e)}>
+                <h3>New Comment</h3>
+                <label htmlFor="text">Text: </label>
+                <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)}/>
+                <button type='submit'>Submit New Comment</button>
+            </form>
+            <Link to='/user/posts'>
+                <button>Back to User Posts</button>
+            </Link>
+        </div>
     )
 };
 

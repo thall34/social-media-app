@@ -12,8 +12,15 @@ div {
     flex-direction: column;
     align-items: center;
     border: 1px solid black;
-    width: fit-content;
+    width: 100%;
     padding: 5em;
+    gap: 1em;
+}
+
+span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: 1em;
 }
 
@@ -33,10 +40,15 @@ label {
     font-size: 1.2em;
 }
 
-input {
+input, textarea {
     font-size: 1em;
     border: 1px solid black;
     padding: 0.2em 0.7em;
+    width: 15em;
+}
+
+textarea {
+    width: fit-content;
 }
 
 button {
@@ -44,4 +56,22 @@ button {
     font-size: 1.2em;
     padding: 0em 1.2em;
     border: 1px solid black;
+}
+
+#root {
+    padding: 0;
+}
+
+.post-details {
+    gap: 2em;
+    padding: 2em;
+}
+
+.post-buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.comment, .comment-details, .post-details, .post-buttons {
+    padding: 1em;
 }

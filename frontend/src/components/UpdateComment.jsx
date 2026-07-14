@@ -51,12 +51,17 @@ function UpdateComment() {
   }, []);
 
     return (
-        <form onSubmit={(e) => handleUpdateComment(e)}>
-            <h3>Update Comment</h3>
-            <label htmlFor="text">Text: </label>
-            <input type="text" name='text' id='text' value={commentData.text} onChange={(e) => handleChange(e, setCommentData)}/>
-            <button type='submit'>Submit Updated Comment</button>
-        </form>
+        <div>
+            <form onSubmit={(e) => handleUpdateComment(e)}>
+                <h3>Update Comment</h3>
+                <label htmlFor="text">Text: </label>
+                <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)}/>
+                <button type='submit'>Submit Updated Comment</button>
+            </form>
+            <Link to='/user/posts'>
+                <button>Back to User Posts</button>
+            </Link>
+        </div>
     )
 };
 

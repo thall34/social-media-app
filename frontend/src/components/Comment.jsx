@@ -17,23 +17,24 @@ function Comment({ userId, postId, comment, setComments, setError }) {
     const createdDate = new Date(comment.createdAt);
 
     return (
-        <div>
-            <div>
-                <img src={comment.author.profilePicFilePath} width={25}></img> 
-                <span>{comment.author.firstName} {comment.author.lastName}</span> 
-                {comment.text} 
-                {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}
+        <div className='comment'>
+            <div className='comment-details'>
+                <span><img src={comment.author.profilePicFilePath} width={25}></img>
+                    <p>{comment.author.firstName} {comment.author.lastName}</p>
+                    <p>{comment.text}</p>
+                    <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
+                    {comment.authorId === userId ? (
+                        <>
+                            <Link to={`/user/post/${postId}/comment/${comment.id}/update`}>
+                                <button>Edit</button>
+                            </Link>
+                            <button onClick={() => handleDeleteComment(comment.id)}>X</button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </span>
             </div>
-            {comment.authorId === userId ? (
-                <>
-                    <Link to={`/user/post/${postId}/comment/${comment.id}/update`}>
-                        <button>Edit Comment</button>
-                    </Link>
-                    <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
-                </>
-            ) : (
-                <></>
-            )}
         </div>
     )
 };

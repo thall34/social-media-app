@@ -70,8 +70,8 @@ function UserPosts() {
     return (
       <div>
         <h1>{error.message}</h1>
-        <Link to='/'>
-          <button onClick={() => setError(null)}>Back to Homepage</button>
+        <Link to='/user/posts'>
+          <button onClick={() => setError(null)}>Back to User Posts</button>
         </Link>
       </div>
     )
@@ -84,18 +84,17 @@ function UserPosts() {
       <div>
         <div>
             <h1>{user.firstName} {user.lastName}</h1>
-            <img src={user.profilePicFilePath} width={100}></img>
-            <Link to={user.profilePicFilePath}>View Profile Picture</Link>
+            <Link to={user.profilePicFilePath}><img src={user.profilePicFilePath} width={100}></img></Link>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
         </div>
         <h3>Posts</h3>
         {posts.length > 0 ? (
-            <div>
+            <>
                 {posts.map((post) => (
                     <Post key={post.id} userId={user.id} post={post} setPosts={setPosts} setError={setError} />
                 ))}
-            </div>
+            </>
         ) : (
             <>
                 <h3>No posts yet</h3>

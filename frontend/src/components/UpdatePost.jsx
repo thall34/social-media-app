@@ -51,12 +51,17 @@ function UpdatePost() {
   }, []);
 
     return (
-        <form onSubmit={(e) => handleUpdatePost(e)}>
-            <h3>Update Post</h3>
-            <label htmlFor="text">Text: </label>
-            <input type="text" name='text' id='text' value={postData.text} onChange={(e) => handleChange(e, setPostData)}/>
-            <button type='submit'>Submit Updated Post</button>
-        </form>
+        <div>
+            <form onSubmit={(e) => handleUpdatePost(e)}>
+                <h3>Update Post</h3>
+                <label htmlFor="text">Text: </label>
+                <textarea name='text' id='text' rows={10} cols={50} value={postData.text} onChange={(e) => handleChange(e, setPostData)}/>
+                <button type='submit'>Submit Updated Post</button>
+            </form>
+            <Link to='/user/posts'>
+                <button>Back to User Posts</button>
+            </Link>
+        </div>
     )
 };
 

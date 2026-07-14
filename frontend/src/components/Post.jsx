@@ -61,35 +61,37 @@ function Post({ userId, post, setPosts, setError }) {
     }, []);
 
     return (
-        <div>
-            <div>
-                <img src={post.author.profilePicFilePath} width={25}></img>
-                <span>{post.author.firstName} {post.author.lastName}</span> 
-                {post.text} 
-                {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}
+        <div className='post'>
+            <div className='post-details'>
+                <span><img src={post.author.profilePicFilePath} width={25}></img>
+                <p>{post.author.firstName} {post.author.lastName}</p></span> 
+                <p>{post.text}</p>
+                <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
             </div>
-            Likes: {likes.length}
-            {likes.some(like => like.userId === userId) ? (
-                <button onClick={() => handleRemoveLike(post.id)}>Liked</button>
-            ) : (
-                <button onClick={() => handleLikePost(post.id)}>Like</button>    
-            )}
-            {post.authorId === userId ? (
-            <>
-                <Link to={`/user/post/${post.id}/update`}>
-                    <button>Edit Post</button>
-                </Link>
-                <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
-            </>
-            ) : (
-                <></>
-            )}
+            <div className='post-buttons'>
+                Likes: {likes.length}
+                {likes.some(like => like.userId === userId) ? (
+                    <button onClick={() => handleRemoveLike(post.id)}>Liked</button>
+                ) : (
+                    <button onClick={() => handleLikePost(post.id)}>Like</button>    
+                )}
+                {post.authorId === userId ? (
+                <>
+                    <Link to={`/user/post/${post.id}/update`}>
+                        <button>Edit Post</button>
+                    </Link>
+                    <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
+                </>
+                ) : (
+                    <></>
+                )}
+            </div>
             {comments.length > 0 ? (
-                <div>
+                <>
                     {comments.map((comment) => (
                         <Comment key={comment.id} userId={userId} postId={post.id} comment={comment} setComments={setComments} setError={setError} />
                     ))}
-                </div>
+                </>
             ) : (
                 <h3>No Comments Yet</h3>
             )}
