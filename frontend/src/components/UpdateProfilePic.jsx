@@ -73,7 +73,7 @@ function UpdateProfilePic() {
                     <button type='submit'>Submit Update</button>
                 </form>
                 <Link to='/user/posts'>
-                    <button>Back to User Page</button>
+                    <button>Back to User Posts Page</button>
                 </Link>
             </div>
         )
