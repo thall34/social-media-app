@@ -10,12 +10,13 @@ const validateLogin = require('../middleware/validateLogin');
 const validateUpdateUser = require('../middleware/validateUpdateUser');
 const uploadProfilePic = require('../middleware/multer');
 
-// add a route for updating profile picture
 userRouter.get('/me', userController.sendUserDetails);
 userRouter.get('/peer/:id', isAuthenticated, validateId, userController.findUser);
+userRouter.get('/:userId/peer/:id/pool', isAuthenticated, validateUserId, validateId, userController.getPeerPoolForPeer);
 userRouter.get('/:id/pool', isAuthenticated, validateId, userController.getPeerPool);
 userRouter.get('/:id', isAuthenticated, validateId, userController.findUser);
 userRouter.post('/', uploadProfilePic, validateUser, userController.createUser);
+userRouter.put('/:id/picture', isAuthenticated, validateId, uploadProfilePic, userController.updateUserProfilePic);
 userRouter.put('/:id', isAuthenticated, validateId, isOwner, validateUpdateUser, userController.updateUser);
 userRouter.delete('/follow-request/cancel/:userId/:id', isAuthenticated, validateUserId, validateId, userController.removeFollowRequestFromUser);
 userRouter.delete('/follow-request/decline/:userId/:id', isAuthenticated, validateUserId, validateId, userController.declineFollowRequestFromUser);

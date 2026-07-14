@@ -144,6 +144,28 @@ async function updateUser(req, res, next) {
     };
 };
 
+async function updateUserProfilePic(req, res, next) {
+    const id = req.validatedId;
+    const user = await db.getUserById(id);
+    let filePath, cloudinaryId;
+
+    if (!req.file) {
+        filePath = user.profilePicFilePath;
+        cloudinaryId = user.profilePicCloudId;
+    } else {
+        const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+        filePath = cloudinaryResult.secure_url;
+        cloudinaryId = cloudinaryResult.public_id;
+    }
+
+    try {
+        const updatedUser = await db.updateUserProfilePicById(id, filePath, cloudinaryId);
+        return res.status(200).json(updatedUser);
+    } catch(err) {
+        next(err);
+    };
+};
+
 // deletes user from database
 async function deleteUser(req, res, next) {
     const id = req.validatedId;
@@ -169,6 +191,21 @@ async function getPeerPool(req, res, next) {
 
     try {
         const users = await db.getPeerPool(id);
+        return res.status(200).json({
+            message: 'Successfully retrieved users',
+            users: users,
+        });
+    } catch(err) {
+        next(err);
+    };
+};
+
+async function getPeerPoolForPeer(req, res, next) {
+    const userId = req.validatedUserId;
+    const id = req.validatedId;
+
+    try {
+        const users = await db.getPeerPoolForPeer(userId, id);
         return res.status(200).json({
             message: 'Successfully retrieved users',
             users: users,
@@ -257,9 +294,11 @@ module.exports = {
     findUser,
     createUser,
     updateUser,
+    updateUserProfilePic,
     deleteUser,
     sendUserDetails,
     getPeerPool,
+    getPeerPoolForPeer,
     addFollowRequestToUser,
     removeFollowRequestFromUser,
     addFollowerAndRemoveRequest,

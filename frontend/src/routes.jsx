@@ -8,6 +8,7 @@ import UpdateComment from './components/UpdateComment';
 import UserPosts from './components/UserPosts';
 import UserNetwork from './components/UserNetwork';
 import PeerProfile from './components/PeerProfile';
+import UpdateProfilePic from './components/UpdateProfilePic';
 
 const routes = [
     {
@@ -29,6 +30,10 @@ const routes = [
     {
         path: '/user/update',
         element: <UpdateUser />
+    },
+    {
+        path: '/user/profile/pic/update',
+        element: <UpdateProfilePic />
     },
     {
         path: '/user/post/new',

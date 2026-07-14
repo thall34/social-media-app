@@ -71,6 +71,18 @@ async function updateUserById(firstName, lastName, username, password, city, bir
     return updatedUser;
 };
 
+async function updateUserProfilePicById(id, filePath, cloudId) {
+    const updatedUser = await prisma.user.update({
+        where: { id: id },
+        data: {
+            profilePicFilePath: filePath,
+            profilePicCloudId: cloudId,
+        },
+    });
+
+    return updatedUser;
+};
+
 async function deleteUserById(id) {
     const deletedUser = await prisma.user.delete({
         where: { id: id },
@@ -90,6 +102,26 @@ async function getPeerPool(id) {
             posts: {
                 include: {
                     comments: true,
+                },
+            },
+        },
+    });
+
+    return users;
+};
+
+async function getPeerPoolForPeer(userId, peerId) {
+    const users = await prisma.follow.findMany({
+        where: {
+            followingUserId: peerId,
+        },
+        select: {
+            followed: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    profilePicFilePath: true,
                 },
             },
         },
@@ -173,8 +205,10 @@ module.exports = {
     getUserById,
     createNewUser,
     updateUserById,
+    updateUserProfilePicById,
     deleteUserById,
     getPeerPool,
+    getPeerPoolForPeer,
     addFollowRequestToUser,
     removeFollowRequestFromUser,
     addFollowerAndRemoveRequest,

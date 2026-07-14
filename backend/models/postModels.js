@@ -59,7 +59,24 @@ async function getAllPostsForUserById(id) {
             },
         },
         include: {
-            comments: true,
+            author: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    profilePicFilePath: true,
+                },
+            },
+            comments: {
+                include: {
+                    author: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            profilePicFilePath: true,
+                        },
+                    },
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -73,7 +90,24 @@ async function getPostsForPeerById(id) {
     const posts = await prisma.post.findMany({
         where: { authorId: id },
         include: {
-            comments: true,
+            author: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    profilePicFilePath: true,
+                },
+            },
+            comments: {
+                include: {
+                    author: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            profilePicFilePath: true,
+                        },
+                    },
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',

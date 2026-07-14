@@ -62,7 +62,13 @@ function Post({ userId, post, setPosts, setError }) {
 
     return (
         <div>
-            <span>{post.text} {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })} Likes: {likes.length}</span>
+            <div>
+                <img src={post.author.profilePicFilePath} width={25}></img>
+                <span>{post.author.firstName} {post.author.lastName}</span> 
+                {post.text} 
+                {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}
+            </div>
+            Likes: {likes.length}
             {likes.some(like => like.userId === userId) ? (
                 <button onClick={() => handleRemoveLike(post.id)}>Liked</button>
             ) : (

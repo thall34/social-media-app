@@ -18,7 +18,12 @@ function Comment({ userId, postId, comment, setComments, setError }) {
 
     return (
         <div>
-            <span>{comment.text} {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+            <div>
+                <img src={comment.author.profilePicFilePath} width={25}></img> 
+                <span>{comment.author.firstName} {comment.author.lastName}</span> 
+                {comment.text} 
+                {createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}
+            </div>
             {comment.authorId === userId ? (
                 <>
                     <Link to={`/user/post/${postId}/comment/${comment.id}/update`}>

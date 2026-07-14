@@ -4,7 +4,7 @@ import Post from './Post';
 import Peer from './Peer';
 import getCurrentUser from '../api/getCurrentUser';
 import getCurrentPeer from '../api/getCurrentPeer';
-import getPeerPool from '../api/getPeerPool';
+import getPeerPoolForPeer from '../api/getPeerPoolForPeer';
 import getPostsForPeer from '../api/getPostsForPeer';
 import logOutUser from '../api/logOutUser';
 import formatBirthday from '../utils/formatBirthday';
@@ -37,9 +37,9 @@ function PeerProfile() {
         async function initializePage() {
             try {
                 const currentUser = await getCurrentUser();
-                const currentPeer = await getCurrentPeer(peerId);
-                const currentPeerPool = await getPeerPool(peerId);
-                const currentPosts = await getPostsForPeer(peerId);
+                const currentPeer = await getCurrentPeer(Number(peerId));
+                const currentPeerPool = await getPeerPoolForPeer(currentUser.id, Number(peerId));
+                const currentPosts = await getPostsForPeer(Number(peerId));
                 setUser(currentUser);
                 setPeer(currentPeer.foundUser);
                 setPosts(currentPosts.posts);
@@ -56,7 +56,7 @@ function PeerProfile() {
         };
 
         initializePage();
-    }, []);
+    }, [peerId]);
 
     if (loading) {
         return (
@@ -77,10 +77,13 @@ function PeerProfile() {
         )
     };
 
-    if (user.following.some(follower => follower.followingUserId !== user.id) || user.following.length === 0) {
+    if (!user.following.some(follower => follower.followedUserId === peer.id) || user.following.length === 0) {
         return (
             <div>
                 <h1>You are not following this user and their account info is private</h1>
+                <Link to='/user/network'>
+                        <button>Go to Your User Network Page</button>
+                </Link>
             </div>
         )
     }
@@ -92,6 +95,7 @@ function PeerProfile() {
             <div>
                 <div>
                     <h1>{peer.firstName} {peer.lastName}</h1>
+                    <img src={peer.profilePicFilePath} width={100}></img>
                     <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
                     <p>Lives in {peer.city}</p>
                     <p>Born on {formatBirthday(peer.birthDate)}</p>
@@ -118,9 +122,9 @@ function PeerProfile() {
                     <div>
                         {peerPool.map((peer) => (
                             <Peer
-                                key={peer.id}
+                                key={peer.followed.id}
                                 userId={user.id}
-                                peer={peer}
+                                peer={peer.followed}
                                 requestSentPool={requestSentPool}
                                 setRequestSentPool={setRequestSentPool}
                                 requestReceivedPool={requestReceivedPool}
