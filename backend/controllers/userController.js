@@ -2,8 +2,9 @@ const db = require('../models/userModels');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { validationResult, matchedData } = require('express-validator');
+const { uploadToCloudinary, cloudinary } = require('../config/cloudinary');
 
-// logs in user to passport local session
+// logs in user to passport local session 
 function logInUser(req, res, next) { 
     const authenticateUser = passport.authenticate('local', function (err, user, info) {
         if (err) {
@@ -79,17 +80,27 @@ async function findUser(req, res, next) {
 // creates new user in database
 async function createUser(req, res, next) {
     const errors = validationResult(req);
+    let filePath, cloudinaryId;
 
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                message: 'Invalid credentials to create new user',
-            });
-        };
+    if (!req.file) {
+        filePath = 'https://res.cloudinary.com/desbleq8y/image/upload/v1784029820/stock_mfe6q5.jpg';
+        cloudinaryId = 'stock_mfe6q5';
+    } else {
+        const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+        filePath = cloudinaryResult.secure_url;
+        cloudinaryId = cloudinaryResult.public_id;
+    }
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: 'Invalid credentials to create new user',
+        });
+    };
 
     try {
         const { firstName, lastName, username, password, city, birthDate } = matchedData(req);
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await db.createNewUser(firstName, lastName, username, hashedPassword, city, birthDate);
+        const newUser = await db.createNewUser(firstName, lastName, username, hashedPassword, filePath, cloudinaryId, city, birthDate);
         if (!newUser) {
             return res.status(400).json({
                 message: 'Failed creating new user',
@@ -105,6 +116,7 @@ async function createUser(req, res, next) {
     };
 };
 
+// add an update profile picture function
 // updates user in database
 async function updateUser(req, res, next) {
     const errors = validationResult(req);

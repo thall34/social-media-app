@@ -94,9 +94,10 @@ function UserNetwork() {
         <div>
             <h1>{user.firstName} {user.lastName}</h1>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
-            <p>{user.city}</p>
-            <p>{formatBirthday(user.birthDate)}</p>
+            <p>Lives in {user.city}</p>
+            <p>Born on {formatBirthday(user.birthDate)}</p>
         </div>
+        <h3>Users</h3>
         {peerPool.length > 0 ? (
           <div>
             {peerPool.map((peer) => (
@@ -119,11 +120,16 @@ function UserNetwork() {
         ) : (
           <></>
         )}
-        <Link to='/user/update'>
-          <button>Edit User Profile</button>
-        </Link>
-        <button onClick={handleDeleteUser}>Delete User</button>
-        <button onClick={handleLogout}>Log Out</button>
+        <div>
+          <Link to='/user/posts'>
+            <button>Go to Your User Posts Page</button>
+          </Link>
+          <Link to='/user/update'>
+            <button>Edit User Profile</button>
+          </Link>
+          <button onClick={handleDeleteUser}>Delete User</button>
+          <button onClick={handleLogout}>Log Out</button>
+        </div>
       </div>
     )
   };

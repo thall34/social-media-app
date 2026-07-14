@@ -1,7 +1,6 @@
-async function getPeersForPeer(peerId) {
+async function getCurrentPeer(id) {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/users/peer/${peerId}/pool`,
+      const response = await fetch(`http://localhost:3000/api/users/peer/${id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -14,11 +13,11 @@ async function getPeersForPeer(peerId) {
         return null;
       };
 
-      const users = await response.json();
-      return users;
+      const comment = await response.json();
+      return comment;
     } catch (err) {
       return null;
     };
   };
 
-export default getPeersForPeer;
+export default getCurrentPeer;

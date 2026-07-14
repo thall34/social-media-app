@@ -83,11 +83,11 @@ function UserPosts() {
     return (
       <div>
         <div>
-            <Link to='/user/network'>
-                <h1>{user.firstName} {user.lastName}</h1>
-            </Link>
+            <h1>{user.firstName} {user.lastName}</h1>
+            <img src={user.profilePicFilePath} width={50}></img>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
         </div>
+        <h3>Posts</h3>
         {posts.length > 0 ? (
             <div>
                 {posts.map((post) => (
@@ -102,11 +102,16 @@ function UserPosts() {
         <Link to='/user/post/new'>
           <button>Create New Post</button>
         </Link>
-        <Link to='/user/update'>
-          <button>Edit User Profile</button>
-        </Link>
-        <button onClick={handleDeleteUser}>Delete User</button>
-        <button onClick={handleLogout}>Log Out</button>
+        <div>
+          <Link to='/user/network'>
+            <button>Go to Your Follower Network Page</button>
+          </Link>
+          <Link to='/user/update'>
+            <button>Edit User Profile</button>
+          </Link>
+          <button onClick={handleDeleteUser}>Delete User</button>
+          <button onClick={handleLogout}>Log Out</button>
+        </div>
       </div>
     )
   };

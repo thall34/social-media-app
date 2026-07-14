@@ -37,13 +37,15 @@ async function getUserById(id) {
     return user;
 };
 
-async function createNewUser(firstName, lastName, username, password, city, birthDate) {
+async function createNewUser(firstName, lastName, username, password, filePath, cloudId, city, birthDate) {
     const newUser = await prisma.user.create({
         data: {
             firstName: firstName,
             lastName: lastName,
             email: username,
             passwordHash: password,
+            profilePicFilePath: filePath,
+            profilePicCloudId: cloudId,
             city: city,
             birthDate: birthDate,
         },
@@ -52,6 +54,7 @@ async function createNewUser(firstName, lastName, username, password, city, birt
     return newUser;
 };
 
+// add way to update profile picture
 async function updateUserById(firstName, lastName, username, password, city, birthDate, id) {
     const updatedUser = await prisma.user.update({
         where: { id: id },
@@ -177,4 +180,4 @@ module.exports = {
     addFollowerAndRemoveRequest,
     declineFollowRequestFromUser,
     removeFollower,
-};
+}; 

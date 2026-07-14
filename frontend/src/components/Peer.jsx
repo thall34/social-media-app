@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router'
 import sendFollowRequest from '../api/sendFollowRequest';
 import cancelFollowRequest from '../api/cancelFollowRequest';
 import acceptFollowRequest from '../api/acceptFollowRequest';
@@ -98,7 +99,9 @@ function Peer({
     if (following && followed) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button>Following</button>
                 <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
                 <button>Following You</button>
@@ -110,7 +113,9 @@ function Peer({
     if (following && !followed && requestReceived) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button>Following</button>
                 <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
                 <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
@@ -120,7 +125,9 @@ function Peer({
     } else if (following && !followed) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button>Following</button>
                 <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
             </div>
@@ -130,7 +137,9 @@ function Peer({
     if (!following && followed && requestSent) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button>Follow Request Sent</button>
                 <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
                 <button>Following You</button>
@@ -140,7 +149,9 @@ function Peer({
     } else if (!following && followed) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
                 <button>Following You</button>
                 <button onClick={() => handleRemoveFollower(peer.id)}>Remove Follower</button>
@@ -151,7 +162,9 @@ function Peer({
     if (!following && !followed && requestSent && requestReceived) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button>Follow Request Sent</button>
                 <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
                 <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
@@ -161,7 +174,9 @@ function Peer({
     } else if (!following && !followed && requestSent) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button>Follow Request Sent</button>
                 <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
             </div> 
@@ -169,7 +184,9 @@ function Peer({
     } else if (!following && !followed && requestReceived) {
         return (
             <div>
-                {peer.firstName} {peer.lastName}
+                <Link to={`/user/peer/${peer.id}`}>
+                    {peer.firstName} {peer.lastName}
+                </Link>
                 <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
                 <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
                 <button onClick={() => handleDeclineFollowRequest(peer.id)}>Decline Follow Request</button>
@@ -179,7 +196,9 @@ function Peer({
 
     return (
         <div>
-            {peer.firstName} {peer.lastName}
+            <Link to={`/user/peer/${peer.id}`}>
+                {peer.firstName} {peer.lastName}
+            </Link>
             <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
         </div>
     )

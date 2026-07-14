@@ -7,6 +7,7 @@ import NewComment from './components/NewComment';
 import UpdateComment from './components/UpdateComment';
 import UserPosts from './components/UserPosts';
 import UserNetwork from './components/UserNetwork';
+import PeerProfile from './components/PeerProfile';
 
 const routes = [
     {
@@ -44,6 +45,10 @@ const routes = [
     {
         path: '/user/post/:postId/comment/:commentId/update',
         element: <UpdateComment />
+    },
+    {
+        path: '/user/peer/:peerId',
+        element: <PeerProfile />
     },
 ];
 

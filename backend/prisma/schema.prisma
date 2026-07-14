@@ -19,6 +19,8 @@ model User {
   lastName String
   email String @unique
   passwordHash String
+  profilePicFilePath String?
+  profilePicCloudId String?
   city String?
   birthDate DateTime
   createdAt DateTime @default(now())

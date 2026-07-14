@@ -18,9 +18,10 @@ function RegistrationForm() {
 
     async function handleRegistration(e) {
         e.preventDefault();
+        const formElements = e.target;
 
         try {
-            const success = await createUser(newUserData);
+            const success = await createUser(formElements);
             if (!success) {
                 const error = new Error('Error Registering User');
                 error.status = 400;
@@ -54,7 +55,7 @@ function RegistrationForm() {
 
     return (
         <div>
-            <form onSubmit={handleRegistration}>
+            <form onSubmit={handleRegistration} encType='multipart/form-data'>
                 <h1>Register New User</h1>
                 <label htmlFor="firstName">First Name: </label>
                 <input type="text" name="firstName" id="firstName" value={newUserData.firstName} onChange={(e) => handleChange(e, setNewUserData)} />
@@ -64,6 +65,8 @@ function RegistrationForm() {
                 <input type="text" name="username" id="username" value={newUserData.username} onChange={(e) => handleChange(e, setNewUserData)} />
                 <label htmlFor="password">Password: </label>
                 <input type="password" name="password" id="password" value={newUserData.password} onChange={(e) => handleChange(e, setNewUserData)} />
+                <label htmlFor="profilePic">Profile Picture (optional): </label>
+                <input type="file" name="profilePic" id="profilePic"/>
                 <label htmlFor="city">City (optional): </label>
                 <input type="text" name="city" id="city" value={newUserData.city} onChange={(e) => handleChange(e, setNewUserData)} />
                 <label htmlFor="birthDate">Date of Birth: </label>

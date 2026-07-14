@@ -26,7 +26,7 @@ function NewComment() {
                 setError(error);
             };
 
-            navigate('/user');
+            navigate('/user/posts');
         } catch(err) {
             setError(err);
         };

@@ -3,10 +3,10 @@ import { Link, useNavigate, useParams } from 'react-router';
 import Post from './Post';
 import Peer from './Peer';
 import getCurrentUser from '../api/getCurrentUser';
-// add getCurrentPeer and use peerId from params
+import getCurrentPeer from '../api/getCurrentPeer';
+import getPeerPool from '../api/getPeerPool';
 import getPostsForPeer from '../api/getPostsForPeer';
 import logOutUser from '../api/logOutUser';
-import getPeersForPeer from '../api/getPeersForPeer';
 import formatBirthday from '../utils/formatBirthday';
 
 function PeerProfile() {
@@ -37,12 +37,17 @@ function PeerProfile() {
         async function initializePage() {
             try {
                 const currentUser = await getCurrentUser();
-                // make a constant for currentPeer using getCurrentPeer api call
-                const currentPosts = await getPostsForPeer(peer.id);
-                const currentPeerPool = await getPeersForPeer(peer.id);
+                const currentPeer = await getCurrentPeer(peerId);
+                const currentPeerPool = await getPeerPool(peerId);
+                const currentPosts = await getPostsForPeer(peerId);
                 setUser(currentUser);
+                setPeer(currentPeer.foundUser);
                 setPosts(currentPosts.posts);
                 setPeerPool(currentPeerPool.users);
+                setRequestSentPool(currentUser.following_request);
+                setRequestReceivedPool(currentUser.followed_request);
+                setFollowerPool(currentUser.followers);
+                setFollowedPool(currentUser.following);
             } catch (err) {
                 setUser(null);
             } finally {
@@ -72,6 +77,14 @@ function PeerProfile() {
         )
     };
 
+    if (user.following.some(follower => follower.followingUserId !== user.id) || user.following.length === 0) {
+        return (
+            <div>
+                <h1>You are not following this user and their account info is private</h1>
+            </div>
+        )
+    }
+
     if (user && peer) {
         const activeDate = new Date(peer.createdAt);
 
@@ -80,9 +93,10 @@ function PeerProfile() {
                 <div>
                     <h1>{peer.firstName} {peer.lastName}</h1>
                     <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
-                    <p>{peer.city}</p>
-                    <p>{formatBirthday(peer.birthDate)}</p>
+                    <p>Lives in {peer.city}</p>
+                    <p>Born on {formatBirthday(peer.birthDate)}</p>
                 </div>
+                <h3>Posts</h3>
                 {posts.length > 0 ? (
                     <div>
                         {posts.map((post) => (
@@ -94,10 +108,15 @@ function PeerProfile() {
                         <h3>No posts yet</h3>
                     </>
                 )}
-                {peerPool.length > 0 ? (
+                <h3>Following</h3>
+                {peerPool.length === 1 && peerPool[0].id === user.id ? (
+                    <div>
+                        <Link to='/user/network'>{peerPool[0].firstName} {peerPool[0].lastName}</Link>
+                    </div>
+                ) : (
+                peerPool.length > 0 ? (
                     <div>
                         {peerPool.map((peer) => (
-                            // do I need to change userId?
                             <Peer
                                 key={peer.id}
                                 userId={user.id}
@@ -116,8 +135,16 @@ function PeerProfile() {
                     </div>
                 ) : (
                     <></>
-                )}
-                <button onClick={handleLogout}>Log Out</button>
+                ))}
+                <div>
+                    <Link to='/user/posts'>
+                        <button>Go to Your User Posts Page</button>
+                    </Link>
+                    <Link to='/user/network'>
+                        <button>Go to Your Follower Network Page</button>
+                    </Link>
+                    <button onClick={handleLogout}>Log Out</button>
+                </div>
             </div>
         )
     };
