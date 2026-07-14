@@ -113,9 +113,10 @@ function PeerProfile() {
                     </>
                 )}
                 <h3>Following</h3>
-                {peerPool.length === 1 && peerPool[0].id === user.id ? (
+                {peerPool.some(peer => peer.followed.id === user.id) ? (
                     <div>
-                        <Link to='/user/network'>{peerPool[0].firstName} {peerPool[0].lastName}</Link>
+                        <img src={peerPool[0].followed.profilePicFilePath} width={50}></img>
+                        <Link to='/user/network'>{peerPool[0].followed.firstName} {peerPool[0].followed.lastName}</Link>
                     </div>
                 ) : (
                 peerPool.length > 0 ? (
