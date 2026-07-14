@@ -84,7 +84,11 @@ function UserPosts() {
       <div>
         <div>
             <h1>{user.firstName} {user.lastName}</h1>
-            <Link to={user.profilePicFilePath}><img src={user.profilePicFilePath} width={100}></img></Link>
+            <div className='image profile'>
+              <Link to={user.profilePicFilePath}>
+                <img src={user.profilePicFilePath} width={100}></img>
+              </Link>
+            </div>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
         </div>

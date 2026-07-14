@@ -75,3 +75,34 @@ button {
 .comment, .comment-details, .post-details, .post-buttons {
     padding: 1em;
 }
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image {
+    overflow: hidden;
+    border-radius: 50%;
+    padding: 0;
+}
+.preview {
+    width: 20em;
+    height: 20em;
+}
+
+.profile {
+    width: 15em;
+    height: 15em;
+}
+
+.user-post {
+    width: 8em;
+    height: 8em;
+}
+
+.user-comment {
+    width: 5em;
+    height: 5em;
+}

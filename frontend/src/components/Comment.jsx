@@ -19,7 +19,10 @@ function Comment({ userId, postId, comment, setComments, setError }) {
     return (
         <div className='comment'>
             <div className='comment-details'>
-                <span><img src={comment.author.profilePicFilePath} width={25}></img>
+                <span>
+                    <div className='image user-comment'>
+                        <img src={comment.author.profilePicFilePath} width={25}></img>
+                    </div>
                     <p>{comment.author.firstName} {comment.author.lastName}</p>
                     <p>{comment.text}</p>
                     <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>

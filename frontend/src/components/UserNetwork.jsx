@@ -93,8 +93,11 @@ function UserNetwork() {
       <div>
         <div>
             <h1>{user.firstName} {user.lastName}</h1>
-            <img src={user.profilePicFilePath} width={100}></img>
-            <Link to={user.profilePicFilePath}>View Profile Picture</Link>
+            <div className='image profile'>
+              <Link to={user.profilePicFilePath}>
+                <img src={user.profilePicFilePath} width={100}></img>
+              </Link>
+            </div>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
             <p>Lives in {user.city}</p>

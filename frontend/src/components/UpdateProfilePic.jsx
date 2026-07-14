@@ -65,7 +65,7 @@ function UpdateProfilePic() {
     if (user) {
         return (
             <div>
-                <img src={user.profilePicFilePath} width={200}></img>
+                <div className='image preview'><img src={user.profilePicFilePath}></img></div>
                 <form onSubmit={handleUpdate} encType='multipart/form-data'>
                     <h1>Update Profile Picture</h1>
                     <label htmlFor="profilePic">Profile Picture: </label>

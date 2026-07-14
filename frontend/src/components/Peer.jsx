@@ -99,7 +99,9 @@ function Peer({
     if (following && followed) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -114,7 +116,9 @@ function Peer({
     if (following && !followed && requestReceived) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -127,7 +131,9 @@ function Peer({
     } else if (following && !followed) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -140,7 +146,9 @@ function Peer({
     if (!following && followed && requestSent) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -153,6 +161,9 @@ function Peer({
     } else if (!following && followed) {
         return (
             <div>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -166,7 +177,9 @@ function Peer({
     if (!following && !followed && requestSent && requestReceived) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -179,7 +192,9 @@ function Peer({
     } else if (!following && !followed && requestSent) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -190,7 +205,9 @@ function Peer({
     } else if (!following && !followed && requestReceived) {
         return (
             <div>
-                <img src={peer.profilePicFilePath} width={50}></img>
+                <div className='image profile'>
+                    <img src={peer.profilePicFilePath}></img>
+                </div>
                 <Link to={`/user/peer/${peer.id}`}>
                     {peer.firstName} {peer.lastName}
                 </Link>
@@ -203,7 +220,9 @@ function Peer({
 
     return (
         <div>
-            <img src={peer.profilePicFilePath} width={50}></img>
+            <div className='image profile'>
+                <img src={peer.profilePicFilePath}></img>
+            </div>
             <Link to={`/user/peer/${peer.id}`}>
                 {peer.firstName} {peer.lastName}
             </Link>

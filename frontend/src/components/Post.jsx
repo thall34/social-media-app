@@ -63,7 +63,10 @@ function Post({ userId, post, setPosts, setError }) {
     return (
         <div className='post'>
             <div className='post-details'>
-                <span><img src={post.author.profilePicFilePath} width={25}></img>
+                <span>
+                <div className='image user-post'>
+                    <img src={post.author.profilePicFilePath} width={25}></img>
+                </div>
                 <p>{post.author.firstName} {post.author.lastName}</p></span> 
                 <p>{post.text}</p>
                 <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
