@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router';
 import deletePost from '../api/deletePost';
-import getLikesForPost from '../api/getLikesForPost';
 import addLikeToPost from '../api/addLikeToPost';
 import removeLikeFromPost from '../api/removeLikeFromPost';
 import Comment from './Comment';
 
 function Post({ userId, post, setPosts, setError }) {
     const [comments, setComments] = useState(post.comments);
-    const [likes, setLikes] = useState([]);
+    const [likes, setLikes] = useState(post.likes);
 
     const createdDate = new Date(post.createdAt);
 
@@ -46,19 +45,6 @@ function Post({ userId, post, setPosts, setError }) {
             setError(err);
         };
     };
-
-    useEffect(() => {
-        async function initializePost() {
-            try {
-                const postLikes = await getLikesForPost(post.id);
-                setLikes(postLikes.likes);
-            } catch(err) {
-                setError(err);
-            };
-        };
-
-        initializePost();
-    }, []);
 
     return (
         <div className='post'>

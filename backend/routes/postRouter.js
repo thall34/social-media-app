@@ -8,7 +8,6 @@ const validatePost = require('../middleware/validatePost');
 
 postRouter.get('/all/:userId', isAuthenticated, validateUserId, postController.getAllPostsForUser);
 postRouter.get('/peer/:id', isAuthenticated, validateId, postController.getPostsForPeer);
-postRouter.get('/likes/:id', isAuthenticated, validateId, postController.getLikesForPost);
 postRouter.get('/:id', isAuthenticated, validateId, postController.getPost);
 postRouter.post('/:userId', isAuthenticated, validateUserId, validatePost, postController.createPost);
 postRouter.post('/likes/:id/:userId', isAuthenticated, validateId, validateUserId, postController.addLikeToPost);

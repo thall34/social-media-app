@@ -2,14 +2,24 @@ const prisma = require('../config/db');
 
 // NOTE FOR ALL USERNAME QUERIES - EMAIL IS BEING USED AS USERNAME
 
-async function getUserByUsername(username) {
+// fetches minimal user details needed to serialize the passport session
+async function getUserByUsernameForPassport(username) {
     const user = await prisma.user.findUnique({
         where: { email: username },
+        select: {
+            id: true,
+            email: true,
+            passwordHash: true,
+        },
     });
 
     return user;
 };
 
+// fetches a single user from database by ID
+// includes all posts by user including comments for each post
+// includes all data from following and followers join tables
+// includes all user IDs in following request and followed request join tables
 async function getUserById(id) {
     const user = await prisma.user.findUnique({
         where: { id: id },
@@ -37,6 +47,7 @@ async function getUserById(id) {
     return user;
 };
 
+// creates a new user entry in database
 async function createNewUser(firstName, lastName, username, password, filePath, cloudId, city, birthDate) {
     const newUser = await prisma.user.create({
         data: {
@@ -54,7 +65,7 @@ async function createNewUser(firstName, lastName, username, password, filePath, 
     return newUser;
 };
 
-// add way to update profile picture
+// updates an existing user entry in database by ID
 async function updateUserById(firstName, lastName, username, password, city, birthDate, id) {
     const updatedUser = await prisma.user.update({
         where: { id: id },
@@ -71,6 +82,7 @@ async function updateUserById(firstName, lastName, username, password, city, bir
     return updatedUser;
 };
 
+// updates an existing user's profile pic entries in database by ID
 async function updateUserProfilePicById(id, filePath, cloudId) {
     const updatedUser = await prisma.user.update({
         where: { id: id },
@@ -83,6 +95,7 @@ async function updateUserProfilePicById(id, filePath, cloudId) {
     return updatedUser;
 };
 
+// deletes an existing user entry in database by ID
 async function deleteUserById(id) {
     const deletedUser = await prisma.user.delete({
         where: { id: id },
@@ -91,6 +104,8 @@ async function deleteUserById(id) {
     return deletedUser;
 };
 
+// fetches all users except for the current user
+// includes posts and comments for each user
 async function getPeerPool(id) {
     const users = await prisma.user.findMany({
         where: {
@@ -110,7 +125,9 @@ async function getPeerPool(id) {
     return users;
 };
 
-async function getPeerPoolForPeer(userId, peerId) {
+// fetches all peers that the current peer is following
+// includes their id, first name, last name and profile pic file path for each peer
+async function getPeerPoolForPeer(peerId) {
     const users = await prisma.follow.findMany({
         where: {
             followingUserId: peerId,
@@ -130,6 +147,21 @@ async function getPeerPoolForPeer(userId, peerId) {
     return users;
 };
 
+// fetches a single follow request from database by followed ID and following ID
+async function getFollowRequestByIds(followingUserId, followedUserId) {
+    const followRequest = await prisma.followRequest.findUnique({
+        where: {
+            followedUserId_followingUserId: {
+                followedUserId: followedUserId,
+                followingUserId: followingUserId,
+            },
+        },
+    });
+
+    return followRequest;
+};
+
+// creates a new follow request database entry
 async function addFollowRequestToUser(followingUserId, followedUserId) {
     const followRequest = await prisma.followRequest.create({
         data: {
@@ -141,6 +173,7 @@ async function addFollowRequestToUser(followingUserId, followedUserId) {
     return followRequest;
 };
 
+// deletes an existing follow request database entry by followed ID and following ID
 async function removeFollowRequestFromUser(followingUserId, followedUserId) {
     const removeFollowRequest = await prisma.followRequest.delete({
         where: {
@@ -154,7 +187,22 @@ async function removeFollowRequestFromUser(followingUserId, followedUserId) {
     return removeFollowRequest;
 };
 
-async function addFollowerAndRemoveRequest(followedUserId, followingUserId) {
+// fetches a single follow from database by followed ID and following ID
+async function getFollowerByIds(followedUserId, followingUserId) {
+    const follower = await prisma.follow.findUnique({
+        where: {
+            followedUserId_followingUserId: {
+                followedUserId: followedUserId,
+                followingUserId: followingUserId,
+            },
+        },
+    });
+
+    return follower;
+};
+
+// creates a new follow database entry
+async function addFollowerToUser(followedUserId, followingUserId) {
     const addFollower = await prisma.follow.create({
         data: {
             followedUserId: followedUserId,
@@ -162,31 +210,10 @@ async function addFollowerAndRemoveRequest(followedUserId, followingUserId) {
         },
     });
 
-    const deleteFollowRequest = await prisma.followRequest.delete({
-        where: {
-            followedUserId_followingUserId: {
-                followedUserId: followedUserId,
-                followingUserId: followingUserId,
-            },
-        },
-    });
-
     return addFollower;
 };
 
-async function declineFollowRequestFromUser(followedUserId, followingUserId) {
-    const deleteFollowRequest = await prisma.followRequest.delete({
-        where: {
-            followedUserId_followingUserId: {
-                followedUserId: followedUserId,
-                followingUserId: followingUserId,
-            },
-        },
-    });
-
-    return deleteFollowRequest;
-};
-
+// deletes an existing follow database entry by followed ID and following ID
 async function removeFollower(followedUserId, followingUserId) {
     const deleteFollower = await prisma.follow.delete({
         where: {
@@ -201,7 +228,7 @@ async function removeFollower(followedUserId, followingUserId) {
 };
 
 module.exports = {
-    getUserByUsername,
+    getUserByUsernameForPassport,
     getUserById,
     createNewUser,
     updateUserById,
@@ -209,9 +236,10 @@ module.exports = {
     deleteUserById,
     getPeerPool,
     getPeerPoolForPeer,
+    getFollowRequestByIds,
     addFollowRequestToUser,
     removeFollowRequestFromUser,
-    addFollowerAndRemoveRequest,
-    declineFollowRequestFromUser,
+    getFollowerByIds,
+    addFollowerToUser,
     removeFollower,
 }; 

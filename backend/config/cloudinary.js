@@ -1,3 +1,5 @@
+// Configuration file for cloudinary file upload
+// Used to store and retrieve profile pictures for social media app
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({

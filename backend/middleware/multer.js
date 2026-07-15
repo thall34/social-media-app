@@ -1,3 +1,4 @@
+// Multer configuration for uploading
 const multer = require('multer');
 
 const allowedMimeTypes = [

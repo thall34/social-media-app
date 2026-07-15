@@ -1,3 +1,4 @@
+// Express validation for update user form
 const { body } = require('express-validator');
 
 const validateUpdateUser = [

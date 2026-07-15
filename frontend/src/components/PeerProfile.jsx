@@ -38,7 +38,7 @@ function PeerProfile() {
             try {
                 const currentUser = await getCurrentUser();
                 const currentPeer = await getCurrentPeer(Number(peerId));
-                const currentPeerPool = await getPeerPoolForPeer(currentUser.id, Number(peerId));
+                const currentPeerPool = await getPeerPoolForPeer(Number(peerId));
                 const currentPosts = await getPostsForPeer(Number(peerId));
                 setUser(currentUser);
                 setPeer(currentPeer.foundUser);

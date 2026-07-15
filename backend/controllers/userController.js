@@ -5,12 +5,13 @@ const { validationResult, matchedData } = require('express-validator');
 const { uploadToCloudinary, cloudinary } = require('../config/cloudinary');
 
 // logs in user to passport local session 
-function logInUser(req, res, next) { 
+function logInUser(req, res, next) {
     const authenticateUser = passport.authenticate('local', function (err, user, info) {
         if (err) {
             return next(err);
         };
 
+        // if user does not exist, return a 401 failure response
         if (!user) {
             return res.status(401).json({
                 message: info?.message || 'Invalid username or password',
@@ -22,6 +23,7 @@ function logInUser(req, res, next) {
                 return next(err);
             };
 
+            // return a 200 success response with the logged in user
             return res.status(200).json({
                 message: 'Successfully logged in',
                 success: true,
@@ -48,49 +50,44 @@ async function logOutUser(req, res, next) {
                 };
 
                 res.clearCookie('connect.sid');
+                // return a 204 success response indicating the user is logged out
                 res.sendStatus(204);
             });
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
-// gets user from database using id
+// obtains a single user from the database by user ID
 async function findUser(req, res, next) {
     const id = req.validatedId;
 
     try {
         const foundUser = await db.getUserById(id);
+        // if no user is found, return a 404 failure response
         if (!foundUser) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: 'Failed finding user',
             });
         };
 
+        // return a 200 success response with the found user
         return res.status(200).json({
             message: 'Successfully found user',
             foundUser: foundUser,
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
-// creates new user in database
+// creates a new user database entry
 async function createUser(req, res, next) {
     const errors = validationResult(req);
     let filePath, cloudinaryId;
 
-    if (!req.file) {
-        filePath = 'https://res.cloudinary.com/desbleq8y/image/upload/v1784029820/stock_mfe6q5.jpg';
-        cloudinaryId = 'stock_mfe6q5';
-    } else {
-        const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
-        filePath = cloudinaryResult.secure_url;
-        cloudinaryId = cloudinaryResult.public_id;
-    }
-
+    // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
         return res.status(400).json({
             message: 'Invalid credentials to create new user',
@@ -98,192 +95,331 @@ async function createUser(req, res, next) {
     };
 
     try {
+        // if no file is uploaded with the form, assign a default profile picture
+        if (!req.file) {
+            filePath = 'https://res.cloudinary.com/desbleq8y/image/upload/v1784029820/stock_mfe6q5.jpg';
+            cloudinaryId = 'stock_mfe6q5';
+        } else {
+            // if file is uploaded with the form, upload it to cloudinary and return the filepath URL and cloudinary ID
+            const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+            filePath = cloudinaryResult.secure_url;
+            cloudinaryId = cloudinaryResult.public_id;
+        }
+
         const { firstName, lastName, username, password, city, birthDate } = matchedData(req);
+        // encrypt password using bcryptjs
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await db.createNewUser(firstName, lastName, username, hashedPassword, filePath, cloudinaryId, city, birthDate);
+        // if the user is not created, return a 400 failure response
         if (!newUser) {
             return res.status(400).json({
                 message: 'Failed creating new user',
-            });  
+            });
         };
 
-        return res.status(200).json({
+        // return a 201 success response with the new user
+        return res.status(201).json({
             message: 'Successfully created new user',
             newUser: newUser,
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
-// add an update profile picture function
-// updates user in database
+// updates an existing user database entry by user ID
 async function updateUser(req, res, next) {
     const errors = validationResult(req);
     const id = req.validatedId;
 
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                message: 'Invalid credentials to update user'
+    // if there are any form validation errors, return a 400 failure response
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: 'Invalid credentials to update user'
+        });
+    };
+
+    try {
+        // looks through database to ensure the user exists before updating
+        const user = await db.getUserById(id);
+        // if no user is found, return a 404 failure response
+        if (!user) {
+            return res.status(404).json({
+                message: 'Failed finding user',
             });
         };
 
-    try {
+        // if user id does not match the current user, return a 403 failure response
+        if (user.id !== id) {
+            return res.status(403).json({
+                message: 'Access forbidden',
+            });
+        };
+
         const { firstName, lastName, username, password, city, birthDate } = matchedData(req);
+        // if password entry from form is filled in with a new password, re-encrypt the new password and update user
         if (password !== '') {
             const hashedPassword = await bcrypt.hash(password, 10);
             const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, id);
+            // return a 200 success response with the updated user
             return res.status(200).json(updatedUser);
         };
 
-        const user = await db.getUserById(id);
+        // if password entry from form is left empty, update user with new details but use previous password from found user
         const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, id);
+        // return a 200 success response with the updated user
         return res.status(200).json(updatedUser);
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
+// updates an existing user's profile picture details by user ID
 async function updateUserProfilePic(req, res, next) {
     const id = req.validatedId;
-    const user = await db.getUserById(id);
     let filePath, cloudinaryId;
 
-    if (!req.file) {
-        filePath = user.profilePicFilePath;
-        cloudinaryId = user.profilePicCloudId;
-    } else {
-        const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
-        filePath = cloudinaryResult.secure_url;
-        cloudinaryId = cloudinaryResult.public_id;
-    }
-
     try {
+        // looks through database to ensure the user exists before updating
+        const user = await db.getUserById(id);
+
+        // if no user is found, return a 404 failure response
+        if (!user) {
+            return res.status(404).json({
+                message: 'Failed finding user',
+            });
+        };
+
+        // if user id does not match the current user, return a 403 failure response
+        if (user.id !== id) {
+            return res.status(403).json({
+                message: 'Access forbidden',
+            });
+        };
+
+        // if no file is uploaded with the form, re-assign the found user's profile pic details
+        if (!req.file) {
+            filePath = user.profilePicFilePath;
+            cloudinaryId = user.profilePicCloudId;
+        } else {
+            // if file is uploaded with the form, upload it to cloudinary and return the filepath URL and cloudinary ID
+            const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+            filePath = cloudinaryResult.secure_url;
+            cloudinaryId = cloudinaryResult.public_id;
+        }
+
         const updatedUser = await db.updateUserProfilePicById(id, filePath, cloudinaryId);
+        // return a 200 success response with the updated user
         return res.status(200).json(updatedUser);
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
-// deletes user from database
+// deletes an existing user database entry by user ID
 async function deleteUser(req, res, next) {
     const id = req.validatedId;
 
     try {
+        // looks through database to ensure the user exists before deleting
+        const user = await db.getUserById(id);
+        // if no user is found, return a 404 failure response
+        if (!user) {
+            return res.status(404).json({
+                message: 'Failed finding user',
+            });
+        };
+
+        // if user id does not match the current user, return a 403 failure response
+        if (user.id !== id) {
+            return res.status(403).json({
+                message: 'Access forbidden',
+            });
+        };
+
         await db.deleteUserById(id);
+        // return a 204 success response indicating the user was deleted
         return res.sendStatus(204);
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
+// obtain user details from passport session
 async function sendUserDetails(req, res, next) {
     try {
-        res.json(req.user);
-    } catch(err) {
+        res.status(200).json(req.user);
+    } catch (err) {
         next(err)
     };
 };
 
+// obtains all peers for current user by user ID
 async function getPeerPool(req, res, next) {
     const id = req.validatedId;
 
     try {
         const users = await db.getPeerPool(id);
+        // return a 200 success response with the found users
         return res.status(200).json({
             message: 'Successfully retrieved users',
             users: users,
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
+// obtains all peers for current peer by current peer ID
 async function getPeerPoolForPeer(req, res, next) {
-    const userId = req.validatedUserId;
     const id = req.validatedId;
 
     try {
-        const users = await db.getPeerPoolForPeer(userId, id);
+        const users = await db.getPeerPoolForPeer(id);
+        // return a 200 success response with the found users
         return res.status(200).json({
             message: 'Successfully retrieved users',
             users: users,
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
+// creates a new follow request database entry
 async function addFollowRequestToUser(req, res, next) {
     const userId = req.validatedUserId;
-    const id = req.validatedId;
+    const peerId = req.validatedId;
+
+    if (userId === peerId) {
+        return res.status(422).json({
+            message: 'Cannot follow yourself',
+        });
+    };
+
     try {
-        const request = await db.addFollowRequestToUser(userId, id);
+        const request = await db.addFollowRequestToUser(userId, peerId);
+        // if the request is not created, return a 400 failure response
         if (!request) {
             return res.status(400).json({
                 message: 'Failed sending follow request',
             });
         };
 
-        return res.status(200).json({
+        // return a 201 success response with the new request
+        return res.status(201).json({
             message: 'Successfully sent follow request',
             request: request,
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
+// deletes an existing follow request database entry by user ID and peer ID
 async function removeFollowRequestFromUser(req, res, next) {
     const userId = req.validatedUserId;
-    const id = req.validatedId;
+    const peerId = req.validatedId;
+
     try {
-        await db.removeFollowRequestFromUser(userId, id);
+        // looks through database to ensure the follow request exists before deleting
+        const followRequest = await db.getFollowRequestByIds(userId, peerId);
+        // if no follow request is found, return a 404 failure response
+        if (!followRequest) {
+            return res.status(404).json({
+                message: 'Failed finding follow request'
+            });
+        };
+
+        await db.removeFollowRequestFromUser(userId, peerId);
+        // return a 204 success response indicating the follow request was deleted
         return res.sendStatus(204);
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
-async function addFollowerAndRemoveRequest(req, res, next) {
+// deletes an existing follow request database entry by peer ID and user ID
+async function declineFollowRequestFromUser(req, res, next) {
     const userId = req.validatedUserId;
-    const id = req.validatedId;
+    const peerId = req.validatedId;
+
     try {
-        const request = await db.addFollowerAndRemoveRequest(userId, id);
-        if (!request) {
+        // looks through database to ensure the follow request exists before deleting
+        const followRequest = await db.getFollowRequestByIds(peerId, userId);
+        // if no follow request is found, return a 404 failure response
+        if (!followRequest) {
+            return res.status(404).json({
+                message: 'Failed finding follow request'
+            });
+        };
+
+        await db.removeFollowRequestFromUser(peerId, userId);
+        // return a 204 success response indicating the follow request was deleted
+        return res.sendStatus(204);
+    } catch (err) {
+        next(err);
+    };
+};
+
+// creates a new follow database entry and deletes an existing follow request database entry by user ID and peer ID
+async function addFollowerAndRemoveRequestFromUser(req, res, next) {
+    const userId = req.validatedUserId;
+    const peerId = req.validatedId;
+
+    if (userId === peerId) {
+        return res.status(422).json({
+            message: 'Cannot follow yourself',
+        });
+    };
+    
+    try {
+        // looks through database to ensure the follow request exists before deleting
+        const followRequest = await db.getFollowRequestByIds(peerId, userId);
+        // if no follow request is found, return a 404 failure response
+        if (!followRequest) {
+            return res.status(404).json({
+                message: 'Failed finding follow request'
+            });
+        };
+
+        const deleteRequest = await db.removeFollowRequestFromUser(peerId, userId);
+        const addRequest = await db.addFollowerToUser(userId, peerId);
+        // if the follower is not created, return a 400 failure response
+        if (!addRequest) {
             return res.status(400).json({
                 message: 'Failed adding follower',
             });
         };
 
-        return res.status(200).json({
+        // return a 201 success response with the new follower
+        return res.status(201).json({
             message: 'Successfully added follower',
-            follower: request,
+            follower: addRequest,
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
 
-async function declineFollowRequestFromUser(req, res, next) {
-    const userId = req.validatedUserId;
-    const id = req.validatedId;
-    try {
-        await db.declineFollowRequestFromUser(userId, id);
-        return res.sendStatus(204);
-    } catch(err) {
-        next(err);
-    };
-};
-
+// deletes an existing follow database entry by user ID and peer ID
 async function removeFollower(req, res, next) {
     const userId = req.validatedUserId;
-    const id = req.validatedId;
+    const peerId = req.validatedId;
+
     try {
-        await db.removeFollower(userId, id);
+        // looks through database to ensure the follower exists before deleting
+        const follower = await db.getFollowerByIds(userId, peerId);
+        // if no follower is found, return a 404 failure response
+        if (!follower) {
+            return res.status(404).json({
+                message: 'Failed finding follower'
+            });
+        };
+        await db.removeFollower(userId, peerId);
+        // return a 204 success response indicating the follower was deleted
         return res.sendStatus(204);
-    } catch(err) {
+    } catch (err) {
         next(err);
     };
 };
@@ -301,7 +437,7 @@ module.exports = {
     getPeerPoolForPeer,
     addFollowRequestToUser,
     removeFollowRequestFromUser,
-    addFollowerAndRemoveRequest,
     declineFollowRequestFromUser,
+    addFollowerAndRemoveRequestFromUser,
     removeFollower,
 }

@@ -1,3 +1,4 @@
+// Express validation for login form
 const { body } = require('express-validator');
 
 const validateLogin = [

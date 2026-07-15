@@ -1,3 +1,4 @@
+// Express validation for post forms
 const { body } = require('express-validator');
 
 const validatePost = [
