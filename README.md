@@ -3,14 +3,30 @@ The goal of this project was to create a full stack social media app. I decided 
 
 ## Features
 1. Single page app that starts on the homepage with a login form if no current user is logged in and register button to create a new user in the database.
-<img src='./screenshots/login.png' alt='login page' width='500'>
+<img src='./screenshots/login.png' alt='login page' width='700'>
+
 2. Once successfully logged in and a passport session has been made in the backend, goes to the user homepage.
 3. Header and footer on every page that displays the app name, and a nav bar that either has a home button if the user isn't signed in, or a full nav bar with user home, user network, user edit, user delete and user log out buttons.
+<img src='./screenshots/header.png' alt='header bar' width='700'>
+
 4. User home page with the current logged in user's full name, their profile picture, an edit profile picture button and their date that they created their account, as well as a list of all posts created by the current user and any posts by peers the current user is following sorted from newest to oldest.
+<img src='./screenshots/home.png' alt='user home page' width='700'>
+
 5. User network page with the current logged in user's full name, their profile picture, an edit profile picture button, their date that they created their account, their hometown, and their birthdate, as well as a list of all users in the database that shows if the user is currently following or followed by them and has buttons to send/cancel follow requests or accept/decline follow requests from other users
+<img src='./screenshots/network.png' alt='user network page' width='700'>
+
 6. A peer profile page for every user that is not the current logged in user, it will show a private page if the user is not currently following the selected user, or will show the peer's full name, their profile picture, their date that they created their account, their hometown and their birthdate, as well as any posts that they have made and any users that the peer is following that are not the currently logged in user (with all follow features that are present in the network page)
+<img src='./screenshots/peer.png' alt='peer page' width='700'>
+
 7. Users can create posts on their home page, and can create comments and add/remove likes on any post that is on their home page or on any selected peer profile page that has posts available
-8. Users can edit/delete any post or comment that has a matching author ID to the current user.
+<img src='./screenshots/home.png' alt='user post page with posts, comments and likes' width='700'>
+
+8. Users can edit/delete any post or comment that they authored.
+9. Users can edit their profile information using the header nav bar edit profile button
+<img src='./screenshots/updateUser.png' alt='user update page' width='700'>
+
+10. Users can edit their profile picture and change it for a new one using the update profile picture button under their profile picture on their home or network pages.
+<img src='./screenshots/updatePic.png' alt='user profile picture update page' width='700'>
 
 ## Project Setup
 
