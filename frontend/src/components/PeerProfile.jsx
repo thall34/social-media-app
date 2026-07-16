@@ -41,7 +41,7 @@ function PeerProfile() {
                 const currentPeerPool = await getPeerPoolForPeer(Number(peerId));
                 const currentPosts = await getPostsForPeer(Number(peerId));
                 setUser(currentUser);
-                setPeer(currentPeer.foundUser);
+                setPeer(currentPeer.user);
                 setPosts(currentPosts.posts);
                 setPeerPool(currentPeerPool.users);
                 setRequestSentPool(currentUser.following_request);
@@ -95,7 +95,9 @@ function PeerProfile() {
             <div>
                 <div>
                     <h1>{peer.firstName} {peer.lastName}</h1>
-                    <img src={peer.profilePicFilePath} width={100}></img>
+                    <div className='image profile'>
+                        <img src={peer.profilePicFilePath}></img>
+                    </div>
                     <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
                     <p>Lives in {peer.city}</p>
                     <p>Born on {formatBirthday(peer.birthDate)}</p>

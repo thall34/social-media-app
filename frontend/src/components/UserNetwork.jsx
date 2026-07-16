@@ -95,7 +95,7 @@ function UserNetwork() {
             <h1>{user.firstName} {user.lastName}</h1>
             <div className='image profile'>
               <Link to={user.profilePicFilePath}>
-                <img src={user.profilePicFilePath} width={100}></img>
+                <img src={user.profilePicFilePath}></img>
               </Link>
             </div>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>

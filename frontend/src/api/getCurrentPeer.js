@@ -13,8 +13,8 @@ async function getCurrentPeer(id) {
         return null;
       };
 
-      const comment = await response.json();
-      return comment;
+      const user = await response.json();
+      return user;
     } catch (err) {
       return null;
     };

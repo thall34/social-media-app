@@ -1,5 +1,7 @@
 const db = require('../models/commentModels');
 const { validationResult, matchedData } = require('express-validator');
+const success = require('../utils/success');
+const failure = require('../utils/failure');
 
 // obtains a single comment from the database by comment ID
 async function getComment(req, res, next) {
@@ -9,16 +11,11 @@ async function getComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return res.status(404).json({
-                message: 'Failed finding comment',
-            })
+            return failure(res, 404, 'Failed finding comment');
         };
 
         // return a 200 success response with the found comment
-        return res.status(200).json({
-            message: 'Successfully found comment',
-            comment: comment,
-        });
+        return success(res, 200, 'Successfully found comment', 'comment', comment);
     } catch(err) {
         next(err);
     };
@@ -32,9 +29,7 @@ async function createComment(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: 'Invalid credentials to create new comment',
-        });
+        return failure(res, 400, 'Invalid credentials to create new comment');
     };
 
     try {
@@ -42,16 +37,11 @@ async function createComment(req, res, next) {
         const newComment = await db.createNewComment(text, userId, postId);
         // if the comment is not created, return a 400 failure response
         if (!newComment) {
-            return res.status(400).json({
-                message: 'Failed creating new comment',
-            });
+            return failure(res, 400, 'Failed creating new comment');
         };
 
         // return a 201 success response with the new comment
-        return res.status(201).json({
-            message: 'Successfully created new comment',
-            newComment: newComment,
-        });
+        return success(res, 201, 'Successfully created new comment', 'newComment', newComment);
     } catch(err) {
         next(err);
     };
@@ -65,9 +55,7 @@ async function updateComment(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: 'Invalid credentials to update comment',
-        });
+        return failure(res, 400, 'Invalid credentials to update comment');
     };
 
     try {
@@ -75,32 +63,23 @@ async function updateComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return res.status(404).json({
-                message: 'Failed finding comment',
-            });
+            return failure(res, 404, 'Failed finding comment');
         };
 
         // if comment author does not match the current user, return a 403 failure response
         if (comment.authorId !== userId) {
-            return res.status(403).json({
-                message: 'Access forbidden',
-            });
+            return failure(res, 403, 'Access forbidden');
         };
         
         const { text } = matchedData(req);
         const updatedComment = await db.updateCommentById(text, id);
         // if the comment is not updated, return a 400 failure response
         if (!updatedComment) {
-            return res.status(400).json({
-                message: 'Failed updating comment',
-            });
+            return failure(res, 400, 'Failed updating comment');
         };
 
         // return a 200 success response with the updated comment
-        return res.status(200).json({
-            message: 'Successfully updated comment',
-            updatedComment: updatedComment,
-        });
+        return success(res, 200, 'Successfully updated comment', 'updatedComment', updatedComment);
     } catch(err) {
         next(err);
     };
@@ -116,21 +95,17 @@ async function deleteComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return res.status(404).json({
-                message: 'Failed finding comment',
-            });
+            return failure(res, 404, 'Failed finding comment');
         };
 
         // if comment author does not match the current user, return a 403 failure response
         if (comment.authorId !== userId) {
-            return res.status(403).json({
-                message: 'Access forbidden',
-            });
+            return failure(res, 403, 'Access forbidden');
         };
 
         await db.deleteCommentById(id);
         // return a 204 success response indicating the comment was deleted
-        return res.sendStatus(204);
+        return success(res, 204);
     } catch(err) {
         next(err);
     };

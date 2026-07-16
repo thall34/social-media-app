@@ -1,4 +1,4 @@
-async function getPeerPoolForPeer(userId, peerId) {
+async function getPeerPoolForPeer(peerId) {
     try {
       const response = await fetch(
         `http://localhost:3000/api/users/peer/${peerId}/pool`,

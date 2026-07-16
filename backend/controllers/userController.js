@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { validationResult, matchedData } = require('express-validator');
 const { uploadToCloudinary, cloudinary } = require('../config/cloudinary');
+const success = require('../utils/success');
+const failure = require('../utils/failure');
 
 // logs in user to passport local session 
 function logInUser(req, res, next) {
@@ -13,9 +15,7 @@ function logInUser(req, res, next) {
 
         // if user does not exist, return a 401 failure response
         if (!user) {
-            return res.status(401).json({
-                message: info?.message || 'Invalid username or password',
-            });
+            return failure(res, 401, info?.message || 'Invalid username or password');
         };
 
         req.logIn(user, (err) => {
@@ -51,7 +51,7 @@ async function logOutUser(req, res, next) {
 
                 res.clearCookie('connect.sid');
                 // return a 204 success response indicating the user is logged out
-                res.sendStatus(204);
+                return success(res, 204);
             });
         });
     } catch (err) {
@@ -67,16 +67,11 @@ async function findUser(req, res, next) {
         const foundUser = await db.getUserById(id);
         // if no user is found, return a 404 failure response
         if (!foundUser) {
-            return res.status(404).json({
-                message: 'Failed finding user',
-            });
+            return failure(res, 404, 'Failed finding user');
         };
 
         // return a 200 success response with the found user
-        return res.status(200).json({
-            message: 'Successfully found user',
-            foundUser: foundUser,
-        });
+        return success(res, 200, 'Successfully found user', 'user', foundUser);
     } catch (err) {
         next(err);
     };
@@ -89,9 +84,7 @@ async function createUser(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: 'Invalid credentials to create new user',
-        });
+        return failure(res, 400, 'Invalid credentials to create new user');
     };
 
     try {
@@ -112,16 +105,11 @@ async function createUser(req, res, next) {
         const newUser = await db.createNewUser(firstName, lastName, username, hashedPassword, filePath, cloudinaryId, city, birthDate);
         // if the user is not created, return a 400 failure response
         if (!newUser) {
-            return res.status(400).json({
-                message: 'Failed creating new user',
-            });
+            return failure(res, 400, 'Failed creating new user');
         };
 
         // return a 201 success response with the new user
-        return res.status(201).json({
-            message: 'Successfully created new user',
-            newUser: newUser,
-        });
+        return success(res, 201, 'Successfully created new user', 'newUser', newUser);
     } catch (err) {
         next(err);
     };
@@ -134,9 +122,7 @@ async function updateUser(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: 'Invalid credentials to update user'
-        });
+        return failure(res, 400, 'Invalid credentials to update user');
     };
 
     try {
@@ -144,16 +130,12 @@ async function updateUser(req, res, next) {
         const user = await db.getUserById(id);
         // if no user is found, return a 404 failure response
         if (!user) {
-            return res.status(404).json({
-                message: 'Failed finding user',
-            });
+            return failure(res, 404, 'Failed finding user');
         };
 
         // if user id does not match the current user, return a 403 failure response
         if (user.id !== id) {
-            return res.status(403).json({
-                message: 'Access forbidden',
-            });
+            return failure(res, 403, 'Access forbidden');
         };
 
         const { firstName, lastName, username, password, city, birthDate } = matchedData(req);
@@ -162,13 +144,13 @@ async function updateUser(req, res, next) {
             const hashedPassword = await bcrypt.hash(password, 10);
             const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, id);
             // return a 200 success response with the updated user
-            return res.status(200).json(updatedUser);
+            return success(res, 200, 'Successfully updated user', 'updatedUser', updatedUser);
         };
 
         // if password entry from form is left empty, update user with new details but use previous password from found user
         const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, id);
         // return a 200 success response with the updated user
-        return res.status(200).json(updatedUser);
+        return success(res, 200, 'Successfully updated user', 'updatedUser', updatedUser);
     } catch (err) {
         next(err);
     };
@@ -182,19 +164,14 @@ async function updateUserProfilePic(req, res, next) {
     try {
         // looks through database to ensure the user exists before updating
         const user = await db.getUserById(id);
-
         // if no user is found, return a 404 failure response
         if (!user) {
-            return res.status(404).json({
-                message: 'Failed finding user',
-            });
+            return failure(res, 404, 'Failed finding user');
         };
 
         // if user id does not match the current user, return a 403 failure response
         if (user.id !== id) {
-            return res.status(403).json({
-                message: 'Access forbidden',
-            });
+            return failure(res, 403, 'Access forbidden');
         };
 
         // if no file is uploaded with the form, re-assign the found user's profile pic details
@@ -210,7 +187,7 @@ async function updateUserProfilePic(req, res, next) {
 
         const updatedUser = await db.updateUserProfilePicById(id, filePath, cloudinaryId);
         // return a 200 success response with the updated user
-        return res.status(200).json(updatedUser);
+        return success(res, 200, 'Successfully updated user', 'updatedUser', updatedUser);
     } catch (err) {
         next(err);
     };
@@ -225,21 +202,17 @@ async function deleteUser(req, res, next) {
         const user = await db.getUserById(id);
         // if no user is found, return a 404 failure response
         if (!user) {
-            return res.status(404).json({
-                message: 'Failed finding user',
-            });
+            return failure(res, 404, 'Failed finding user');
         };
 
         // if user id does not match the current user, return a 403 failure response
         if (user.id !== id) {
-            return res.status(403).json({
-                message: 'Access forbidden',
-            });
+            return failure(res, 403, 'Access forbidden');
         };
 
         await db.deleteUserById(id);
         // return a 204 success response indicating the user was deleted
-        return res.sendStatus(204);
+        return success(res, 204);
     } catch (err) {
         next(err);
     };
@@ -248,7 +221,7 @@ async function deleteUser(req, res, next) {
 // obtain user details from passport session
 async function sendUserDetails(req, res, next) {
     try {
-        res.status(200).json(req.user);
+        return res.status(200).json(req.user);
     } catch (err) {
         next(err)
     };
@@ -261,10 +234,7 @@ async function getPeerPool(req, res, next) {
     try {
         const users = await db.getPeerPool(id);
         // return a 200 success response with the found users
-        return res.status(200).json({
-            message: 'Successfully retrieved users',
-            users: users,
-        });
+        return success(res, 200, 'Successfully found users', 'users', users);
     } catch (err) {
         next(err);
     };
@@ -277,10 +247,7 @@ async function getPeerPoolForPeer(req, res, next) {
     try {
         const users = await db.getPeerPoolForPeer(id);
         // return a 200 success response with the found users
-        return res.status(200).json({
-            message: 'Successfully retrieved users',
-            users: users,
-        });
+        return success(res, 200, 'Successfully found users', 'users', users);
     } catch (err) {
         next(err);
     };
@@ -292,18 +259,14 @@ async function addFollowRequestToUser(req, res, next) {
     const peerId = req.validatedId;
 
     if (userId === peerId) {
-        return res.status(422).json({
-            message: 'Cannot follow yourself',
-        });
+        return failure(res, 422, 'Cannot follow yourself');
     };
 
     try {
         const request = await db.addFollowRequestToUser(userId, peerId);
         // if the request is not created, return a 400 failure response
         if (!request) {
-            return res.status(400).json({
-                message: 'Failed sending follow request',
-            });
+            return failure(res, 400, 'Failed sending follow request');
         };
 
         // return a 201 success response with the new request
@@ -311,6 +274,7 @@ async function addFollowRequestToUser(req, res, next) {
             message: 'Successfully sent follow request',
             request: request,
         });
+        return success(res, 201, 'Successfully sent follow request', 'request', request);
     } catch (err) {
         next(err);
     };
@@ -326,14 +290,12 @@ async function removeFollowRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(userId, peerId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return res.status(404).json({
-                message: 'Failed finding follow request'
-            });
+            return failure(res, 404, 'Failed finding follow request');
         };
 
         await db.removeFollowRequestFromUser(userId, peerId);
         // return a 204 success response indicating the follow request was deleted
-        return res.sendStatus(204);
+        return success(res, 204);
     } catch (err) {
         next(err);
     };
@@ -349,14 +311,12 @@ async function declineFollowRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return res.status(404).json({
-                message: 'Failed finding follow request'
-            });
+            return failure(res, 404, 'Failed finding follow request');
         };
 
         await db.removeFollowRequestFromUser(peerId, userId);
         // return a 204 success response indicating the follow request was deleted
-        return res.sendStatus(204);
+        return success(res, 204);
     } catch (err) {
         next(err);
     };
@@ -368,9 +328,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
     const peerId = req.validatedId;
 
     if (userId === peerId) {
-        return res.status(422).json({
-            message: 'Cannot follow yourself',
-        });
+        return failure(res, 422, 'Cannot follow yourself');
     };
     
     try {
@@ -378,25 +336,18 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return res.status(404).json({
-                message: 'Failed finding follow request'
-            });
+            return failure(res, 404, 'Failed finding follow request');
         };
 
         const deleteRequest = await db.removeFollowRequestFromUser(peerId, userId);
         const addRequest = await db.addFollowerToUser(userId, peerId);
         // if the follower is not created, return a 400 failure response
         if (!addRequest) {
-            return res.status(400).json({
-                message: 'Failed adding follower',
-            });
+            return failure(res, 400, 'Failed adding follower');
         };
 
         // return a 201 success response with the new follower
-        return res.status(201).json({
-            message: 'Successfully added follower',
-            follower: addRequest,
-        });
+        return success(res, 201, 'Successfully added follower', 'follower', addRequest);
     } catch (err) {
         next(err);
     };
@@ -412,13 +363,12 @@ async function removeFollower(req, res, next) {
         const follower = await db.getFollowerByIds(userId, peerId);
         // if no follower is found, return a 404 failure response
         if (!follower) {
-            return res.status(404).json({
-                message: 'Failed finding follower'
-            });
+            return failure(res, 404, 'Failed finding follower');
         };
         await db.removeFollower(userId, peerId);
         // return a 204 success response indicating the follower was deleted
         return res.sendStatus(204);
+        return success(res, 204);
     } catch (err) {
         next(err);
     };

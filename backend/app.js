@@ -9,7 +9,7 @@ const cors = require('cors')
 const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
 const commentRouter = require('./routes/commentRouter');
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./utils/errorHandler');
 
 const PORT = process.env.PORT || 3000
 
