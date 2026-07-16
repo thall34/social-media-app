@@ -1,12 +1,3 @@
-To Do List:
-
-Clean up CSS
-
-Frontend
-Be able to go to profile when clicking on profile picture or name on post author
-Be able to go to profile when clicking on profile picture or name on comment author
-Right now, adding or editing comments will take you back to your user posts page, need to find out how to add a comment and return to the peer page you were on if going that route
-
 # Social Media App
 The goal of this project was to create a full stack social media app. I decided to use REST APIs in Node.js using Express, PostgreSQL, and Prisma for the backend and React for the frontend.
 
