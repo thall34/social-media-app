@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import Header from './Header';
+import Footer from './Footer';
 import createUser from "../api/createUser";
 import handleChange from '../utils/handleChange';
 
@@ -46,15 +48,20 @@ function RegistrationForm() {
 
     if (error) {
         return (
-            <div>
+            <div className='page'>
+                <Header setError={setError}/>
                 <h1>{error.message}</h1>
                 <button onClick={() => setError(null)}>Back to Registration Page</button>
+                <Footer />
             </div>
         )
     };
 
     return (
-        <div>
+        <div className='page'>
+            <Header user={null} setError={setError} />
+            <main>
+                <section className='form'>
             <form onSubmit={handleRegistration} encType='multipart/form-data'>
                 <h1>Register New User</h1>
                 <label htmlFor="firstName">First Name: </label>
@@ -66,16 +73,16 @@ function RegistrationForm() {
                 <label htmlFor="password">Password: </label>
                 <input type="password" name="password" id="password" value={newUserData.password} onChange={(e) => handleChange(e, setNewUserData)} />
                 <label htmlFor="profilePic">Profile Picture (optional): </label>
-                <input type="file" name="profilePic" id="profilePic"/>
+                <input type="file" name="profilePic" id="profilePic" className='file'/>
                 <label htmlFor="city">City (optional): </label>
                 <input type="text" name="city" id="city" value={newUserData.city} onChange={(e) => handleChange(e, setNewUserData)} />
                 <label htmlFor="birthDate">Date of Birth: </label>
                 <input type="date" name="birthDate" id="birthDate" value={newUserData.birthDate} onChange={(e) => handleChange(e, setNewUserData)} />
                 <button type="submit">Register User</button>
             </form>
-            <Link to='/'>
-                <button>Back to Homepage</button>
-            </Link>
+            </section>
+            </main>
+            <Footer />
         </div>
     )
 };

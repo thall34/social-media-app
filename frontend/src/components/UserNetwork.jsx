@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router';
+import Header from './Header';
+import Footer from './Footer';
 import Peer from './Peer';
 import getCurrentUser from '../api/getCurrentUser';
-import logOutUser from '../api/logOutUser';
-import deleteUser from '../api/deleteUser';
 import getPeerPool from '../api/getPeerPool';
 import formatBirthday from '../utils/formatBirthday';
 
@@ -18,33 +18,6 @@ function UserNetwork() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  async function handleLogout() {
-    try {
-        await logOutUser();
-        navigate('/');
-    } catch(err) {
-        setError(err);
-    };
-  };
-
-  async function handleDeleteUser() {
-    try {
-      const success = await deleteUser(user.id);
-
-      if (!success) {
-        const error = new Error('Error Deleting User');
-        error.status = 400;
-        setError(error);
-        return;
-      };
-
-      await logOutUser();
-      navigate('/');
-    } catch(err) {
-      setError(err);
-    };
-  };
 
   useEffect(() => {
     async function initializePage() {
@@ -69,7 +42,7 @@ function UserNetwork() {
 
   if (loading) {
     return (
-      <div>
+      <div className='page'>
         <h1>Loading...</h1>
       </div>
     )
@@ -77,11 +50,13 @@ function UserNetwork() {
 
   if (error) {
     return (
-      <div>
+      <div className='page'>
+        <Header user={user} setError={setError} />
         <h1>{error.message}</h1>
         <Link to='/'>
           <button onClick={() => setError(null)}>Back to Homepage</button>
         </Link>
+        <Footer />
       </div>
     )
   };
@@ -90,22 +65,22 @@ function UserNetwork() {
     const activeDate = new Date(user.createdAt);
 
     return (
-      <div>
-        <div>
+      <div className='page'>
+        <Header user={user} setError={setError} />
+        <main>
+        <section className='user-details'>
             <h1>{user.firstName} {user.lastName}</h1>
-            <div className='image profile'>
               <Link to={user.profilePicFilePath}>
-                <img src={user.profilePicFilePath}></img>
+                <img src={user.profilePicFilePath} className='image profile' />
               </Link>
-            </div>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
             <p>Lives in {user.city}</p>
             <p>Born on {formatBirthday(user.birthDate)}</p>
-        </div>
+        </section>
         <h3>Users</h3>
         {peerPool.length > 0 ? (
-          <div>
+          <section className='user-peers'>
             {peerPool.map((peer) => (
               <Peer 
                 key={peer.id} 
@@ -122,30 +97,24 @@ function UserNetwork() {
                 setError={setError} 
               />
             ))}
-          </div>
+          </section>
         ) : (
           <></>
         )}
-        <div>
-          <Link to='/user/posts'>
-            <button>Go to Your User Posts Page</button>
-          </Link>
-          <Link to='/user/update'>
-            <button>Edit User Profile</button>
-          </Link>
-          <button onClick={handleDeleteUser}>Delete User</button>
-          <button onClick={handleLogout}>Log Out</button>
-        </div>
+        </main>
+        <Footer />
       </div>
     )
   };
 
   return (
-    <div>
+    <div className='page'>
+      <Header user={user} setError={setError} />
       <h1>Not Authenticated</h1>
       <Link to='/'>
         <button>Go to Homepage</button>
       </Link>
+      <Footer />
     </div>
   )
 };

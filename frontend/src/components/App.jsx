@@ -20,7 +20,7 @@ function App() {
         setUser(currentUser);
         if (currentUser) {
           navigate('/user/posts');
-        }
+        };
       } catch (err) {
         setUser(null);
       } finally {
@@ -33,7 +33,7 @@ function App() {
 
   if (loading) {
     return (
-      <div>
+      <div className='page'>
         <h1>Loading...</h1>
       </div>
     )
@@ -41,11 +41,13 @@ function App() {
 
   if (error) {
     return (
-      <div>
+      <div className='page'>
+        <Header user={user} setError={setError} />
         <h1>{error.message}</h1>
         <Link to='/'>
           <button onClick={() => setError(null)}>Back to Homepage</button>
         </Link>
+        <Footer />
       </div>
     )
   };

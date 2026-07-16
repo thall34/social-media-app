@@ -29,7 +29,7 @@ function LoginForm({ setError }) {
     };
 
     return (
-        <section className='login'>
+        <section className='form'>
             <form onSubmit={handleLogin}>
                 <h1>Login</h1>
                 <label htmlFor="username">Email: </label>

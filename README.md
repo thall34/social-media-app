@@ -3,8 +3,6 @@ Last big project of full stack javascript course
 
 To Do List:
 
-Refactor failure utility function into controllers
-Keep styling app
 Buff up readme
 
 Frontend

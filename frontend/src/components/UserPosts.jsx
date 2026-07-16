@@ -5,7 +5,6 @@ import Footer from './Footer';
 import Post from './Post';
 import getCurrentUser from '../api/getCurrentUser';
 import getAllPostsForUser from '../api/getAllPostsForUser';
-import deleteUser from '../api/deleteUser';
 
 function UserPosts() {
   const [user, setUser] = useState(null);
@@ -14,24 +13,6 @@ function UserPosts() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  async function handleDeleteUser() {
-    try {
-      const success = await deleteUser(user.id);
-
-      if (!success) {
-        const error = new Error('Error Deleting User');
-        error.status = 400;
-        setError(error);
-        return;
-      };
-
-      await logOutUser();
-      navigate('/');
-    } catch(err) {
-      setError(err);
-    };
-  };
 
   useEffect(() => {
     async function initializePage() {
@@ -81,7 +62,7 @@ function UserPosts() {
         <section className='user-details'>
             <h1>{user.firstName} {user.lastName}</h1>
               <Link to={user.profilePicFilePath}>
-                <img src={user.profilePicFilePath} className='image profile'></img>
+                <img src={user.profilePicFilePath} className='image profile' />
               </Link>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
@@ -98,9 +79,9 @@ function UserPosts() {
                 ))}
             </>
         ) : (
-            <>
+            <div className='no-posts'>
                 <h3>No posts yet</h3>
-            </>
+            </div>
         )}
         </section>
         </main>
@@ -116,6 +97,7 @@ function UserPosts() {
       <Link to='/'>
         <button>Go to Homepage</button>
       </Link>
+      <Footer />
     </div>
   )
 };

@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import Nav from './Nav';
 
 function Header({ user, setError }) {
@@ -5,7 +6,7 @@ function Header({ user, setError }) {
         return (
             <header>
                 <h1>BookFace</h1>
-                <Nav setError={setError} />
+                <Nav user={user} setError={setError} />
             </header>
         )
     }
@@ -13,6 +14,9 @@ function Header({ user, setError }) {
     return (
         <header>
             <h1>Bookface</h1>
+            <Link to='/'>
+                <p>Home</p>
+            </Link>
         </header>
     )
 }

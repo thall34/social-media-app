@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
+import Header from './Header';
+import Footer from './Footer';
 import getCurrentUser from '../api/getCurrentUser';
 import updateProfilePic from '../api/updateProfilePic';
 
@@ -55,26 +57,31 @@ function UpdateProfilePic() {
 
     if (error) {
         return (
-            <div>
+            <div className='page'>
+                <Header user={user} setError={setError} />
                 <h1>{error.message}</h1>
                 <button onClick={() => setError(null)}>Back to User Update Page</button>
+                <Footer />
             </div>
         )
     };
 
     if (user) {
         return (
-            <div>
-                <div className='image preview'><img src={user.profilePicFilePath}></img></div>
-                <form onSubmit={handleUpdate} encType='multipart/form-data'>
-                    <h1>Update Profile Picture</h1>
-                    <label htmlFor="profilePic">Profile Picture: </label>
-                    <input type="file" name="profilePic" id="profilePic" />
-                    <button type='submit'>Submit Update</button>
-                </form>
-                <Link to='/user/posts'>
-                    <button>Back to User Posts Page</button>
-                </Link>
+            <div className='page'>
+                <Header user={setUser} setError={setError} />
+                <main>
+                    <section className='form'>
+                        <img src={user.profilePicFilePath} className='image preview' />
+                        <form onSubmit={handleUpdate} encType='multipart/form-data'>
+                            <h1>Update Profile Picture</h1>
+                            <label htmlFor="profilePic">Profile Picture: </label>
+                            <input type="file" name="profilePic" id="profilePic" className='file'/>
+                            <button type='submit'>Submit Update</button>
+                        </form>
+                    </section>
+                </main>
+                <Footer />
             </div>
         )
     };

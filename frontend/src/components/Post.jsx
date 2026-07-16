@@ -51,7 +51,7 @@ function Post({ userId, post, setPosts, setError }) {
             <section className='post'>
                 <section className='post-details'>
                     <span>
-                        <img src={post.author.profilePicFilePath} className='image user'></img>
+                        <img src={post.author.profilePicFilePath} className='image user' />
                         <p>{post.author.firstName} {post.author.lastName}</p>
                     </span>
                     <p>{post.text}</p>

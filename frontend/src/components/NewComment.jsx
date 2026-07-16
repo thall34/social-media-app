@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router';
+import Header from './Header';
+import Footer from './Footer';
 import getCurrentUser from '../api/getCurrentUser';
 import createNewComment from '../api/createNewComment';
 import handleChange from '../utils/handleChange';
@@ -27,37 +29,40 @@ function NewComment() {
             };
 
             navigate('/user/posts');
-        } catch(err) {
+        } catch (err) {
             setError(err);
         };
     };
 
     useEffect(() => {
-    async function initializePage() {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      };
-    };
+        async function initializePage() {
+            try {
+                const currentUser = await getCurrentUser();
+                setUser(currentUser);
+            } catch (err) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            };
+        };
 
-    initializePage();
-  }, []);
+        initializePage();
+    }, []);
 
     return (
-        <div>
-            <form onSubmit={(e) => handleNewComment(e)}>
-                <h3>New Comment</h3>
-                <label htmlFor="text">Text: </label>
-                <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)}/>
-                <button type='submit'>Submit New Comment</button>
-            </form>
-            <Link to='/user/posts'>
-                <button>Back to User Posts</button>
-            </Link>
+        <div className='page'>
+            <Header user={user} setError={setError} />
+            <main>
+                <section className='form'>
+                    <form onSubmit={(e) => handleNewComment(e)}>
+                        <h3>New Comment</h3>
+                        <label htmlFor="text">Text: </label>
+                        <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)} />
+                        <button type='submit'>Submit New Comment</button>
+                    </form>
+                </section>
+            </main>
+            <Footer />
         </div>
     )
 };

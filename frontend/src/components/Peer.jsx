@@ -96,137 +96,42 @@ function Peer({
     const requestSent = requestSentPool.some(request => request.followedUserId === peer.id);
     const requestReceived = requestReceivedPool.some(request => request.followingUserId === peer.id);
 
-    if (following && followed) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button>Following</button>
-                <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
-                <button>Following You</button>
-                <button onClick={() => handleRemoveFollower(peer.id)}>Remove Follower</button>
-            </div>
-        )
-    }
-
-    if (following && !followed && requestReceived) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button>Following</button>
-                <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
-                <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
-                <button onClick={() => handleDeclineFollowRequest(peer.id)}>Decline Follow Request</button>
-            </div>
-        )
-    } else if (following && !followed) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button>Following</button>
-                <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
-            </div>
-        )
-    }
-
-    if (!following && followed && requestSent) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button>Follow Request Sent</button>
-                <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
-                <button>Following You</button>
-                <button onClick={() => handleRemoveFollower(peer.id)}>Remove Follower</button>
-            </div>
-        )
-    } else if (!following && followed) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
-                <button>Following You</button>
-                <button onClick={() => handleRemoveFollower(peer.id)}>Remove Follower</button>
-            </div>
-        )
-    }
-
-    if (!following && !followed && requestSent && requestReceived) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button>Follow Request Sent</button>
-                <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
-                <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
-                <button onClick={() => handleDeclineFollowRequest(peer.id)}>Decline Follow Request</button>
-            </div>
-        )
-    } else if (!following && !followed && requestSent) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button>Follow Request Sent</button>
-                <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
-            </div> 
-        )
-    } else if (!following && !followed && requestReceived) {
-        return (
-            <div>
-                <div className='image profile'>
-                    <img src={peer.profilePicFilePath}></img>
-                </div>
-                <Link to={`/user/peer/${peer.id}`}>
-                    {peer.firstName} {peer.lastName}
-                </Link>
-                <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
-                <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
-                <button onClick={() => handleDeclineFollowRequest(peer.id)}>Decline Follow Request</button>
-            </div>
-        )
-    }
-
     return (
-        <div>
-            <div className='image profile'>
-                <img src={peer.profilePicFilePath}></img>
-            </div>
-            <Link to={`/user/peer/${peer.id}`}>
-                {peer.firstName} {peer.lastName}
-            </Link>
-            <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
+        <div className='peer-background'>
+            <section className='peer'>
+                <img src={peer.profilePicFilePath} className='image profile' />
+                <Link to={`/user/peer/${peer.id}`}>
+                    <p>{peer.firstName} {peer.lastName}</p>
+                </Link>
+                {following ? (
+                    <div className='following'>
+                        <button>Following</button>
+                        <button onClick={() => handleRemoveFollowing(peer.id)}>Stop Following</button>
+                    </div>
+                ) : requestSent ? (
+                    <div className='following'>
+                        <button>Follow Request Sent</button>
+                        <button onClick={() => handleCancelFollowRequest(peer.id)}>Cancel Follow Request</button>
+                    </div>
+                ) : (
+                    <div className='following'>
+                        <button onClick={() => handleSendFollowRequest(peer.id)}>Follow</button>
+                    </div>
+                )}
+                {followed ? (
+                    <div className='followed'>
+                        <button>Following You</button>
+                        <button onClick={() => handleRemoveFollower(peer.id)}>Remove Follower</button>
+                    </div>
+                ) : requestReceived ? (
+                    <div className='followed'>
+                        <button onClick={() => handleAcceptFollowRequest(peer.id)}>Accept Follow Request</button>
+                        <button onClick={() => handleDeclineFollowRequest(peer.id)}>Decline Follow Request</button>       
+                    </div>
+                ) : (
+                    <></>
+                )}
+            </section>
         </div>
     )
 };

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router';
+import Header from './Header';
+import Footer from './Footer';
 import getCurrentUser from '../api/getCurrentUser';
 import getCurrentPost from '../api/getCurrentPost';
 import updatePost from '../api/updatePost';
@@ -28,39 +30,42 @@ function UpdatePost() {
             };
 
             navigate('/user/posts');
-        } catch(err) {
+        } catch (err) {
             setError(err);
         };
     };
 
     useEffect(() => {
-    async function initializePage() {
-      try {
-        const currentUser = await getCurrentUser();
-        const currentPost = await getCurrentPost(postId);
-        setUser(currentUser);
-        setPostData({ text: currentPost.post.text });
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      };
-    };
+        async function initializePage() {
+            try {
+                const currentUser = await getCurrentUser();
+                const currentPost = await getCurrentPost(postId);
+                setUser(currentUser);
+                setPostData({ text: currentPost.post.text });
+            } catch (err) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            };
+        };
 
-    initializePage();
-  }, []);
+        initializePage();
+    }, []);
 
     return (
-        <div>
-            <form onSubmit={(e) => handleUpdatePost(e)}>
-                <h3>Update Post</h3>
-                <label htmlFor="text">Text: </label>
-                <textarea name='text' id='text' rows={10} cols={50} value={postData.text} onChange={(e) => handleChange(e, setPostData)}/>
-                <button type='submit'>Submit Updated Post</button>
-            </form>
-            <Link to='/user/posts'>
-                <button>Back to User Posts</button>
-            </Link>
+        <div className='page'>
+            <Header user={user} setError={setError} />
+            <main>
+                <section className='form'>
+                    <form onSubmit={(e) => handleUpdatePost(e)}>
+                        <h3>Update Post</h3>
+                        <label htmlFor="text">Text: </label>
+                        <textarea name='text' id='text' rows={10} cols={50} value={postData.text} onChange={(e) => handleChange(e, setPostData)} />
+                        <button type='submit'>Submit Updated Post</button>
+                    </form>
+                </section>
+            </main>
+            <Footer />
         </div>
     )
 };
