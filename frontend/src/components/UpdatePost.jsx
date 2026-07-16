@@ -41,7 +41,7 @@ function UpdatePost() {
                 const currentUser = await getCurrentUser();
                 const currentPost = await getCurrentPost(postId);
                 setUser(currentUser);
-                setPostData({ text: currentPost.post.text });
+                setPostData({ text: currentPost.data.text });
             } catch (err) {
                 setUser(null);
             } finally {

@@ -13,8 +13,7 @@ async function getCurrentPost(id) {
         return null;
       };
 
-      const post = await response.json();
-      return post;
+      return response.json();
     } catch (err) {
       return null;
     };

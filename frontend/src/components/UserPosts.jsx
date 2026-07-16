@@ -20,7 +20,7 @@ function UserPosts() {
         const currentUser = await getCurrentUser();
         const currentPosts = await getAllPostsForUser(currentUser.id);
         setUser(currentUser);
-        setPosts(currentPosts.posts);
+        setPosts(currentPosts.data);
       } catch (err) {
         setUser(null);
       } finally {

@@ -14,8 +14,7 @@ async function getPeerPool(userId) {
         return null;
       };
 
-      const users = await response.json();
-      return users;
+      return response.json();
     } catch (err) {
       return null;
     };

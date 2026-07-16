@@ -13,8 +13,7 @@ async function getCurrentComment(id) {
         return null;
       };
 
-      const comment = await response.json();
-      return comment;
+      return response.json();
     } catch (err) {
       return null;
     };

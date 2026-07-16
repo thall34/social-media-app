@@ -13,8 +13,7 @@ async function getAllPostsForUser(id) {
         return null;
       };
 
-      const posts = await response.json();
-      return posts;
+      return response.json();
     } catch (err) {
       return null;
     };

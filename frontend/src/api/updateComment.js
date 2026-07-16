@@ -13,8 +13,7 @@ async function updateComment(userId, commentId, commentData) {
             return null;
         };
 
-        const comment = await response.json();
-        return comment;
+        return response.json();
     } catch (err) {
         return err;
     };

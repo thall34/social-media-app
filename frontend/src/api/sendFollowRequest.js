@@ -12,8 +12,7 @@ async function sendFollowRequest(senderId, receiverId) {
             return null;
         };
 
-        const success = await response.json();
-        return success;
+        return response.json();
     } catch (err) {
         return err;
     };

@@ -15,7 +15,7 @@ async function getPost(req, res, next) {
         };
 
         // return a 200 success response with the found post
-        return success(res, 200, 'Successfully found post', 'post', post);
+        return success(res, 200, 'Successfully found post', post);
     } catch(err) {
         next(err);
     };
@@ -40,7 +40,7 @@ async function createPost(req, res, next) {
         };
 
         // return a 201 success response with the new post
-        return success(res, 201, 'Successfully created new post', 'newPost', newPost);
+        return success(res, 201, 'Successfully created new post', newPost);
     } catch(err) {
         next(err);
     };
@@ -78,7 +78,7 @@ async function updatePost(req, res, next) {
         };
 
         // return a 200 success response with the updated comment
-        return success(res, 200, 'Successfully updated post', 'updatedPost', updatedPost);
+        return success(res, 200, 'Successfully updated post', updatedPost);
     } catch(err) {
         next(err);
     };
@@ -120,7 +120,7 @@ async function getAllPostsForUser(req, res, next) {
     try {
         const posts = await db.getAllPostsForUserById(userId);
         // returns a 200 success response with the found posts
-        return success(res, 200, 'Successfully found posts', 'posts', posts);
+        return success(res, 200, 'Successfully found posts', posts);
     } catch(err) {
         next(err);
     };
@@ -132,7 +132,7 @@ async function getPostsForPeer(req, res, next) {
     try {
         const posts = await db.getPostsForPeerById(id);
         // returns a 200 success response with the found posts
-        return success(res, 200, 'Successfully found posts', 'posts', posts);
+        return success(res, 200, 'Successfully found posts', posts);
     } catch(err) {
         next(err);
     };
@@ -151,7 +151,7 @@ async function addLikeToPost(req, res, next) {
         };
 
         // return a 201 success response with the new like
-        return success(res, 201, 'Successfully added like to post', 'newLike', newLike);
+        return success(res, 201, 'Successfully added like to post', newLike);
     } catch(err) {
         next(err);
     };

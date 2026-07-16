@@ -15,7 +15,7 @@ async function getComment(req, res, next) {
         };
 
         // return a 200 success response with the found comment
-        return success(res, 200, 'Successfully found comment', 'comment', comment);
+        return success(res, 200, 'Successfully found comment', comment);
     } catch(err) {
         next(err);
     };
@@ -41,7 +41,7 @@ async function createComment(req, res, next) {
         };
 
         // return a 201 success response with the new comment
-        return success(res, 201, 'Successfully created new comment', 'newComment', newComment);
+        return success(res, 201, 'Successfully created new comment', newComment);
     } catch(err) {
         next(err);
     };
@@ -79,7 +79,7 @@ async function updateComment(req, res, next) {
         };
 
         // return a 200 success response with the updated comment
-        return success(res, 200, 'Successfully updated comment', 'updatedComment', updatedComment);
+        return success(res, 200, 'Successfully updated comment', updatedComment);
     } catch(err) {
         next(err);
     };

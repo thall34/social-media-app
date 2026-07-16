@@ -11,8 +11,7 @@ async function updateProfilePic(userId, formElements) {
             return null;
         };
 
-        const pic = await response.json();
-        return pic;
+        return response.json();
     } catch (err) {
         return err;
     };

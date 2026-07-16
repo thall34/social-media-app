@@ -13,8 +13,7 @@ async function getPostsForPeer(peerId) {
         return null;
       };
 
-      const posts = await response.json();
-      return posts;
+      return response.json();
     } catch (err) {
       return null;
     };

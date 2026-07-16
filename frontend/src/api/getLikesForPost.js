@@ -13,8 +13,7 @@ async function getLikesForPost(id) {
         return null;
     };
 
-    const likes = await response.json();
-    return likes;
+    return response.json();
     } catch(err) {
         return null;
     };

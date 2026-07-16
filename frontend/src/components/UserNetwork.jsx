@@ -25,7 +25,7 @@ function UserNetwork() {
         const currentUser = await getCurrentUser();
         const currentPeerPool = await getPeerPool(currentUser.id);
         setUser(currentUser);
-        setPeerPool(currentPeerPool.users);
+        setPeerPool(currentPeerPool.data);
         setRequestSentPool(currentUser.following_request);
         setRequestReceivedPool(currentUser.followed_request);
         setFollowerPool(currentUser.followers);

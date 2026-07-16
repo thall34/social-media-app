@@ -41,7 +41,7 @@ function UpdateComment() {
                 const currentUser = await getCurrentUser();
                 const currentComment = await getCurrentComment(commentId);
                 setUser(currentUser);
-                setCommentData({ text: currentComment.comment.text });
+                setCommentData({ text: currentComment.data.text });
             } catch (err) {
                 setUser(null);
             } finally {

@@ -91,9 +91,13 @@ function Peer({
         };
     };
 
+    // returns true if the current user is following this peer
     const following = followedPool.some(follower => follower.followedUserId === peer.id);
+    // returns true if the current user is being followed by this peer
     const followed = followerPool.some(follower => follower.followingUserId === peer.id);
+    // returns true if the current user has sent a follow request to this peer
     const requestSent = requestSentPool.some(request => request.followedUserId === peer.id);
+    // returns true if the current user has receieved a follow request from this peer
     const requestReceived = requestReceivedPool.some(request => request.followingUserId === peer.id);
 
     return (

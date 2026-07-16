@@ -14,8 +14,7 @@ async function getCurrentUser() {
         return null;
       };
 
-      const user = await response.json();
-      return user;
+      return response.json();
     } catch (err) {
       return null;
     };

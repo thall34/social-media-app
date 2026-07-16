@@ -8,6 +8,8 @@ async function logOutUser() {
         if (!response.ok) {
             return null;
         };
+
+        return response;
     } catch(err) {
         return null;
     };

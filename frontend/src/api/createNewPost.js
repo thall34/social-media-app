@@ -13,8 +13,7 @@ async function createNewPost(userId, postData) {
             return null;
         };
 
-        const post = await response.json();
-        return post;
+        return response.json();
     } catch (err) {
         return err;
     };

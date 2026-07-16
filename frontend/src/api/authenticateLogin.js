@@ -13,8 +13,8 @@ async function authenticateLogin(loginData) {
             return null;
         };
 
-        const user = await response.json();
-        return user.user;
+        const data = await response.json();
+        return data.user;
     } catch (err) {
         return err;
     };

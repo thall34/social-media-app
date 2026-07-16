@@ -12,8 +12,7 @@ async function addLikeToPost(postId, userId) {
             return null;
         };
 
-        const like = await response.json();
-        return like;
+        return response.json();
     } catch (err) {
         return err;
     };

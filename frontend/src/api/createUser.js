@@ -10,8 +10,7 @@ async function createUser(formElements) {
             return null;
         };
 
-        const user = await response.json();
-        return user;
+        return response.json();
     } catch (err) {
         return err;
     };

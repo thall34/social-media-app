@@ -24,11 +24,12 @@ function logInUser(req, res, next) {
             };
 
             // return a 200 success response with the logged in user
-            return res.status(200).json({
-                message: 'Successfully logged in',
-                success: true,
-                user: req.user,
-            });
+            // return res.status(200).json({
+            //     message: 'Successfully logged in',
+            //     success: true,
+            //     user: req.user,
+            // });
+            return success(res, 200, 'Successfully logged in', req.user)
         });
     }
     );
@@ -71,7 +72,7 @@ async function findUser(req, res, next) {
         };
 
         // return a 200 success response with the found user
-        return success(res, 200, 'Successfully found user', 'user', foundUser);
+        return success(res, 200, 'Successfully found user', foundUser);
     } catch (err) {
         next(err);
     };
@@ -109,7 +110,7 @@ async function createUser(req, res, next) {
         };
 
         // return a 201 success response with the new user
-        return success(res, 201, 'Successfully created new user', 'newUser', newUser);
+        return success(res, 201, 'Successfully created new user', newUser);
     } catch (err) {
         next(err);
     };
@@ -144,13 +145,13 @@ async function updateUser(req, res, next) {
             const hashedPassword = await bcrypt.hash(password, 10);
             const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, id);
             // return a 200 success response with the updated user
-            return success(res, 200, 'Successfully updated user', 'updatedUser', updatedUser);
+            return success(res, 200, 'Successfully updated user', updatedUser);
         };
 
         // if password entry from form is left empty, update user with new details but use previous password from found user
         const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, id);
         // return a 200 success response with the updated user
-        return success(res, 200, 'Successfully updated user', 'updatedUser', updatedUser);
+        return success(res, 200, 'Successfully updated user', updatedUser);
     } catch (err) {
         next(err);
     };
@@ -187,7 +188,7 @@ async function updateUserProfilePic(req, res, next) {
 
         const updatedUser = await db.updateUserProfilePicById(id, filePath, cloudinaryId);
         // return a 200 success response with the updated user
-        return success(res, 200, 'Successfully updated user', 'updatedUser', updatedUser);
+        return success(res, 200, 'Successfully updated user', updatedUser);
     } catch (err) {
         next(err);
     };
@@ -234,7 +235,7 @@ async function getPeerPool(req, res, next) {
     try {
         const users = await db.getPeerPool(id);
         // return a 200 success response with the found users
-        return success(res, 200, 'Successfully found users', 'users', users);
+        return success(res, 200, 'Successfully found users', users);
     } catch (err) {
         next(err);
     };
@@ -247,7 +248,7 @@ async function getPeerPoolForPeer(req, res, next) {
     try {
         const users = await db.getPeerPoolForPeer(id);
         // return a 200 success response with the found users
-        return success(res, 200, 'Successfully found users', 'users', users);
+        return success(res, 200, 'Successfully found users', users);
     } catch (err) {
         next(err);
     };
@@ -274,7 +275,7 @@ async function addFollowRequestToUser(req, res, next) {
             message: 'Successfully sent follow request',
             request: request,
         });
-        return success(res, 201, 'Successfully sent follow request', 'request', request);
+        return success(res, 201, 'Successfully sent follow request', request);
     } catch (err) {
         next(err);
     };
@@ -330,7 +331,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
     if (userId === peerId) {
         return failure(res, 422, 'Cannot follow yourself');
     };
-    
+
     try {
         // looks through database to ensure the follow request exists before deleting
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
@@ -347,7 +348,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
         };
 
         // return a 201 success response with the new follower
-        return success(res, 201, 'Successfully added follower', 'follower', addRequest);
+        return success(res, 201, 'Successfully added follower', addRequest);
     } catch (err) {
         next(err);
     };
@@ -367,7 +368,6 @@ async function removeFollower(req, res, next) {
         };
         await db.removeFollower(userId, peerId);
         // return a 204 success response indicating the follower was deleted
-        return res.sendStatus(204);
         return success(res, 204);
     } catch (err) {
         next(err);

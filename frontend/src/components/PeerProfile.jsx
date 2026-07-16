@@ -43,9 +43,9 @@ function PeerProfile() {
                 const currentPeerPool = await getPeerPoolForPeer(Number(peerId));
                 const currentPosts = await getPostsForPeer(Number(peerId));
                 setUser(currentUser);
-                setPeer(currentPeer.user);
-                setPosts(currentPosts.posts);
-                setPeerPool(currentPeerPool.users);
+                setPeer(currentPeer.data);
+                setPosts(currentPosts.data);
+                setPeerPool(currentPeerPool.data);
                 setRequestSentPool(currentUser.following_request);
                 setRequestReceivedPool(currentUser.followed_request);
                 setFollowerPool(currentUser.followers);
