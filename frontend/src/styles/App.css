@@ -184,8 +184,14 @@ li > button {
     width: 100%;
     justify-content: space-evenly;
     align-items: center;
-    padding: 2em;
+    padding: 1em 0em;
     padding-bottom: 1em;
+    background-color: white;
+    border-radius: 2em;
+}
+
+.post-buttons {
+    width: 75%;
 }
 
 .user-posts {
@@ -211,13 +217,6 @@ main {
     gap: 1em;
 }
 
-.post-buttons {
-    padding: 1em 0em;
-    width: 75%;
-    border-radius: 2em;
-    background-color: white;
-}
-
 .comment {
     width: 100%;
 }
@@ -238,6 +237,8 @@ main {
     width: 60%;
     align-items: center;
     border-radius: 2em;
+    padding: 1em;
+    gap: 1em;
     overflow: hidden;
     background-color: rgb(215, 214, 214);
 }
