@@ -41,17 +41,19 @@ Before installing, ensure you have the following software installed:
 ```cd clone-location/social-media-app```
 3. **Install dependencies**
 ```cd ./frontend -> npm install -> cd ../backend -> npm install```
-4. **Configure .env file in backend folder and add a DATABASE_URL variable**
+4. **Copy .env.example file in backend folder and rename it as a .env file**
+```cp ./backend/.env.example .env ```
+5. **Configure DATABASE_URL using your role name and password in your .env file**
 ```DATABASE_URL=postgresql://<your-role-name>:<your-role-password>@localhost:5432/socialpage?schema=public```
-5. **Add a SESSION_SECRET variable to your .env file**
+6. **Configure SESSION_SECRET variable in your .env file**
 ```SESSION_SECRET=<your_secret>```
-6. **Add cloudinary variables to your .env file**
+7. **Configure cloudinary variables in your .env file**
 ```CLOUDINARY_CLOUD_NAME=<your-cloud-name> CLOUDINARY_API_KEY=<your-api-key> CLOUDINARY_API_SECRET=<your-api-secret>```
-7. **Start the local server**
+8. **Start the local server**
 ```cd backend -> node app.js```
-8. **Start the React server**
+9. **Start the React server**
 ```cd frontend -> npm run dev```
-8. **Navigate to the localhost in your browser**
+10. **Navigate to the localhost in your browser**
 ```http://localhost:5173```
 
 ## Future improvements
