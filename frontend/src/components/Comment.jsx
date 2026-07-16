@@ -17,12 +17,9 @@ function Comment({ userId, postId, comment, setComments, setError }) {
     const createdDate = new Date(comment.createdAt);
 
     return (
-        <div className='comment'>
-            <div className='comment-details'>
-                <span>
-                    <div className='image user-comment'>
-                        <img src={comment.author.profilePicFilePath} width={25}></img>
-                    </div>
+        <section className='comment'>
+            <section className='comment-details'>
+                    <img src={comment.author.profilePicFilePath} className='image user-comment'></img>
                     <p>{comment.author.firstName} {comment.author.lastName}</p>
                     <p>{comment.text}</p>
                     <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
@@ -36,9 +33,8 @@ function Comment({ userId, postId, comment, setComments, setError }) {
                     ) : (
                         <></>
                     )}
-                </span>
-            </div>
-        </div>
+            </section>
+        </section>
     )
 };
 

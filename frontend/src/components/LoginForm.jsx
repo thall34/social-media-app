@@ -29,7 +29,7 @@ function LoginForm({ setError }) {
     };
 
     return (
-        <>
+        <section className='login'>
             <form onSubmit={handleLogin}>
                 <h1>Login</h1>
                 <label htmlFor="username">Email: </label>
@@ -41,7 +41,7 @@ function LoginForm({ setError }) {
             <Link to='/user/new'>
                 <button>Register New User</button>
             </Link>
-        </>
+        </section>
     )
 };
 

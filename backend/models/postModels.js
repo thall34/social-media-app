@@ -177,8 +177,10 @@ async function getPostsForPeerById(id) {
 async function getLikeByIds(userId, postId) {
     const like = await prisma.like.findUnique({
         where: {
-            userId: userId,
-            postId: postId,
+            userId_postId: {
+                userId: userId,
+                postId: postId,
+            },
         },
     });
 

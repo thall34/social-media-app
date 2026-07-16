@@ -30,7 +30,7 @@ function Post({ userId, post, setPosts, setError }) {
                     userId: like.newLike.userId,
                 },
             ]);
-        } catch(err) {
+        } catch (err) {
             setError(err);
         };
     };
@@ -41,52 +41,55 @@ function Post({ userId, post, setPosts, setError }) {
             setLikes((prevLikes) => {
                 return prevLikes.filter((like) => like.userId !== userId);
             });
-        } catch(err) {
+        } catch (err) {
             setError(err);
         };
     };
 
     return (
-        <div className='post'>
-            <div className='post-details'>
-                <span>
-                <div className='image user-post'>
-                    <img src={post.author.profilePicFilePath} width={25}></img>
-                </div>
-                <p>{post.author.firstName} {post.author.lastName}</p></span> 
-                <p>{post.text}</p>
-                <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
-            </div>
-            <div className='post-buttons'>
-                Likes: {likes.length}
-                {likes.some(like => like.userId === userId) ? (
-                    <button onClick={() => handleRemoveLike(post.id)}>Liked</button>
-                ) : (
-                    <button onClick={() => handleLikePost(post.id)}>Like</button>    
-                )}
-                {post.authorId === userId ? (
-                <>
-                    <Link to={`/user/post/${post.id}/update`}>
-                        <button>Edit Post</button>
+        <div className='post-background'>
+            <section className='post'>
+                <section className='post-details'>
+                    <span>
+                        <img src={post.author.profilePicFilePath} className='image user'></img>
+                        <p>{post.author.firstName} {post.author.lastName}</p>
+                    </span>
+                    <p>{post.text}</p>
+                    <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
+                </section>
+                <section className='post-buttons'>
+                    <button>Likes 👍: {likes.length}</button>
+                    {likes.some(like => like.userId === userId) ? (
+                        <button onClick={() => handleRemoveLike(post.id)}>Liked 👍</button>
+                    ) : (
+                        <button onClick={() => handleLikePost(post.id)}>Like</button>
+                    )}
+                    {post.authorId === userId ? (
+                        <>
+                            <Link to={`/user/post/${post.id}/update`}>
+                                <button>Edit Post</button>
+                            </Link>
+                            <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </section>
+                <section className='comments'>
+                    {comments.length > 0 ? (
+                        <>
+                            {comments.map((comment) => (
+                                <Comment key={comment.id} userId={userId} postId={post.id} comment={comment} setComments={setComments} setError={setError} />
+                            ))}
+                        </>
+                    ) : (
+                        <h3>No Comments Yet</h3>
+                    )}
+                    <Link to={`/user/post/${post.id}/comment/new`}>
+                        <button>Add Comment</button>
                     </Link>
-                    <button onClick={() => handleDeletePost(post.id)}>Delete Post</button>
-                </>
-                ) : (
-                    <></>
-                )}
-            </div>
-            {comments.length > 0 ? (
-                <>
-                    {comments.map((comment) => (
-                        <Comment key={comment.id} userId={userId} postId={post.id} comment={comment} setComments={setComments} setError={setError} />
-                    ))}
-                </>
-            ) : (
-                <h3>No Comments Yet</h3>
-            )}
-            <Link to={`/user/post/${post.id}/comment/new`}>
-                <button>Add Comment</button>
-            </Link>
+                </section>
+            </section>
         </div>
     )
 };

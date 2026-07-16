@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router';
 import RegistrationForm from './RegistrationForm';
 import LoginForm from './LoginForm';
+import Header from './Header';
+import Footer from './Footer';
 import getCurrentUser from '../api/getCurrentUser';
 
 function App() {
@@ -49,8 +51,10 @@ function App() {
   };
 
   return (
-    <div>
+    <div className='page'>
+      <Header user={user} setError={setError} />
       <LoginForm setError={setError} />
+      <Footer />
     </div>
   )
 };
