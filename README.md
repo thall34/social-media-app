@@ -3,6 +3,7 @@ The goal of this project was to create a full stack social media app. I decided 
 
 ## Features
 1. Single page app that starts on the homepage with a login form if no current user is logged in and register button to create a new user in the database.
+<img src='./screenshots/login.png' alt='login page' width='500'>
 2. Once successfully logged in and a passport session has been made in the backend, goes to the user homepage.
 3. Header and footer on every page that displays the app name, and a nav bar that either has a home button if the user isn't signed in, or a full nav bar with user home, user network, user edit, user delete and user log out buttons.
 4. User home page with the current logged in user's full name, their profile picture, an edit profile picture button and their date that they created their account, as well as a list of all posts created by the current user and any posts by peers the current user is following sorted from newest to oldest.
@@ -11,7 +12,7 @@ The goal of this project was to create a full stack social media app. I decided 
 7. Users can create posts on their home page, and can create comments and add/remove likes on any post that is on their home page or on any selected peer profile page that has posts available
 8. Users can edit/delete any post or comment that has a matching author ID to the current user.
 
-## Installation
+## Project Setup
 
 Before installing, ensure you have the following software installed:
 **Git**: [Download Git](https://git-scm.com)
