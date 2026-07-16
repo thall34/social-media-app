@@ -15,7 +15,7 @@ function Header({ user, setError }) {
         <header>
             <h1>Bookface</h1>
             <Link to='/'>
-                <p>Home</p>
+                <p className='home'>Home</p>
             </Link>
         </header>
     )

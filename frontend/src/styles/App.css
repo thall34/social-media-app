@@ -121,7 +121,7 @@ a {
     color: black;
 }
 
-a > p {
+.home {
     color: white;
     font-weight: 900;
 }
