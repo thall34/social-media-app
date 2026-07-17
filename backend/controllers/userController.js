@@ -266,10 +266,6 @@ async function addFollowRequestToUser(req, res, next) {
         };
 
         // return a 201 success response with the new request
-        return res.status(201).json({
-            message: 'Successfully sent follow request',
-            request: request,
-        });
         return success(res, 201, 'Successfully sent follow request', request);
     } catch (err) {
         next(err);

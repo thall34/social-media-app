@@ -27,7 +27,7 @@ function Post({ userId, post, setPosts, setError }) {
             const like = await addLikeToPost(id, userId);
             setLikes((prevLikes) => [
                 ...prevLikes, {
-                    userId: like.newLike.userId,
+                    userId: like.data.userId,
                 },
             ]);
         } catch (err) {

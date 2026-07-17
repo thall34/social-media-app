@@ -24,7 +24,7 @@ function Peer({
             const success = await sendFollowRequest(userId, id);
             setRequestSentPool((prevRequests) => [
                 ...prevRequests, {
-                    followedUserId: success.request.followedUserId,
+                    followedUserId: success.data.followedUserId,
                 }
             ]);
         } catch (err) {
@@ -51,7 +51,7 @@ function Peer({
             });
             
             setFollowerPool((prevFollowers) => [
-                ...prevFollowers, success.follower
+                ...prevFollowers, success.data
             ]);
         } catch (err) {
             setError(err);

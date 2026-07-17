@@ -17,7 +17,6 @@ function App() {
     async function initializePage() {
       try {
         const currentUser = await getCurrentUser();
-        console.log(currentUser);
         setUser(currentUser);
         if (currentUser) {
           navigate('/user/posts');
