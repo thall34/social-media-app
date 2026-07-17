@@ -7,14 +7,12 @@ function errorHandler(err, req, res, next) {
     if (err instanceof multer.MulterError) {
         switch (err.code) {
             case 'LIMIT_FILE_SIZE':
-                return res.status(400).render('errors', {
-                    title: 'File Too Large',
+                return res.status(400).json({
                     message: 'The uploaded file exceeds the maximum allowed (5mb)',
                 });
 
             default:
-                return res.status(400).render('errors', {
-                    title: 'Upload Error',
+                return res.status(400).json({
                     message: 'Upload Error',
                 });
         };
@@ -22,11 +20,10 @@ function errorHandler(err, req, res, next) {
 
     // Multer upload wrong file type error
     if (err.message === 'Invalid file type') {
-        return res.status(400).render('errors', {
-            title: 'Invalid File Type',
+        return res.status(400).json({
             message: 'Only JPG, PNG, and WEBP images are allowed.',
         });
-    }
+    };
 
     // postSQL Database errors
     if (err.code) {

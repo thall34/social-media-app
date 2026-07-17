@@ -21,12 +21,6 @@ function NewPost() {
 
         try {
             const success = await createNewPost(user.id, postData);
-            if (!success) {
-                const error = new Error('Error creating post');
-                error.status = 400;
-                setError(error);
-            };
-
             navigate('/user/posts');
         } catch (err) {
             setError(err);
@@ -39,7 +33,7 @@ function NewPost() {
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
             } catch (err) {
-                setUser(null);
+                setError(err);
             } finally {
                 setLoading(false);
             };
@@ -48,19 +42,51 @@ function NewPost() {
         initializePage();
     }, []);
 
+    if (loading) {
+        return (
+            <div className='page'>
+                <h1>Loading...</h1>
+            </div>
+        )
+    };
+
+    if (error) {
+        return (
+            <div className='page'>
+                <Header user={user} setError={setError} />
+                <h1>{error.message}</h1>
+                <button onClick={() => setError(null)}>Back to New Post</button>
+                <Footer />
+            </div>
+        )
+    };
+
+    if (user) {
+        return (
+            <div className='page'>
+                <Header user={user} setError={setError} />
+                <main>
+                    <section className='form'>
+                        <form onSubmit={(e) => handleNewPost(e)}>
+                            <h3>New Post</h3>
+                            <label htmlFor="text">Text: </label>
+                            <textarea name='text' id='text' rows={10} cols={50} value={postData.text} onChange={(e) => handleChange(e, setPostData)} />
+                            <button type='submit'>Submit New Post</button>
+                        </form>
+                    </section>
+                </main>
+                <Footer />
+            </div>
+        )
+    }
+
     return (
         <div className='page'>
             <Header user={user} setError={setError} />
-            <main>
-                <section className='form'>
-                    <form onSubmit={(e) => handleNewPost(e)}>
-                        <h3>New Post</h3>
-                        <label htmlFor="text">Text: </label>
-                        <textarea name='text' id='text' rows={10} cols={50} value={postData.text} onChange={(e) => handleChange(e, setPostData)} />
-                        <button type='submit'>Submit New Post</button>
-                    </form>
-                </section>
-            </main>
+            <h1>Not Authenticated</h1>
+            <Link to='/'>
+                <button>Go to Homepage</button>
+            </Link>
             <Footer />
         </div>
     )

@@ -10,12 +10,12 @@ async function updatePost(userId, postId, postData) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Post not updated');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

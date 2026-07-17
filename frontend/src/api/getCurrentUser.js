@@ -16,7 +16,7 @@ async function getCurrentUser() {
 
       return response.json();
     } catch (err) {
-      return null;
+      throw err;
     };
   };
 

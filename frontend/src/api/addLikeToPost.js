@@ -9,12 +9,12 @@ async function addLikeToPost(postId, userId) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Like not added to post')
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

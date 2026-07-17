@@ -10,12 +10,12 @@ async function getLikesForPost(id) {
     );
 
     if (!response.ok) {
-        return null;
+        throw new Error('Likes not found for post');
     };
 
     return response.json();
     } catch(err) {
-        return null;
+        throw err;
     };
 };
 

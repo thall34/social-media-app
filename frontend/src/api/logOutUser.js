@@ -6,12 +6,12 @@ async function logOutUser() {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Could not log out user');
         };
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     };
 };
 

@@ -10,13 +10,13 @@ async function authenticateLogin(loginData) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Invalid Username or Password');
         };
 
         const data = await response.json();
         return data.user;
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

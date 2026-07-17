@@ -10,12 +10,12 @@ async function getPostsForPeer(peerId) {
       );
 
       if (!response.ok) {
-        return null;
+        throw new Error('Posts not found');
       };
 
       return response.json();
     } catch (err) {
-      return null;
+      throw err;
     };
   };
 

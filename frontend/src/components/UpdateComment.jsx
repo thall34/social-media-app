@@ -23,12 +23,6 @@ function UpdateComment() {
 
         try {
             const success = await updateComment(user.id, commentId, commentData);
-            if (!success) {
-                const error = new Error('Error updating comment');
-                error.status = 400;
-                setError(error);
-            };
-
             navigate('/user/posts');
         } catch (err) {
             setError(err);
@@ -43,7 +37,7 @@ function UpdateComment() {
                 setUser(currentUser);
                 setCommentData({ text: currentComment.data.text });
             } catch (err) {
-                setUser(null);
+                setError(null);
             } finally {
                 setLoading(false);
             };
@@ -52,19 +46,51 @@ function UpdateComment() {
         initializePage();
     }, []);
 
+    if (loading) {
+        return (
+            <div className='page'>
+                <h1>Loading...</h1>
+            </div>
+        )
+    };
+
+    if (error) {
+        return (
+            <div className='page'>
+                <Header user={user} setError={setError} />
+                <h1>{error.message}</h1>
+                <button onClick={() => setError(null)}>Back to Update Comment</button>
+                <Footer />
+            </div>
+        )
+    };
+
+    if (user) {
+        return (
+            <div className='page'>
+                <Header user={user} setError={setError} />
+                <main>
+                    <section className='form'>
+                        <form onSubmit={(e) => handleUpdateComment(e)}>
+                            <h3>Update Comment</h3>
+                            <label htmlFor="text">Text: </label>
+                            <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)} />
+                            <button type='submit'>Submit Updated Comment</button>
+                        </form>
+                    </section>
+                </main>
+                <Footer />
+            </div>
+        )
+    }
+
     return (
         <div className='page'>
             <Header user={user} setError={setError} />
-            <main>
-                <section className='form'>
-                    <form onSubmit={(e) => handleUpdateComment(e)}>
-                        <h3>Update Comment</h3>
-                        <label htmlFor="text">Text: </label>
-                        <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)} />
-                        <button type='submit'>Submit Updated Comment</button>
-                    </form>
-                </section>
-            </main>
+            <h1>Not Authenticated</h1>
+            <Link to='/'>
+                <button>Go to Homepage</button>
+            </Link>
             <Footer />
         </div>
     )

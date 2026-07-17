@@ -10,12 +10,12 @@ async function getCurrentPeer(id) {
       );
 
       if (!response.ok) {
-        return null;
+        throw new Error('Peer not found');
       };
 
       return response.json();
     } catch (err) {
-      return null;
+      throw err;
     };
   };
 

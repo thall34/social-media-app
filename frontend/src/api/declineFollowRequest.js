@@ -8,12 +8,12 @@ async function declineFollowRequest(receiverId, senderId) {
         );
 
         if (!response.ok) {
-            return null;
+            throw new Error('Follow request could not be declined');
         }
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     }
 }
 

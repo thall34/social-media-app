@@ -8,12 +8,12 @@ async function cancelFollowRequest(senderId, receiverId) {
         );
 
         if (!response.ok) {
-            return null;
+            throw new Error('Follow request could not be cancelled')
         }
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     }
 }
 

@@ -10,12 +10,12 @@ async function getCurrentComment(id) {
       );
 
       if (!response.ok) {
-        return null;
+        throw new Error('Comment not found');
       };
 
       return response.json();
     } catch (err) {
-      return null;
+      throw err;
     };
   };
 

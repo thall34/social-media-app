@@ -17,14 +17,6 @@ function Nav({ user, setError }) {
     async function handleDeleteUser() {
     try {
       const success = await deleteUser(user.id);
-
-      if (!success) {
-        const error = new Error('Error Deleting User');
-        error.status = 400;
-        setError(error);
-        return;
-      };
-
       await logOutUser();
       navigate('/');
     } catch(err) {

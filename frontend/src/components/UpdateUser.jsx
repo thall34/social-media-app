@@ -27,13 +27,6 @@ function UpdateUser() {
 
         try {
             const success = await updateUser(user.id, userData);
-            if (!success) {
-                const error = new Error('Error Updating User');
-                error.status = 400;
-                setError(error);
-                return;
-            };
-
             setUserData({
                 firstName: '',
                 lastName: '',
@@ -42,7 +35,6 @@ function UpdateUser() {
                 city: '',
                 birthDate: '',
             });
-
             navigate('/user/posts');
         } catch (err) {
             setError(err);
@@ -64,7 +56,7 @@ function UpdateUser() {
                     birthDate: birthDate,
                 });
             } catch (err) {
-                setUser(null);
+                setError(err);
             } finally {
                 setLoading(false);
             };
@@ -72,6 +64,14 @@ function UpdateUser() {
 
         initializePage();
     }, []);
+
+    if (loading) {
+        return (
+            <div>
+                <h1>Loading...</h1>
+            </div>
+        )
+    };
 
     if (error) {
         return (
@@ -84,30 +84,41 @@ function UpdateUser() {
         )
     };
 
+    if (user) {
+        return (
+            <div className='page'>
+                <Header user={user} setError={setError} />
+                <main>
+                    <section className='form'>
+                        <form onSubmit={handleUpdate}>
+                            <h1>Update User</h1>
+                            <label htmlFor="firstName">First Name: </label>
+                            <input type="text" name="firstName" id="firstName" value={userData.firstName} onChange={(e) => handleChange(e, setUserData)} />
+                            <label htmlFor="lastName">First Name: </label>
+                            <input type="text" name="lastName" id="lastName" value={userData.lastName} onChange={(e) => handleChange(e, setUserData)} />
+                            <label htmlFor="username">Email: </label>
+                            <input type="text" name="username" id="username" value={userData.username} onChange={(e) => handleChange(e, setUserData)} />
+                            <label htmlFor="password">Password: </label>
+                            <input type="password" name="password" id="password" value={userData.password} onChange={(e) => handleChange(e, setUserData)} placeholder='Leave blank to keep old password' />
+                            <label htmlFor="city">City (optional): </label>
+                            <input type="text" name="city" id="city" value={userData.city} onChange={(e) => handleChange(e, setUserData)} />
+                            <label htmlFor="birthDate">Date of Birth: </label>
+                            <input type="date" name="birthDate" id="birthDate" value={userData.birthDate} onChange={(e) => handleChange(e, setUserData)} />
+                            <button type="submit">Update User</button>
+                        </form>
+                    </section>
+                </main>
+                <Footer />
+            </div>
+        )
+    }
+
     return (
-        <div className='page'>
-            <Header user={user} setError={setError} />
-            <main>
-                <section className='form'>
-                    <form onSubmit={handleUpdate}>
-                        <h1>Update User</h1>
-                        <label htmlFor="firstName">First Name: </label>
-                        <input type="text" name="firstName" id="firstName" value={userData.firstName} onChange={(e) => handleChange(e, setUserData)} />
-                        <label htmlFor="lastName">First Name: </label>
-                        <input type="text" name="lastName" id="lastName" value={userData.lastName} onChange={(e) => handleChange(e, setUserData)} />
-                        <label htmlFor="username">Email: </label>
-                        <input type="text" name="username" id="username" value={userData.username} onChange={(e) => handleChange(e, setUserData)} />
-                        <label htmlFor="password">Password: </label>
-                        <input type="password" name="password" id="password" value={userData.password} onChange={(e) => handleChange(e, setUserData)} placeholder='Leave blank to keep old password' />
-                        <label htmlFor="city">City (optional): </label>
-                        <input type="text" name="city" id="city" value={userData.city} onChange={(e) => handleChange(e, setUserData)} />
-                        <label htmlFor="birthDate">Date of Birth: </label>
-                        <input type="date" name="birthDate" id="birthDate" value={userData.birthDate} onChange={(e) => handleChange(e, setUserData)} />
-                        <button type="submit">Update User</button>
-                    </form>
-                </section>
-            </main>
-            <Footer />
+        <div>
+            <h1>Not Authenticated</h1>
+            <Link to='/'>
+                <button>Go to Homepage</button>
+            </Link>
         </div>
     )
 };

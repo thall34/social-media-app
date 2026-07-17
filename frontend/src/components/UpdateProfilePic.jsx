@@ -20,12 +20,6 @@ function UpdateProfilePic() {
         try {
             setLoading(true);
             const success = await updateProfilePic(user.id, formElement);
-            if (!success) {
-                const error = new Error('Error Updating Profile Picture');
-                error.status = 400;
-                setError(error);
-                return;
-            };
             navigate('/user/posts');
         } catch (err) {
             setError(err);
@@ -38,7 +32,7 @@ function UpdateProfilePic() {
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
             } catch (err) {
-                setUser(null);
+                setError(err);
             } finally {
                 setLoading(false);
             };
@@ -60,7 +54,7 @@ function UpdateProfilePic() {
             <div className='page'>
                 <Header user={user} setError={setError} />
                 <h1>{error.message}</h1>
-                <button onClick={() => setError(null)}>Back to User Update Page</button>
+                <button onClick={() => setError(null)}>Back to Profile Pic Update Page</button>
                 <Footer />
             </div>
         )

@@ -10,12 +10,12 @@ async function createNewComment(userId, postId, commentData) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Comment not created');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

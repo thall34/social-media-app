@@ -1,5 +1,6 @@
 async function createUser(formElements) {
     const formData = new FormData(formElements);
+
     try {
         const response = await fetch('http://localhost:3000/api/users/', {
             method: 'POST',
@@ -7,12 +8,12 @@ async function createUser(formElements) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('User not created');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

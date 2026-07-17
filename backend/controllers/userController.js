@@ -24,11 +24,6 @@ function logInUser(req, res, next) {
             };
 
             // return a 200 success response with the logged in user
-            // return res.status(200).json({
-            //     message: 'Successfully logged in',
-            //     success: true,
-            //     user: req.user,
-            // });
             return success(res, 200, 'Successfully logged in', req.user)
         });
     }
@@ -222,7 +217,7 @@ async function deleteUser(req, res, next) {
 // obtain user details from passport session
 async function sendUserDetails(req, res, next) {
     try {
-        return res.status(200).json(req.user);
+        return res.status(200).json(req.user ?? null);
     } catch (err) {
         next(err)
     };

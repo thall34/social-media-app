@@ -10,12 +10,12 @@ async function updateComment(userId, commentId, commentData) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Comment not updated');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

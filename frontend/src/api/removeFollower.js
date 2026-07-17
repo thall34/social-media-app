@@ -8,12 +8,12 @@ async function removeFollower(receiverId, senderId) {
         );
 
         if (!response.ok) {
-            return null;
+            throw new Error('Follower could not be removed');
         }
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     }
 }
 

@@ -51,7 +51,7 @@ function PeerProfile() {
                 setFollowerPool(currentUser.followers);
                 setFollowedPool(currentUser.following);
             } catch (err) {
-                setUser(null);
+                setError(err);
             } finally {
                 setLoading(false);
             };

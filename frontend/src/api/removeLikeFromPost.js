@@ -8,12 +8,12 @@ async function removeLikeFromPost(postId, userId) {
         );
 
         if (!response.ok) {
-            return null;
+            throw new Error('Like could not be removed from post');
         }
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     }
 }
 

@@ -8,12 +8,12 @@ async function deleteUser(id) {
         );
 
         if (!response.ok) {
-            return null;
+            throw new Error('User not deleted');
         }
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     }
 }
 

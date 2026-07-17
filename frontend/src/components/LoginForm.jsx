@@ -16,12 +16,6 @@ function LoginForm({ setError }) {
 
         try {
             const user = await authenticateLogin(loginData);
-            if (!user) {
-                const error = new Error('Error logging in');
-                error.status = 400;
-                setError(error);
-            };
-
             navigate('/user/posts');
         } catch (err) {
             setError(err);

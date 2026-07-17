@@ -10,12 +10,12 @@ async function getCurrentPost(id) {
       );
 
       if (!response.ok) {
-        return null;
+        throw new Error('Post not found');
       };
 
       return response.json();
     } catch (err) {
-      return null;
+      throw err;
     };
   };
 

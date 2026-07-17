@@ -11,12 +11,12 @@ async function getPeerPoolForPeer(peerId) {
       );
 
       if (!response.ok) {
-        return null;
+        throw new Error('Peers not found');
       };
 
       return response.json();
     } catch (err) {
-      return null;
+      throw err;
     };
   };
 

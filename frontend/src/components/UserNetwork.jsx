@@ -31,7 +31,7 @@ function UserNetwork() {
         setFollowerPool(currentUser.followers);
         setFollowedPool(currentUser.following);
       } catch (err) {
-        setUser(null);
+        setError(err);
       } finally {
         setLoading(false);
       };
@@ -53,9 +53,7 @@ function UserNetwork() {
       <div className='page'>
         <Header user={user} setError={setError} />
         <h1>{error.message}</h1>
-        <Link to='/'>
-          <button onClick={() => setError(null)}>Back to Homepage</button>
-        </Link>
+        <button onClick={() => setError(null)}>Back to User Network Page</button>
         <Footer />
       </div>
     )

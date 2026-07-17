@@ -10,12 +10,12 @@ async function createNewPost(userId, postData) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Post not created');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

@@ -9,12 +9,12 @@ async function acceptFollowRequest(receiverId, senderId) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Follow request not sent')
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

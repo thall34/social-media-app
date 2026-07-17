@@ -10,12 +10,12 @@ async function updateUser(userId, userData) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('User not updated');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

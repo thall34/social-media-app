@@ -8,12 +8,12 @@ async function updateProfilePic(userId, formElements) {
         });
 
         if (!response.ok) {
-            return null;
+            throw new Error('Profile pic not updated');
         };
 
         return response.json();
     } catch (err) {
-        return err;
+        throw err;
     };
 };
 

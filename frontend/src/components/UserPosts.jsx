@@ -22,7 +22,7 @@ function UserPosts() {
         setUser(currentUser);
         setPosts(currentPosts.data);
       } catch (err) {
-        setUser(null);
+        setError(err);
       } finally {
         setLoading(false);
       };

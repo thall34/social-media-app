@@ -8,12 +8,12 @@ async function deleteComment(id, userId) {
         );
 
         if (!response.ok) {
-            return null;
+            throw new Error('Comment not deleted');
         }
 
         return response;
     } catch(err) {
-        return null;
+        throw err;
     }
 }
 
