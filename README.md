@@ -58,7 +58,7 @@ Before installing, ensure you have the following software installed:
 
 ## Future improvements
 
-Refactor userId for post and comment routes
+Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately
 Add CSS styling for mobile
 Deploy to render or a similar service
 Add unit testing and API tests

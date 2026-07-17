@@ -24,7 +24,7 @@ async function getComment(req, res, next) {
 // creates a new comment database entry
 async function createComment(req, res, next) {
     const errors = validationResult(req);
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
     const postId = req.validatedPostId;
 
     // if there are any form validation errors, return a 400 failure response
@@ -51,7 +51,7 @@ async function createComment(req, res, next) {
 async function updateComment(req, res, next) {
     const errors = validationResult(req);
     const id = req.validatedId;
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
@@ -88,7 +88,7 @@ async function updateComment(req, res, next) {
 // deletes an existing comment database entry by comment ID
 async function deleteComment(req, res, next) {
     const id = req.validatedId;
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     try {
         // looks through database to ensure the comment exists before deleting

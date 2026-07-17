@@ -21,7 +21,7 @@ function NewComment() {
         e.preventDefault();
 
         try {
-            const success = await createNewComment(user.id, postId, commentData);
+            const success = await createNewComment(postId, commentData);
             navigate('/user/posts');
         } catch (err) {
             setError(err);

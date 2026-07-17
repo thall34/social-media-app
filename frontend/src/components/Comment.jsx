@@ -5,7 +5,7 @@ function Comment({ userId, postId, comment, setComments, setError }) {
 
     async function handleDeleteComment(id) {
         try {
-            await deleteComment(id, userId);
+            await deleteComment(id);
             setComments((prevComments) => {
                 return prevComments.filter((comment) => comment.id !== id);
             });

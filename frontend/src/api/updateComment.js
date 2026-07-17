@@ -1,6 +1,6 @@
-async function updateComment(userId, commentId, commentData) {
+async function updateComment(commentId, commentData) {
     try {
-        const response = await fetch(`http://localhost:3000/api/comments/${commentId}/${userId}`, {
+        const response = await fetch(`http://localhost:3000/api/comments/${commentId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
-async function deleteComment(id, userId) {
+async function deleteComment(id) {
     try {
-        const response = await fetch(`http://localhost:3000/api/comments/${id}/${userId}`,
+        const response = await fetch(`http://localhost:3000/api/comments/${id}`,
             {
                 method: 'DELETE',
                 credentials: 'include',

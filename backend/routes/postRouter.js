@@ -3,7 +3,6 @@ const postRouter = Router();
 const postController = require('../controllers/postController');
 const isAuthenticated = require('../middleware/isAuthenticated');
 const validateId = require('../middleware/validateId');
-const validateUserId = require('../middleware/validateUserId');
 const validatePost = require('../middleware/validatePost');
 
 postRouter.get('/all', isAuthenticated, postController.getAllPostsForUser);

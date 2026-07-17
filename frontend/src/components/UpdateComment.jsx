@@ -22,7 +22,7 @@ function UpdateComment() {
         e.preventDefault();
 
         try {
-            const success = await updateComment(user.id, commentId, commentData);
+            const success = await updateComment(commentId, commentData);
             navigate('/user/posts');
         } catch (err) {
             setError(err);

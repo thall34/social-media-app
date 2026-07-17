@@ -3,7 +3,6 @@ const userRouter = Router();
 const userController = require('../controllers/userController');
 const isAuthenticated = require('../middleware/isAuthenticated');
 const validateId = require('../middleware/validateId');
-const validateUserId = require('../middleware/validateUserId');
 const validateUser = require('../middleware/validateUser');
 const validateLogin = require('../middleware/validateLogin');
 const validateUpdateUser = require('../middleware/validateUpdateUser');
@@ -13,7 +12,6 @@ userRouter.get('/me', userController.sendUserDetails);
 userRouter.get('/pool', isAuthenticated, userController.getPeerPool);
 userRouter.get('/peer/:id', isAuthenticated, validateId, userController.findUser);
 userRouter.get('/peer/:id/pool', isAuthenticated, validateId, userController.getPeerPoolForPeer);
-// userRouter.get('/:id', isAuthenticated, validateId, userController.findUser); delete this if nothing breaks
 userRouter.post('/', uploadProfilePic, validateUser, userController.createUser);
 userRouter.post('/login', validateLogin, userController.logInUser);
 userRouter.post('/logout', userController.logOutUser);
