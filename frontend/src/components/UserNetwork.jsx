@@ -23,7 +23,7 @@ function UserNetwork() {
     async function initializePage() {
       try {
         const currentUser = await getCurrentUser();
-        const currentPeerPool = await getPeerPool(currentUser.id);
+        const currentPeerPool = await getPeerPool();
         setUser(currentUser);
         setPeerPool(currentPeerPool.data);
         setRequestSentPool(currentUser.following_request);

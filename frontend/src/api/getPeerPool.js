@@ -1,7 +1,6 @@
-async function getPeerPool(userId) {
+async function getPeerPool() {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/users/${userId}/pool`,
+      const response = await fetch(`http://localhost:3000/api/users/pool`,
         {
           headers: {
             'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
-async function removeFollower(receiverId, senderId) {
+async function removeFollower(senderId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/follow/${receiverId}/${senderId}`,
+        const response = await fetch(`http://localhost:3000/api/users/follow/${senderId}`,
             {
                 method: 'DELETE',
                 credentials: 'include',

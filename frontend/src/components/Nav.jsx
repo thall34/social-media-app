@@ -16,7 +16,7 @@ function Nav({ user, setError }) {
 
     async function handleDeleteUser() {
         try {
-            const success = await deleteUser(user.id);
+            const success = await deleteUser();
             await logOutUser();
             navigate('/');
         } catch (err) {

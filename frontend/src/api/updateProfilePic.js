@@ -1,7 +1,7 @@
-async function updateProfilePic(userId, formElements) {
+async function updateProfilePic(formElements) {
     const formData = new FormData(formElements);
     try {
-        const response = await fetch(`http://localhost:3000/api/users/${userId}/picture`, {
+        const response = await fetch(`http://localhost:3000/api/users/picture`, {
             method: 'PUT',
             body: formData,
             credentials: 'include',

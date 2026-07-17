@@ -26,7 +26,7 @@ function UpdateUser() {
         e.preventDefault();
 
         try {
-            const success = await updateUser(user.id, userData);
+            const success = await updateUser(userData);
             setUserData({
                 firstName: '',
                 lastName: '',

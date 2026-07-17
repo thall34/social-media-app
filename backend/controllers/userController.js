@@ -114,7 +114,7 @@ async function createUser(req, res, next) {
 // updates an existing user database entry by user ID
 async function updateUser(req, res, next) {
     const errors = validationResult(req);
-    const id = req.validatedId;
+    const userId = req.user.id;
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
@@ -123,14 +123,14 @@ async function updateUser(req, res, next) {
 
     try {
         // looks through database to ensure the user exists before updating
-        const user = await db.getUserById(id);
+        const user = await db.getUserById(userId);
         // if no user is found, return a 404 failure response
         if (!user) {
             return failure(res, 404, 'Failed finding user');
         };
 
         // if user id does not match the current user, return a 403 failure response
-        if (user.id !== id) {
+        if (user.id !== userId) {
             return failure(res, 403, 'Access forbidden');
         };
 
@@ -138,13 +138,13 @@ async function updateUser(req, res, next) {
         // if password entry from form is filled in with a new password, re-encrypt the new password and update user
         if (password !== '') {
             const hashedPassword = await bcrypt.hash(password, 10);
-            const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, id);
+            const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, userId);
             // return a 200 success response with the updated user
             return success(res, 200, 'Successfully updated user', updatedUser);
         };
 
         // if password entry from form is left empty, update user with new details but use previous password from found user
-        const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, id);
+        const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, userId);
         // return a 200 success response with the updated user
         return success(res, 200, 'Successfully updated user', updatedUser);
     } catch (err) {
@@ -154,19 +154,19 @@ async function updateUser(req, res, next) {
 
 // updates an existing user's profile picture details by user ID
 async function updateUserProfilePic(req, res, next) {
-    const id = req.validatedId;
+    const userId = req.user.id;
     let filePath, cloudinaryId;
 
     try {
         // looks through database to ensure the user exists before updating
-        const user = await db.getUserById(id);
+        const user = await db.getUserById(userId);
         // if no user is found, return a 404 failure response
         if (!user) {
             return failure(res, 404, 'Failed finding user');
         };
 
         // if user id does not match the current user, return a 403 failure response
-        if (user.id !== id) {
+        if (user.id !== userId) {
             return failure(res, 403, 'Access forbidden');
         };
 
@@ -181,7 +181,7 @@ async function updateUserProfilePic(req, res, next) {
             cloudinaryId = cloudinaryResult.public_id;
         }
 
-        const updatedUser = await db.updateUserProfilePicById(id, filePath, cloudinaryId);
+        const updatedUser = await db.updateUserProfilePicById(userId, filePath, cloudinaryId);
         // return a 200 success response with the updated user
         return success(res, 200, 'Successfully updated user', updatedUser);
     } catch (err) {
@@ -191,22 +191,22 @@ async function updateUserProfilePic(req, res, next) {
 
 // deletes an existing user database entry by user ID
 async function deleteUser(req, res, next) {
-    const id = req.validatedId;
+    const userId = req.user.id;
 
     try {
         // looks through database to ensure the user exists before deleting
-        const user = await db.getUserById(id);
+        const user = await db.getUserById(userId);
         // if no user is found, return a 404 failure response
         if (!user) {
             return failure(res, 404, 'Failed finding user');
         };
 
         // if user id does not match the current user, return a 403 failure response
-        if (user.id !== id) {
+        if (user.id !== userId) {
             return failure(res, 403, 'Access forbidden');
         };
 
-        await db.deleteUserById(id);
+        await db.deleteUserById(userId);
         // return a 204 success response indicating the user was deleted
         return success(res, 204);
     } catch (err) {
@@ -225,10 +225,10 @@ async function sendUserDetails(req, res, next) {
 
 // obtains all peers for current user by user ID
 async function getPeerPool(req, res, next) {
-    const id = req.validatedId;
+    const userId = req.user.id;
 
     try {
-        const users = await db.getPeerPool(id);
+        const users = await db.getPeerPool(userId);
         // return a 200 success response with the found users
         return success(res, 200, 'Successfully found users', users);
     } catch (err) {
@@ -251,7 +251,7 @@ async function getPeerPoolForPeer(req, res, next) {
 
 // creates a new follow request database entry
 async function addFollowRequestToUser(req, res, next) {
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
     const peerId = req.validatedId;
 
     if (userId === peerId) {
@@ -274,7 +274,7 @@ async function addFollowRequestToUser(req, res, next) {
 
 // deletes an existing follow request database entry by user ID and peer ID
 async function removeFollowRequestFromUser(req, res, next) {
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
     const peerId = req.validatedId;
 
     try {
@@ -295,7 +295,7 @@ async function removeFollowRequestFromUser(req, res, next) {
 
 // deletes an existing follow request database entry by peer ID and user ID
 async function declineFollowRequestFromUser(req, res, next) {
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
     const peerId = req.validatedId;
 
     try {
@@ -316,7 +316,7 @@ async function declineFollowRequestFromUser(req, res, next) {
 
 // creates a new follow database entry and deletes an existing follow request database entry by user ID and peer ID
 async function addFollowerAndRemoveRequestFromUser(req, res, next) {
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
     const peerId = req.validatedId;
 
     if (userId === peerId) {
@@ -347,7 +347,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
 
 // deletes an existing follow database entry by user ID and peer ID
 async function removeFollower(req, res, next) {
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
     const peerId = req.validatedId;
 
     try {

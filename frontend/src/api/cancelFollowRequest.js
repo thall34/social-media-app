@@ -1,6 +1,6 @@
-async function cancelFollowRequest(senderId, receiverId) {
+async function cancelFollowRequest(receiverId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/follow-request/cancel/${senderId}/${receiverId}`,
+        const response = await fetch(`http://localhost:3000/api/users/follow-request/cancel/${receiverId}`,
             {
                 method: 'DELETE',
                 credentials: 'include',

@@ -1,6 +1,6 @@
-async function sendFollowRequest(senderId, receiverId) {
+async function sendFollowRequest(receiverId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/follow-request/${senderId}/${receiverId}`, {
+        const response = await fetch(`http://localhost:3000/api/users/follow-request/${receiverId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

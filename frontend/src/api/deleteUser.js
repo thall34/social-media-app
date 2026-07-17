@@ -1,6 +1,6 @@
-async function deleteUser(id) {
+async function deleteUser() {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/${id}`,
+        const response = await fetch('http://localhost:3000/api/users/',
             {
                 method: 'DELETE',
                 credentials: 'include',

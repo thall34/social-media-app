@@ -21,7 +21,7 @@ function Peer({
 }) {
     async function handleSendFollowRequest(id) {
         try {
-            const success = await sendFollowRequest(userId, id);
+            const success = await sendFollowRequest(id);
             setRequestSentPool((prevRequests) => [
                 ...prevRequests, {
                     followedUserId: success.data.followedUserId,
@@ -34,7 +34,7 @@ function Peer({
 
     async function handleCancelFollowRequest(id) {
         try {
-            const success = await cancelFollowRequest(userId, id);
+            const success = await cancelFollowRequest(id);
             setRequestSentPool((prevRequests) => {
                 return prevRequests.filter((request) => request.followedUserId !== id)
             });
@@ -45,7 +45,7 @@ function Peer({
 
     async function handleAcceptFollowRequest(id) {
         try {
-            const success = await acceptFollowRequest(userId, id);
+            const success = await acceptFollowRequest(id);
             setRequestReceivedPool((prevRequests) => {
                 return prevRequests.filter((request) => request.followingUserId !== id)
             });
@@ -60,7 +60,7 @@ function Peer({
 
     async function handleDeclineFollowRequest(id) {
         try {
-            const success = await declineFollowRequest(userId, id);
+            const success = await declineFollowRequest(id);
             setRequestReceivedPool((prevRequests) => {
                 return prevRequests.filter((request) => request.followingUserId !== id)
             });
@@ -71,7 +71,7 @@ function Peer({
 
     async function handleRemoveFollower(id) {
         try {
-            const success = await removeFollower(userId, id);
+            const success = await removeFollower(id);
             setFollowerPool((prevFollowers) => {
                 return prevFollowers.filter((follower) => follower.followingUserId !== id)
             })
@@ -82,7 +82,7 @@ function Peer({
 
     async function handleRemoveFollowing(id) {
         try {
-            const success = await removeFollower(id, userId);
+            const success = await removeFollower(id);
             setFollowedPool((prevFollowers) => {
                 return prevFollowers.filter((follower) => follower.followedUserId !== id)
             })

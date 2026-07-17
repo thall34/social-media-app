@@ -1,6 +1,6 @@
-async function declineFollowRequest(receiverId, senderId) {
+async function declineFollowRequest(senderId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/follow-request/decline/${receiverId}/${senderId}`,
+        const response = await fetch(`http://localhost:3000/api/users/follow-request/decline/${senderId}`,
             {
                 method: 'DELETE',
                 credentials: 'include',

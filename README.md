@@ -58,6 +58,7 @@ Before installing, ensure you have the following software installed:
 
 ## Future improvements
 
+Add CSS styling for mobile
 Deploy to render or a similar service
 Add unit testing and API tests
 Add API Documentation
