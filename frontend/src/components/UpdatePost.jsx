@@ -22,7 +22,7 @@ function UpdatePost() {
         e.preventDefault();
 
         try {
-            const success = await updatePost(user.id, postId, postData);
+            const success = await updatePost(postId, postData);
             navigate('/user/posts');
         } catch (err) {
             setError(err);

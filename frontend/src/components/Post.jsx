@@ -13,7 +13,7 @@ function Post({ userId, post, setPosts, setError }) {
 
     async function handleDeletePost(id) {
         try {
-            await deletePost(id, userId);
+            await deletePost(id);
             setPosts((prevPosts) => {
                 return prevPosts.filter((post) => post.id !== id);
             });
@@ -24,7 +24,7 @@ function Post({ userId, post, setPosts, setError }) {
 
     async function handleLikePost(id) {
         try {
-            const like = await addLikeToPost(id, userId);
+            const like = await addLikeToPost(id);
             setLikes((prevLikes) => [
                 ...prevLikes, {
                     userId: like.data.userId,
@@ -37,7 +37,7 @@ function Post({ userId, post, setPosts, setError }) {
 
     async function handleRemoveLike(id) {
         try {
-            const removedLike = await removeLikeFromPost(id, userId);
+            const removedLike = await removeLikeFromPost(id);
             setLikes((prevLikes) => {
                 return prevLikes.filter((like) => like.userId !== userId);
             });

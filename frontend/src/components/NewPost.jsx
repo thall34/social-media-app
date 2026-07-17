@@ -20,7 +20,7 @@ function NewPost() {
         e.preventDefault();
 
         try {
-            const success = await createNewPost(user.id, postData);
+            const success = await createNewPost(postData);
             navigate('/user/posts');
         } catch (err) {
             setError(err);

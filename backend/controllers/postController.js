@@ -21,10 +21,23 @@ async function getPost(req, res, next) {
     };
 };
 
+// obtains all posts created by the current user and every peer that user is following by user ID
+async function getAllPostsForUser(req, res, next) {
+    const userId = req.user.id;
+
+    try {
+        const posts = await db.getAllPostsForUserById(userId);
+        // returns a 200 success response with the found posts
+        return success(res, 200, 'Successfully found posts', posts);
+    } catch(err) {
+        next(err);
+    };
+};
+
 // creates a new post database entry
 async function createPost(req, res, next) {
     const errors = validationResult(req);
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
@@ -50,7 +63,7 @@ async function createPost(req, res, next) {
 async function updatePost(req, res, next) {
     const errors = validationResult(req);
     const id = req.validatedId;
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
@@ -87,7 +100,7 @@ async function updatePost(req, res, next) {
 // deletes an existing post database entry by post ID
 async function deletePost(req, res, next) {
     const id = req.validatedId;
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     try {
         // looks through database to ensure the post exists before deleting
@@ -113,19 +126,6 @@ async function deletePost(req, res, next) {
     };
 };
 
-// obtains all posts created by the current user and every peer that user is following by user ID
-async function getAllPostsForUser(req, res, next) {
-    const userId = req.validatedUserId;
-
-    try {
-        const posts = await db.getAllPostsForUserById(userId);
-        // returns a 200 success response with the found posts
-        return success(res, 200, 'Successfully found posts', posts);
-    } catch(err) {
-        next(err);
-    };
-};
-
 // obtains all posts created by a peer by peer ID
 async function getPostsForPeer(req, res, next) {
     const id = req.validatedId;
@@ -141,7 +141,7 @@ async function getPostsForPeer(req, res, next) {
 // creates a new like database entry
 async function addLikeToPost(req, res, next) {
     const postId = req.validatedId;
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     try {
         const newLike = await db.addLikeToPostById(userId, postId);
@@ -160,7 +160,7 @@ async function addLikeToPost(req, res, next) {
 // deletes an existing like database entry by user ID and post ID
 async function removeLikeFromPost(req, res, next) {
     const postId = req.validatedId;
-    const userId = req.validatedUserId;
+    const userId = req.user.id;
 
     try {
         // looks through database to ensure the like exists before deleting
@@ -180,10 +180,10 @@ async function removeLikeFromPost(req, res, next) {
 
 module.exports = {
     getPost,
+    getAllPostsForUser,
     createPost,
     updatePost,
     deletePost,
-    getAllPostsForUser,
     getPostsForPeer,
     addLikeToPost,
     removeLikeFromPost,

@@ -1,6 +1,6 @@
-async function removeLikeFromPost(postId, userId) {
+async function removeLikeFromPost(postId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/posts/likes/${postId}/${userId}`,
+        const response = await fetch(`http://localhost:3000/api/posts/likes/${postId}`,
             {
                 method: 'DELETE',
                 credentials: 'include',

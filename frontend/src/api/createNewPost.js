@@ -1,6 +1,6 @@
-async function createNewPost(userId, postData) {
+async function createNewPost(postData) {
     try {
-        const response = await fetch(`http://localhost:3000/api/posts/${userId}`, {
+        const response = await fetch('http://localhost:3000/api/posts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

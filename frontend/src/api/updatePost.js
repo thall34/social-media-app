@@ -1,6 +1,6 @@
-async function updatePost(userId, postId, postData) {
+async function updatePost(postId, postData) {
     try {
-        const response = await fetch(`http://localhost:3000/api/posts/${postId}/${userId}`, {
+        const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
-async function getAllPostsForUser(id) {
+async function getAllPostsForUser() {
     try {
-      const response = await fetch(`http://localhost:3000/api/posts/all/${id}`,
+      const response = await fetch('http://localhost:3000/api/posts/all',
         {
           headers: {
             'Content-Type': 'application/json',

@@ -6,13 +6,13 @@ const validateId = require('../middleware/validateId');
 const validateUserId = require('../middleware/validateUserId');
 const validatePost = require('../middleware/validatePost');
 
-postRouter.get('/all/:userId', isAuthenticated, validateUserId, postController.getAllPostsForUser);
+postRouter.get('/all', isAuthenticated, postController.getAllPostsForUser);
 postRouter.get('/peer/:id', isAuthenticated, validateId, postController.getPostsForPeer);
 postRouter.get('/:id', isAuthenticated, validateId, postController.getPost);
-postRouter.post('/:userId', isAuthenticated, validateUserId, validatePost, postController.createPost);
-postRouter.post('/likes/:id/:userId', isAuthenticated, validateId, validateUserId, postController.addLikeToPost);
-postRouter.put('/:id/:userId', isAuthenticated, validateId, validateUserId, validatePost, postController.updatePost);
-postRouter.delete('/:id/:userId', isAuthenticated, validateId, validateUserId, postController.deletePost);
-postRouter.delete('/likes/:id/:userId', isAuthenticated, validateId, validateUserId, postController.removeLikeFromPost);
+postRouter.post('/', isAuthenticated, validatePost, postController.createPost);
+postRouter.post('/likes/:id', isAuthenticated, validateId, postController.addLikeToPost);
+postRouter.put('/:id', isAuthenticated, validateId, validatePost, postController.updatePost);
+postRouter.delete('/:id', isAuthenticated, validateId, postController.deletePost);
+postRouter.delete('/likes/:id', isAuthenticated, validateId, postController.removeLikeFromPost);
 
 module.exports = postRouter;

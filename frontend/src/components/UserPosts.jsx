@@ -18,7 +18,7 @@ function UserPosts() {
     async function initializePage() {
       try {
         const currentUser = await getCurrentUser();
-        const currentPosts = await getAllPostsForUser(currentUser.id);
+        const currentPosts = await getAllPostsForUser();
         setUser(currentUser);
         setPosts(currentPosts.data);
       } catch (err) {
