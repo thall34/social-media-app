@@ -50,10 +50,25 @@ function Post({ userId, post, setPosts, setError }) {
         <div className='post-background'>
             <section className='post'>
                 <section className='post-details'>
-                    <span>
-                        <img src={post.author.profilePicFilePath} className='image user' />
-                        <p>{post.author.firstName} {post.author.lastName}</p>
-                    </span>
+                    {post.authorId === userId ? (
+                        <>
+                            <Link to='/user/posts'>
+                                <span>
+                                    <img src={post.author.profilePicFilePath} className='image user' />
+                                    <p>{post.author.firstName} {post.author.lastName}</p>
+                                </span>
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link to={`/user/peer/${post.authorId}`}>
+                                <span>
+                                    <img src={post.author.profilePicFilePath} className='image user' />
+                                    <p>{post.author.firstName} {post.author.lastName}</p>
+                                </span>
+                            </Link>
+                        </>
+                    )}
                     <p>{post.text}</p>
                     <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
                 </section>

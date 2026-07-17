@@ -19,8 +19,25 @@ function Comment({ userId, postId, comment, setComments, setError }) {
     return (
         <section className='comment'>
             <section className='comment-details'>
-                    <img src={comment.author.profilePicFilePath} className='image user-comment' />
-                    <p>{comment.author.firstName} {comment.author.lastName}</p>
+                {comment.authorId === userId ? (
+                    <>
+                        <Link to='/user/posts'>
+                                <img src={comment.author.profilePicFilePath} className='image user-comment' />
+                        </Link>
+                        <Link to='/user/posts'>
+                            <p>{comment.author.firstName} {comment.author.lastName}</p>
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link to={`/user/peer/${comment.authorId}`}>
+                            <img src={comment.author.profilePicFilePath} className='image user-comment' />
+                        </Link>
+                        <Link to={`/user/peer/${comment.authorId}`}>
+                            <p>{comment.author.firstName} {comment.author.lastName}</p>
+                        </Link>
+                    </>
+                )}
                     <p>{comment.text}</p>
                     <p>{createdDate.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' })}</p>
                     {comment.authorId === userId ? (

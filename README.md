@@ -58,10 +58,7 @@ Before installing, ensure you have the following software installed:
 
 ## Future improvements
 
-1. Clean up CSS
-2. Be able to go to profile when clicking on profile picture or name on post author
-3. Be able to go to profile when clicking on profile picture or name on comment author
-4. Deploy to render or a similar service
-5. Add unit testing and API tests
-6. Add API Documentation
-7. Add pagination for posts and users
+Deploy to render or a similar service
+Add unit testing and API tests
+Add API Documentation
+Add pagination for posts and users

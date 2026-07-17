@@ -1,3 +1,4 @@
+/* General element stylings */
 body {
     min-height: 100vh;
     width: 100vw;
@@ -6,6 +7,34 @@ body {
     align-items: center;
     font-size: 12px;
     font-weight: 500;
+}
+
+header, footer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 3em;
+    background-color: rgb(58, 58, 194);
+    color: white;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+}
+
+footer {
+    flex-direction: column;
+    justify-content: center;
+    margin-top: auto;
+}
+
+section {
+    width: 100%;
 }
 
 div {
@@ -23,31 +52,12 @@ span {
     gap: 1em;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0em 2em;
-    gap: 1em;
-}
-
 h1 {
     font-size: 2em;
 }
 
-label {
-    font-size: 1.2em;
-}
-
-input, textarea {
-    font-size: 1em;
-    border: 1px solid black;
-    padding: 0.2em 0.7em;
-    width: 15em;
-}
-
-textarea {
-    width: fit-content;
+h2 {
+    font-size: 1.5em;
 }
 
 button {
@@ -58,72 +68,16 @@ button {
     font-weight: 900;
 }
 
-#root {
-    padding: 0;
-}
-
-.post-details {
-    gap: 2em;
-    padding: 2em;
-}
-
-.post-buttons {
-    flex-direction: row;
-    justify-content: center;
-}
-
-.comment, .comment-details, .post-details, .post-buttons {
-    padding: 1em;
-}
-
-.comment-details {
-    display: grid;
-    grid-template-columns: 0.7fr 1.2fr 3fr 2fr 0.7fr 0.5fr;
-    width: 100%;
-    align-items: center;
-    background-color: white;
-    border-radius: 2em;
-}
-
-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.image {
-    overflow: hidden;
-    border-radius: 50%;
-    padding: 0;
-}
-.preview {
-    width: 20em;
-    height: 20em;
-}
-
-.profile {
-    width: 10em;
-    height: 10em;
-}
-
-.user {
-    width: 5em;
-    height: 5em;
-}
-
-.user-comment {
-    width: 3em;
-    height: 3em;
-}
-
 a {
     text-decoration: none;
     color: black;
 }
 
-.home {
-    color: white;
-    font-weight: 900;
+/* List specific stylings */
+ul {
+    display: flex;
+    align-items: center;
+    gap: 2em;
 }
 
 li {
@@ -132,41 +86,65 @@ li {
     font-weight: 900;
 }
 
-header, footer {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1em 3em;
-    background-color: rgb(58, 58, 194);
-    color: white;
-}
-
-footer {
-    flex-direction: column;
-    justify-content: center;
-    margin-top: auto;
-}
-
-nav > ul {
-    display: flex;
-    gap: 2em;
-}
-
 li > button {
-    width: fit-content;
-    height: auto;
-    font-size: 1em;
     padding: 0em;
-    border: none;
-    background-color: inherit;
-    color: inherit;
 }
 
+/* Form specific stylings */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+}
+/* form container */
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5em;
+    gap: 1em;
+    background-color: rgb(215, 214, 214);
+}
+
+label {
+    font-size: 1.2em;
+}
+
+input, textarea {
+    font-size: 1em;
+    border: 1px solid black;
+    padding: 0.2em 0.7em;
+    width: 20%;
+}
+
+.file {
+    background-color: white;
+}
+
+/* Specific styling rules */
+#root {
+    padding: 0;
+}
+/* container for each page */
 .page {
     padding: 0;
     gap: 0;
     min-height: 100vh;
+}
+/* container for all posts on user home page */
+.user-posts {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(242, 242, 242);
+
+}
+/* container for all peers on user network page*/
+.user-peers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: rgb(242, 242, 242);
 }
 
 .user-details, .peer-details {
@@ -174,67 +152,13 @@ li > button {
     flex-direction: column;
     align-items: center;
     background-color: rgb(242, 242, 242);
-    width: 100%;
     padding: 2em;
     gap: 1em;
-}
-
-.post-details, .post-buttons {
-    display: flex;
-    width: 100%;
-    justify-content: space-evenly;
-    align-items: center;
-    padding: 1em 0em;
-    padding-bottom: 1em;
-    background-color: white;
-    border-radius: 2em;
-}
-
-.post-buttons {
-    width: 75%;
-}
-
-.user-posts {
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(242, 242, 242);
-    width: 100%;
-    gap: 1em;
-}
-
-.user-peers {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 100%;
-    background-color: rgb(242, 242, 242);
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    gap: 1em;
-}
-
-.comment {
-    width: 100%;
-}
-
-.comments {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    padding: 1em;
-    gap: 1em;
-    background-color: rgb(215, 214, 214);
 }
 
 .post, .peer {
     display: flex;
     flex-direction: column;
-    width: 60%;
     align-items: center;
     border-radius: 2em;
     padding: 1em;
@@ -243,31 +167,78 @@ main {
     background-color: rgb(215, 214, 214);
 }
 
-.peer {
-    width: 100%;
-    padding: 2em;
-    gap: 1em;
+.post {
+    width: 60%;
 }
 
-.form {
+.post-details, .post-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1em 0em;
+    margin-bottom: 1em;
+    background-color: white;
+    border-radius: 2em;
+}
+
+.post-buttons {
+    width: 75%;
+}
+
+.comments {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    padding: 5em;
     align-items: center;
+    padding: 1em;
     gap: 1em;
     background-color: rgb(215, 214, 214);
 }
 
+.comment, .comment-details {
+    padding: 1em;
+}
+
+.comment-details {
+    display: grid;
+    grid-template-columns: 0.7fr 1.2fr 3fr 2fr 0.7fr 0.5fr;
+    align-items: center;
+    background-color: white;
+    border-radius: 1.5em;
+}
+
+/* padding and gapping for follows and following controls on network page */
 .following, .followed {
     padding: 0;
     gap: 1em;
 }
-
+/* padding for message when user has no posts or followers */
 .no-posts, .no-followers {
     padding: 1em;
 }
 
-.file {
-    background-color: white;
+/* Image specific stylings */
+.image {
+    overflow: hidden;
+    border-radius: 50%;
+    padding: 0;
+}
+/* size for profile pic when on update profile pic page */
+.preview {
+    width: 20em;
+    height: 20em;
+}
+/* size for profile picture at top of user home, user network pages, and peer cards on network page */
+.profile {
+    width: 10em;
+    height: 10em;
+}
+/* size for profile picture on posts*/
+.user {
+    width: 5em;
+    height: 5em;
+}
+/* size for profile picture on comments */
+.user-comment {
+    width: 3em;
+    height: 3em;
 }
