@@ -92,17 +92,17 @@ function UpdateUser() {
                     <section className='form'>
                         <form onSubmit={handleUpdate}>
                             <h1>Update User</h1>
-                            <label htmlFor="firstName">First Name: </label>
+                            <label htmlFor="firstName">First Name:<span className='red'>* required</span></label>
                             <input type="text" name="firstName" id="firstName" value={userData.firstName} onChange={(e) => handleChange(e, setUserData)} />
-                            <label htmlFor="lastName">First Name: </label>
+                            <label htmlFor="lastName">Last Name:<span className='red'>* required</span></label>
                             <input type="text" name="lastName" id="lastName" value={userData.lastName} onChange={(e) => handleChange(e, setUserData)} />
-                            <label htmlFor="username">Email: </label>
+                            <label htmlFor="username">Email:<span className='red'>* required</span></label>
                             <input type="text" name="username" id="username" value={userData.username} onChange={(e) => handleChange(e, setUserData)} />
-                            <label htmlFor="password">Password: </label>
+                            <label htmlFor="password">Password:<span className='red'>* required</span></label>
                             <input type="password" name="password" id="password" value={userData.password} onChange={(e) => handleChange(e, setUserData)} placeholder='Leave blank to keep old password' />
-                            <label htmlFor="city">City (optional): </label>
+                            <label htmlFor="city">City:<span className='red'>* required</span></label>
                             <input type="text" name="city" id="city" value={userData.city} onChange={(e) => handleChange(e, setUserData)} />
-                            <label htmlFor="birthDate">Date of Birth: </label>
+                            <label htmlFor="birthDate">Date of Birth:<span className='red'>* required</span></label>
                             <input type="date" name="birthDate" id="birthDate" value={userData.birthDate} onChange={(e) => handleChange(e, setUserData)} />
                             <button type="submit">Update User</button>
                         </form>

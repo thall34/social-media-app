@@ -123,9 +123,9 @@ function PeerProfile() {
                         )}
                     </section>
                     <h3>Following</h3>
-                    <section className='user-peers'>
                         {peerPool.length > 0 ? (
-                            peerPool
+                            <section className='user-peers'>
+                            {peerPool
                                 .filter((peer) => peer.followed.id !== user.id)
                                 .map((peer) => (
                                     <Peer
@@ -143,17 +143,15 @@ function PeerProfile() {
                                         setError={setError}
                                     />
                                 )
-                                )
+                                )}
+                                </section>
                         ) : (
                             <>
-                            {/* spacer */}
-                                <div></div>
                                 <div className='no-followers'>
                                     <h3>Not following anyone yet</h3>
                                 </div>
                             </>
                         )}
-                    </section>
                 </main>
                 <Footer />
             </div>

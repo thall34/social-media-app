@@ -69,7 +69,7 @@ function NewPost() {
                     <section className='form'>
                         <form onSubmit={(e) => handleNewPost(e)}>
                             <h3>New Post</h3>
-                            <label htmlFor="text">Text: </label>
+                            <label htmlFor="text">Text:<span className='red'>* required</span></label>
                             <textarea name='text' id='text' rows={10} cols={50} value={postData.text} onChange={(e) => handleChange(e, setPostData)} />
                             <button type='submit'>Submit New Post</button>
                         </form>

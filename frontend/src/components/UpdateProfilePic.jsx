@@ -19,7 +19,7 @@ function UpdateProfilePic() {
 
         try {
             setLoading(true);
-            const success = await updateProfilePic(user.id, formElement);
+            const success = await updateProfilePic(formElement);
             navigate('/user/posts');
         } catch (err) {
             setError(err);
@@ -69,7 +69,7 @@ function UpdateProfilePic() {
                         <img src={user.profilePicFilePath} className='image preview' />
                         <form onSubmit={handleUpdate} encType='multipart/form-data'>
                             <h1>Update Profile Picture</h1>
-                            <label htmlFor="profilePic">Profile Picture: </label>
+                            <label htmlFor="profilePic">Profile Picture:</label>
                             <input type="file" name="profilePic" id="profilePic" className='file'/>
                             <button type='submit'>Submit Update</button>
                         </form>

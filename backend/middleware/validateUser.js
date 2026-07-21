@@ -17,7 +17,6 @@ const validateUser = [
     .trim()
     .notEmpty().withMessage('Must include a password'),
     body('city')
-    .optional({ values: 'falsy' })
     .trim(),
     body('birthDate')
     .trim()

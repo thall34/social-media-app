@@ -58,11 +58,6 @@ Before installing, ensure you have the following software installed:
 
 ## Future improvements
 
-for api docs create reusable schemas for error messages and request bodies
-
-Have login only return userID? or remove passwordHash and figure out why it is sending back the username in a field called email
-Remove passwordHash from getUserById
-Add red asterisk to required fields in forms, make city (also in form validation) and profile pic a required field for users in the schema
 Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately
 Add CSS styling for mobile
 Deploy to render or a similar service

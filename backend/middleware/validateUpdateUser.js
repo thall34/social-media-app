@@ -16,7 +16,6 @@ const validateUpdateUser = [
     body('password')
     .trim(),
     body('city')
-    .optional({ values: 'falsy' })
     .trim(),
     body('birthDate')
     .trim()

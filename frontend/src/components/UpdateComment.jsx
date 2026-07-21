@@ -73,7 +73,7 @@ function UpdateComment() {
                     <section className='form'>
                         <form onSubmit={(e) => handleUpdateComment(e)}>
                             <h3>Update Comment</h3>
-                            <label htmlFor="text">Text: </label>
+                            <label htmlFor="text">Text:<span className='red'>* required</span></label>
                             <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)} />
                             <button type='submit'>Submit Updated Comment</button>
                         </form>

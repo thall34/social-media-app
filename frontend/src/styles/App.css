@@ -109,6 +109,9 @@ form {
 }
 
 label {
+    display: flex;
+    width: fit-content;
+    gap: 0.5em;
     font-size: 1.2em;
 }
 
@@ -241,4 +244,67 @@ input, textarea {
 .user-comment {
     width: 3em;
     height: 3em;
+}
+
+.red {
+    color: rgb(204, 16, 16);
+}
+
+@media screen and (max-width: 767px) {
+    body {
+        font-size: 8px;
+    }
+
+    header {
+        padding: 1em;
+    }
+
+    input, textarea {
+        width: 60%;
+    }
+
+    .post-details {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .post-buttons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: 1em;
+    }
+    
+    .post-buttons > * {
+        width: 90%;
+    }
+
+    .post-buttons > * > * {
+        width: 100%;
+    }
+
+    .comment-details {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5em;
+        justify-items: center;
+    }
+
+    .comment-details > * {
+        width: 100%;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .comment-details > button {
+        width: fit-content;
+    }
+
+    .user-peers {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .no-followers {
+        background-color: rgb(242, 242, 242);
+    }
 }

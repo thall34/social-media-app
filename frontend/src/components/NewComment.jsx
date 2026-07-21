@@ -70,7 +70,7 @@ function NewComment() {
                     <section className='form'>
                         <form onSubmit={(e) => handleNewComment(e)}>
                             <h3>New Comment</h3>
-                            <label htmlFor="text">Text: </label>
+                            <label htmlFor="text">Text:<span className='red'>* required</span></label>
                             <textarea name='text' id='text' rows={3} cols={30} value={commentData.text} onChange={(e) => handleChange(e, setCommentData)} />
                             <button type='submit'>Submit New Comment</button>
                         </form>
