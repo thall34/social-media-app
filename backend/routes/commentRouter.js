@@ -7,7 +7,7 @@ const validatePostId = require('../middleware/validatePostId');
 const validateComment = require('../middleware/validateComment');
 
 commentRouter.get('/:id', isAuthenticated, validateId, commentController.getComment);
-commentRouter.post('/:postId', isAuthenticated, validatePostId, validateComment, commentController.createComment);
+commentRouter.post('/post/:postId', isAuthenticated, validatePostId, validateComment, commentController.createComment);
 commentRouter.put('/:id', isAuthenticated, validateId, validateComment, commentController.updateComment);
 commentRouter.delete('/:id', isAuthenticated, validateId, commentController.deleteComment);
 

@@ -35,11 +35,6 @@ async function createComment(req, res, next) {
     try {
         const { text } = matchedData(req);
         const newComment = await db.createNewComment(text, userId, postId);
-        // if the comment is not created, return a 400 failure response
-        if (!newComment) {
-            return failure(res, 400, 'Failed creating new comment');
-        };
-
         // return a 201 success response with the new comment
         return success(res, 201, 'Successfully created new comment', newComment);
     } catch(err) {
@@ -73,11 +68,6 @@ async function updateComment(req, res, next) {
         
         const { text } = matchedData(req);
         const updatedComment = await db.updateCommentById(text, id);
-        // if the comment is not updated, return a 400 failure response
-        if (!updatedComment) {
-            return failure(res, 400, 'Failed updating comment');
-        };
-
         // return a 200 success response with the updated comment
         return success(res, 200, 'Successfully updated comment', updatedComment);
     } catch(err) {

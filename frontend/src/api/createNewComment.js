@@ -1,6 +1,6 @@
 async function createNewComment(postId, commentData) {
     try {
-        const response = await fetch(`http://localhost:3000/api/comments/${postId}`, {
+        const response = await fetch(`http://localhost:3000/api/comments/post/${postId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

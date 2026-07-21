@@ -99,11 +99,6 @@ async function createUser(req, res, next) {
         // encrypt password using bcryptjs
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await db.createNewUser(firstName, lastName, username, hashedPassword, filePath, cloudinaryId, city, birthDate);
-        // if the user is not created, return a 400 failure response
-        if (!newUser) {
-            return failure(res, 400, 'Failed creating new user');
-        };
-
         // return a 201 success response with the new user
         return success(res, 201, 'Successfully created new user', newUser);
     } catch (err) {
@@ -217,6 +212,7 @@ async function deleteUser(req, res, next) {
 // obtain user details from passport session
 async function sendUserDetails(req, res, next) {
     try {
+        // return a 200 success response with either the current req.user from local passport strategy or null if none exists
         return res.status(200).json(req.user ?? null);
     } catch (err) {
         next(err)
@@ -260,11 +256,6 @@ async function addFollowRequestToUser(req, res, next) {
 
     try {
         const request = await db.addFollowRequestToUser(userId, peerId);
-        // if the request is not created, return a 400 failure response
-        if (!request) {
-            return failure(res, 400, 'Failed sending follow request');
-        };
-
         // return a 201 success response with the new request
         return success(res, 201, 'Successfully sent follow request', request);
     } catch (err) {
@@ -333,11 +324,6 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
 
         const deleteRequest = await db.removeFollowRequestFromUser(peerId, userId);
         const addRequest = await db.addFollowerToUser(userId, peerId);
-        // if the follower is not created, return a 400 failure response
-        if (!addRequest) {
-            return failure(res, 400, 'Failed adding follower');
-        };
-
         // return a 201 success response with the new follower
         return success(res, 201, 'Successfully added follower', addRequest);
     } catch (err) {
@@ -357,6 +343,7 @@ async function removeFollower(req, res, next) {
         if (!follower) {
             return failure(res, 404, 'Failed finding follower');
         };
+        
         await db.removeFollower(userId, peerId);
         // return a 204 success response indicating the follower was deleted
         return success(res, 204);

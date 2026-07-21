@@ -47,11 +47,6 @@ async function createPost(req, res, next) {
     try {
         const { text } = matchedData(req);
         const newPost = await db.createNewPost(text, userId);
-        // if the post is not created, return a 400 failure response
-        if (!newPost) {
-            return failure(res, 400, 'Failed creating new post');
-        };
-
         // return a 201 success response with the new post
         return success(res, 201, 'Successfully created new post', newPost);
     } catch(err) {
@@ -85,11 +80,6 @@ async function updatePost(req, res, next) {
         
         const { text } = matchedData(req);
         const updatedPost = await db.updatePostById(text, id);
-        // if the post is not updated, return a 400 failure response
-        if (!updatedPost) {
-            return failure(res, 400, 'Failed updating post');
-        };
-
         // return a 200 success response with the updated comment
         return success(res, 200, 'Successfully updated post', updatedPost);
     } catch(err) {
@@ -107,9 +97,6 @@ async function deletePost(req, res, next) {
         const post = await db.getPostById(id);
         // if no post is found, return a 404 failure response
         if (!post) {
-            return res.status(404).json({
-                message: 'Failed finding post',
-            });
             return failure(res, 404, 'Failed finding post');
         };
 
@@ -145,11 +132,6 @@ async function addLikeToPost(req, res, next) {
 
     try {
         const newLike = await db.addLikeToPostById(userId, postId);
-        // if the like is not created, return a 400 failure response
-        if (!newLike) {
-            return failure(res, 400, 'Failed adding like to post');
-        };
-
         // return a 201 success response with the new like
         return success(res, 201, 'Successfully added like to post', newLike);
     } catch(err) {

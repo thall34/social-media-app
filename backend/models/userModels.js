@@ -42,6 +42,9 @@ async function getUserById(id) {
                 },
             },
         },
+        omit: {
+            passwordHash: true,
+        },
     });
 
     return user;
@@ -60,6 +63,9 @@ async function createNewUser(firstName, lastName, username, password, filePath, 
             city: city,
             birthDate: birthDate,
         },
+        omit: {
+            passwordHash: true,
+        },
     });
 
     return newUser;
@@ -77,6 +83,9 @@ async function updateUserById(firstName, lastName, username, password, city, bir
             city: city,
             birthDate: birthDate,
         },
+        omit: {
+            passwordHash: true,
+        },
     });
 
     return updatedUser;
@@ -90,6 +99,9 @@ async function updateUserProfilePicById(id, filePath, cloudId) {
             profilePicFilePath: filePath,
             profilePicCloudId: cloudId,
         },
+        omit: {
+            passwordHash: true,
+        },
     });
 
     return updatedUser;
@@ -99,6 +111,9 @@ async function updateUserProfilePicById(id, filePath, cloudId) {
 async function deleteUserById(id) {
     const deletedUser = await prisma.user.delete({
         where: { id: id },
+        omit: {
+            passwordHash: true,
+        },
     });
 
     return deletedUser;
@@ -119,6 +134,9 @@ async function getPeerPool(id) {
                     comments: true,
                 },
             },
+        },
+        omit: {
+            passwordHash: true,
         },
     });
 

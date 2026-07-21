@@ -1,0 +1,1273 @@
+openapi: 3.0.3
+
+info:
+  title: Social Media API
+  version: 1.0.0
+  description: API for managing a social media page
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /users/me:
+    get:
+      summary: Get current user
+      description: Returns current req.user or null
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+
+                allOf:
+                  - $ref: "#/components/schemas/UserFull"
+                nullable: true
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/pool: 
+    get:
+      summary: Get a list of all users except for the current user
+      description: Returns an array of user objects except for user that has a matching ID to the current req.user.id
+      operationId: getPeerPool
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Found users"
+                  data:
+                    type: array
+                    minItems: 0
+                    items:
+                      $ref: "#/components/schemas/UserWithPosts"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/peer/{id}:
+    get:
+      summary: Get a peer by their user ID
+      description: Returns a single user object
+      operationId: findUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+        description: The unique identifier of the user
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                      type: string
+                      example: "Found user"
+                  data:
+                    $ref: "#/components/schemas/UserFull"
+        "404":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/peer/{id}/pool:
+    get:
+      summary: get a list of users that the selected peer is following
+      description: Returns an array of user objects for the user whose ID matches the peer ID parameter
+      operationId: getPeerPoolForPeer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+        description: The unique identifier of the peer
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Users not found"
+                  data:
+                    type: array
+                    minItems: 0
+                    items:
+                      type: object
+                      properties:
+                        followed:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                              example: 1
+                            firstName:
+                              type: string
+                              example: "Jane"
+                            lastName:
+                              type: string
+                              example: "Doe"
+                            profilePicFilePath:
+                              type: string
+                              format: uri
+                              example: "https://res.cloudinary.com/your-profile-image.jpg"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users:
+    post:
+      summary: post a new row in the user database table
+      description: creates a new user entry in the database and returns that user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/UserRequestBody"
+                - type: object
+                  properties:
+                    profileImage:
+                      type: string
+                      format: binary
+                      description: Optional profile picture upload
+      responses:
+        "201":
+          description: "Success response"
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User created successfully"
+                  data:
+                    $ref: "#/components/schemas/UserBasic"
+        "400":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    put:
+      summary: Updates the current logged in user's basic information
+      description: Updates row in user database that matches current req.user ID
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestBody"
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated successfully"
+                  data:
+                    $ref: "#/components/schemas/UserBasic"
+        "404":
+          description: Failure response - User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: Failure response - Current user not authenticated to delete user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    delete:
+      summary: Deletes current logged in user
+      description: Deletes row from user table in database that matches current user ID
+      operationId: deleteUser
+      responses: 
+        "204":
+          description: Success response - User deleted successfully
+        "404":
+          description: Failure response - User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: Failure response - Current user not authenticated to delete user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/login:
+    post:
+      summary: post login info to create passport session
+      description: creates a new passport session if user exists and username and password match their database record
+      operationId: logInUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  format: email
+                  example: "janedoe@gmail.com"
+                password:
+                  type: string
+                  example: "abc123"
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User logged in"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                        example: 1
+                      email: 
+                        type: string
+                        example: "janedoe@gmail.com"
+                      passwordHash:
+                        type: string
+                        example: "$2b$10$u77X3ecnfcumbsUJIMRaF.f4b7iYr3MDXUdGEtdSYKMCVEJBozuWS"
+        "401":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/logout:
+    post:
+      summary: logs user out of current passport session
+      description: deletes the session and cookie in the database
+      operationId: logOutUser
+      responses:
+        "204":
+          description: User logged out
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/follow-request/{id}:
+    post:
+      summary: adds a follow request from a user to a peer
+      description: creates a new entry in the follow request table with the current user ID from req.user and the peer ID from params
+      operationId: addFollowRequestToUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+        description: The unique identifier of the peer
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Follow request sent"
+                  data:
+                    $ref: "#/components/schemas/Follow"
+        "422":
+          description: "Failure response - both following and followed ids cannot be the same"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /users/follow/{id}:
+    post:
+      summary: adds a peer to the current user's following table
+      description: creates a new entry in the follow table with the current user ID from req.user and the peer ID from params, and deletes the follow request that matches the userID/peerID combination
+      operationId: addFollowerAndRemoveRequestFromUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+        description: The unique identifier of the peer
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User added as follower"
+                  data:
+                    $ref: "#/components/schemas/Follow"
+        "422":
+          description: "Failure response - both following and followed ids cannot be the same"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "404":
+          description: "Failure response - could not find a matching follow request to remove"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    delete:
+      summary: Deletes follower from current users Followed pool
+      description: Deletes row from follow table in database that matches current user ID and peer ID from params
+      operationId: removeFollower
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the peer
+      responses: 
+        "204":
+          description: Success response - Follower deleted successfully
+        "404":
+          description: Failure response - Follower not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /picture:
+    put:
+      summary: updates the current user's profile picture database entries
+      description: Updates row in user database that matches current req.user ID
+      operationId: updateUserProfilePic
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profileImage:
+                  type: string
+                  format: binary
+                  description: Optional profile picture upload
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated successfully"
+                  data:
+                    $ref: "#/components/schemas/UserBasic"
+        "404":
+          description: Failure response - User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: Failure response - Current user not authenticated to delete user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /follow-request/cancel/{id}:
+    delete:
+      summary: Deletes follow request from the selected peers follow request pool
+      description: Deletes row from followRequest table in database that matches current user ID and peer ID from params
+      operationId: removeFollowRequestFromUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the peer
+      responses: 
+        "204":
+          description: Success response - Follow request deleted successfully
+        "404":
+          description: Failure response - Follow request not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /follow-request/decline/{id}:
+    delete:
+      summary: Deletes follow request from the current users follow request pool
+      description: Deletes row from followRequest table in database that matches current user ID and peer ID from params
+      operationId: declineFollowRequestFromUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the peer
+      responses: 
+        "204":
+          description: Success response - Follow request deleted successfully
+        "404":
+          description: Failure response - Follow request not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /posts/all:
+    get:
+      summary: Gets all posts for the current user
+      description: Gets all posts that the current user has authored and any posts authored by peers the current user is following
+      operationId: getAllPostsForUser
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Posts found successfully"
+                  data:
+                    type: array
+                    minItems: 0
+                    items:
+                      $ref: "#/components/schemas/PostFull"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /posts/peer/{id}:
+    get:
+      summary: Gets all posts for the selected peer
+      description: Gets all posts authored by the peer that has a matching user ID to the peer ID in params
+      operationId: GetPostsForPeer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the peer
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Posts found successfully"
+                  data:
+                    type: array
+                    minItems: 0
+                    items:
+                      $ref: "#/components/schemas/PostFull"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /posts/{id}:
+    get:
+      summary: Get a single post
+      description: Gets a single post from the database that matches the ID param
+      operationId: getPost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the post
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post found successfully"
+                  data:
+                    $ref: "#/components/schemas/PostFull"
+        "404":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    put:
+      summary: Update a post
+      description: Updates a single post from the database that matches the ID param
+      operationId: updatePost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostAndCommentRequestBody"
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post updated successfully"
+                  data:
+                    $ref: "#/components/schemas/PostBasic"
+        "400":
+          description: "Failure response - Invalid request body"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "404":
+          description: "Failure response - Post not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: "Failure response - Access forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    delete:
+      summary: Delete a post
+      description: Deletes a single post from the database that matches the ID param
+      operationId: deletePost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the post
+      responses:
+        "204":
+          description: Success response
+        "404":
+          description: "Failure response - Post not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: "Failure response - Access forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        
+  /posts:
+    post:
+      summary: Create a new post
+      description: Adds a new entry in the posts database
+      operationId: createPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostAndCommentRequestBody"
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post created successfully"
+                  data:
+                    $ref: "#/components/schemas/PostBasic"
+        "400":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /posts/likes/{id}:
+    post:
+      summary: Adds a like to a post
+      description: Adds a new entry to the likes table in the database with the current user ID and the post ID from params
+      operationId: addLikeToPost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the post
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Like added to post"
+                  data:
+                    $ref: "#/components/schemas/Like"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    delete:
+      summary: Removes a like from a post
+      description: Deletes an entry from the likes table in the database with the current user ID and the post ID from params
+      operationId: removeLikeFromPost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the post
+      responses:
+        "204":
+          description: Success response
+        "404":
+          description: Failure response - Post not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /comments/{id}:
+    get:
+      summary: Get a single comment
+      description: Gets a single entry from the comment table of the database that has a matching ID from the params
+      operationId: getComment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the comment
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Comment found successfully"
+                  data:
+                    $ref: "#/components/schemas/CommentBasic"
+        "404":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    put:
+      summary: Updates a single comment
+      description: Updates a single entry from the comment table of the database that has a matching ID from the params
+      operationId: updateComment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostAndCommentRequestBody"
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Comment updated successfully"
+                  data:
+                    $ref: "#/components/schemas/CommentBasic"
+        "404":
+          description: "Failure response - Comment not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: "Failure response - Access forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+    delete:
+      summary: Deletes a single comment
+      description: Deletes a single entry from the comment table of the database that has a matching ID from the params
+      operationId: deleteComment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          description: The unique identifier of the comment
+      responses:
+        "204":
+          description: Success response
+        "404":
+          description: "Failure response - Comment not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "403":
+          description: "Failure response - Access forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+  /comments/post/{postId}:
+    post:
+      summary: Create a new comment
+      description: Adds a new entry in the comments database
+      operationId: createComment
+      parameters:
+          - name: postId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+              example: 1
+            description: The unique identifier of the post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostAndCommentRequestBody"
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Comment created successfully"
+                  data:
+                    $ref: "#/components/schemas/CommentBasic"
+        "400":
+          description: Failure response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+        "500":
+          description: Failure response - Server or database issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
+
+components:
+  schemas:
+    UserBasic:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        firstName:
+          type: string
+          example: Jane
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+          example: janedoe@gmail.com
+        profilePicFilePath:
+          type: string
+          example: "https://res.cloudinary.com/your-profile-image.jpg"
+        profilePicCloudId:
+          type: string
+          example: your-profile-image
+        city:
+          type: string
+          example: Toronto
+        birthDate:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+    UserWithPosts:
+      allOf:
+        - $ref: "#/components/schemas/UserBasic"
+        - type: object
+          properties:
+            posts:
+              type: array
+              items:
+                $ref: "#/components/schemas/PostWithComments"
+    UserFull:
+      allOf:
+        - $ref: "#/components/schemas/UserWithPosts"
+        - type: object
+          properties:
+            following:
+              type: array
+              items:
+                $ref: "#/components/schemas/Follow"
+            followers:
+              type: array
+              items:
+                $ref: "#/components/schemas/Follow"
+            following_requests:
+              type: array
+              items:
+                $ref: "#/components/schemas/Follow"
+            followed_requests:
+              type: array
+              items:
+                $ref: "#/components/schemas/Follow"
+    UserRequestBody:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - username
+      - password
+      - city
+      - birthDate
+      properties:
+        firstName:
+          type: string
+          example: "Jane"
+        lastName:
+          type: string
+          example: "Doe"
+        username:
+          type: string
+          format: email
+          example: "janedoe@gmail.com"
+        password:
+          type: string
+          example: "abc123"
+        city:
+          type: string
+          example: "Toronto"
+        birthDate:
+          type: string
+          format: date
+          example: "2000-01-01"
+    PostBasic:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        text:
+          type: string
+          example: hello world
+        authorId:
+          type: integer
+          format: int32
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+    PostWithComments:
+      allOf:
+        - $ref: "#/components/schemas/PostBasic"
+        - type: object
+          properties:
+            comments:
+              type: array
+              minItems: 0
+              items:
+                $ref: "#/components/schemas/CommentBasic"
+    PostFull:
+      allOf:
+        - $ref: "#/components/schemas/PostBasic"
+        - type: object
+          properties:
+            likes:
+              type: array
+              items:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    format: int32
+                    example: 1
+            author:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: "Jane"
+                lastName:
+                  type: string
+                  example: "Doe"
+                profilePicFilePath:
+                  type: string
+                  example: "https://res.cloudinary.com/your-profile-image.jpg"
+            comments:
+              type: array
+              items:
+                $ref: "#/components/schemas/CommentFull"
+    PostAndCommentRequestBody:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          example: "test"
+    CommentBasic:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        text:
+          type: string
+          example: hello world
+        authorId:
+          type: integer
+          format: int32
+          example: 1
+        postId:
+          type: integer
+          format: int32
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+    CommentFull:
+      allOf:
+        - $ref: "#/components/schemas/CommentBasic"
+        - type: object
+          properties:
+            author:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: "Jane"
+                lastName:
+                  type: string
+                  example: "Doe"
+                profilePicFilePath:
+                  type: string
+                  example: "https://res.cloudinary.com/your-profile-image.jpg"
+    Follow:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        followedUserId:
+          type: integer
+          format: int32
+          example: 1
+        followingUserId:
+          type: integer
+          format: int32
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+    FailureResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    Like:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        userId:
+          type: integer
+          format: int32
+          example: 1
+        postId:
+          type: integer
+          format: int32
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2000-01-01T00:00:00.000Z"
