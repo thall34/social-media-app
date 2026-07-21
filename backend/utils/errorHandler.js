@@ -32,9 +32,9 @@ function errorHandler(err, req, res, next) {
         });
     };
 
-    // fallback to catch all errors
-    return res.status(500).json({
-        message: 'Error - 500: Server error occured',
+    // fallback that returns the error with the appropriate error status and message
+    return res.status(err.status).json({
+        message: err.message
     });
 };
 

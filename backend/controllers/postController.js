@@ -11,7 +11,7 @@ async function getPost(req, res, next) {
         const post = await db.getPostById(id);
         // if no post is found, return a 404 failure response
         if (!post) {
-            return failure(res, 404, 'Failed finding post');
+            return next(failure(404, 'Failed finding post'));
         };
 
         // return a 200 success response with the found post
@@ -41,7 +41,7 @@ async function createPost(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return failure(res, 400, 'Invalid credentials to create new post');
+        return next(failure(400, 'Form fields contain invalid data'));
     };
 
     try {
@@ -62,7 +62,7 @@ async function updatePost(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return failure(res, 400, 'Invalid credentials to update post');
+        return next(failure(400, 'Form fields contain invalid data'));
     };
 
     try {
@@ -70,12 +70,12 @@ async function updatePost(req, res, next) {
         const post = await db.getPostById(id);
         // if no post is found, return a 404 failure response
         if (!post) {
-            return failure(res, 404, 'Failed finding post');
+            return next(failure(404, 'Failed finding post'));
         };
 
         // if post author does not match the current user, return a 403 failure response
         if (post.authorId !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(403, 'Access forbidden'));
         };
         
         const { text } = matchedData(req);
@@ -97,12 +97,12 @@ async function deletePost(req, res, next) {
         const post = await db.getPostById(id);
         // if no post is found, return a 404 failure response
         if (!post) {
-            return failure(res, 404, 'Failed finding post');
+            return next(failure(404, 'Failed finding post'));
         };
 
         // if post author does not match the current user, return a 403 failure response
         if (post.authorId !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(403, 'Access forbidden'));
         };
 
         await db.deletePostById(id);
@@ -149,7 +149,7 @@ async function removeLikeFromPost(req, res, next) {
         const like = await db.getLikeByIds(userId, postId);
         // if no like is found, return a 404 failure response
         if (!like) {
-            return failure(res, 404, 'Failed finding like');
+            return next(failure(404, 'Failed finding like'));
         };
 
         const removedLike = await db.removeLikeFromPostById(userId, postId);

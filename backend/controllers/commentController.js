@@ -11,7 +11,7 @@ async function getComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return failure(res, 404, 'Failed finding comment');
+            return next(failure(404, 'Failed finding comment'));
         };
 
         // return a 200 success response with the found comment
@@ -29,7 +29,7 @@ async function createComment(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return failure(res, 400, 'Invalid credentials to create new comment');
+        return next(failure(404, 'Form fields contain invalid data'));
     };
 
     try {
@@ -50,7 +50,7 @@ async function updateComment(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return failure(res, 400, 'Invalid credentials to update comment');
+        return next(failure(404, 'Form fields contain invalid data'));
     };
 
     try {
@@ -58,12 +58,12 @@ async function updateComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return failure(res, 404, 'Failed finding comment');
+            return next(failure(404, 'Failed finding comment'));
         };
 
         // if comment author does not match the current user, return a 403 failure response
         if (comment.authorId !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(403, 'Access forbidden'));
         };
         
         const { text } = matchedData(req);
@@ -85,12 +85,12 @@ async function deleteComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return failure(res, 404, 'Failed finding comment');
+            return next(failure(404, 'Failed finding comment'));
         };
 
         // if comment author does not match the current user, return a 403 failure response
         if (comment.authorId !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(403, 'Access forbidden'));
         };
 
         await db.deleteCommentById(id);

@@ -15,7 +15,10 @@ function logInUser(req, res, next) {
 
         // if user does not exist, return a 401 failure response
         if (!user) {
-            return failure(res, 401, info?.message || 'Invalid username or password');
+            // return failure(res, 401, info?.message || 'Invalid username or password');
+            const error = new Error('Invalid username or password');
+            error.status = 401
+            return next(error);
         };
 
         req.logIn(user, (err) => {
@@ -63,7 +66,7 @@ async function findUser(req, res, next) {
         const foundUser = await db.getUserById(id);
         // if no user is found, return a 404 failure response
         if (!foundUser) {
-            return failure(res, 404, 'Failed finding user');
+            return next(failure(404, 'Failed finding user'));
         };
 
         // return a 200 success response with the found user
@@ -80,7 +83,7 @@ async function createUser(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return failure(res, 400, 'Invalid credentials to create new user');
+        return next(failure(400, 'Form fields contain invalid data'));
     };
 
     try {
@@ -113,7 +116,7 @@ async function updateUser(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return failure(res, 400, 'Invalid credentials to update user');
+        return next(failure(400, 'Form fields contain invalid data'));
     };
 
     try {
@@ -121,12 +124,12 @@ async function updateUser(req, res, next) {
         const user = await db.getUserById(userId);
         // if no user is found, return a 404 failure response
         if (!user) {
-            return failure(res, 404, 'Failed finding user');
+            return next(failure(404, 'Failed finding user'));
         };
 
         // if user id does not match the current user, return a 403 failure response
         if (user.id !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(403, 'Access forbidden'));
         };
 
         const { firstName, lastName, username, password, city, birthDate } = matchedData(req);
@@ -157,12 +160,12 @@ async function updateUserProfilePic(req, res, next) {
         const user = await db.getUserById(userId);
         // if no user is found, return a 404 failure response
         if (!user) {
-            return failure(res, 404, 'Failed finding user');
+            return next(failure(404, 'Failed finding user'));
         };
 
         // if user id does not match the current user, return a 403 failure response
         if (user.id !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(404, 'Access forbidden'));
         };
 
         // if no file is uploaded with the form, re-assign the found user's profile pic details
@@ -193,12 +196,12 @@ async function deleteUser(req, res, next) {
         const user = await db.getUserById(userId);
         // if no user is found, return a 404 failure response
         if (!user) {
-            return failure(res, 404, 'Failed finding user');
+            return next(failure(404, 'Failed finding user'));
         };
 
         // if user id does not match the current user, return a 403 failure response
         if (user.id !== userId) {
-            return failure(res, 403, 'Access forbidden');
+            return next(failure(403, 'Access forbidden'));
         };
 
         await db.deleteUserById(userId);
@@ -251,7 +254,7 @@ async function addFollowRequestToUser(req, res, next) {
     const peerId = req.validatedId;
 
     if (userId === peerId) {
-        return failure(res, 422, 'Cannot follow yourself');
+        return next(failure(422, 'Follow requests cannot be linked to yourself'));
     };
 
     try {
@@ -273,7 +276,7 @@ async function removeFollowRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(userId, peerId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return failure(res, 404, 'Failed finding follow request');
+            return next(failure(404, 'Failed finding follow request'));
         };
 
         await db.removeFollowRequestFromUser(userId, peerId);
@@ -294,7 +297,7 @@ async function declineFollowRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return failure(res, 404, 'Failed finding follow request');
+            return next(failure(404, 'Failed finding follow request'));
         };
 
         await db.removeFollowRequestFromUser(peerId, userId);
@@ -311,7 +314,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
     const peerId = req.validatedId;
 
     if (userId === peerId) {
-        return failure(res, 422, 'Cannot follow yourself');
+        return next(failure(422, 'Follow requests cannot be linked to yourself'));
     };
 
     try {
@@ -319,7 +322,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return failure(res, 404, 'Failed finding follow request');
+            return next(failure(404, 'Failed finding follow request'));
         };
 
         const deleteRequest = await db.removeFollowRequestFromUser(peerId, userId);
@@ -341,7 +344,7 @@ async function removeFollower(req, res, next) {
         const follower = await db.getFollowerByIds(userId, peerId);
         // if no follower is found, return a 404 failure response
         if (!follower) {
-            return failure(res, 404, 'Failed finding follower');
+            return next(failure(404, 'Failed finding follower'));
         };
         
         await db.removeFollower(userId, peerId);
