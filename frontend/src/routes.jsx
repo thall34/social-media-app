@@ -9,6 +9,7 @@ import UserPosts from './components/UserPosts';
 import UserNetwork from './components/UserNetwork';
 import PeerProfile from './components/PeerProfile';
 import UpdateProfilePic from './components/UpdateProfilePic';
+import ErrorPage from './components/ErrorPage';
 
 const routes = [
     {
@@ -54,6 +55,10 @@ const routes = [
     {
         path: '/user/peer/:peerId',
         element: <PeerProfile />
+    },
+    {
+        path: '/*',
+        element: <ErrorPage />
     },
 ];
 
