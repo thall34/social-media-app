@@ -1,4 +1,4 @@
-const prisma = require('../config/db');
+const prisma = require('../../config/db');
 
 const createFollow = async (user1Id, user2Id) => {
     return prisma.follow.create({

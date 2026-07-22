@@ -1,4 +1,4 @@
-const prisma = require('../config/db');
+const prisma = require('../../config/db');
 
 const createLike = async (postId, userId) => {
     return prisma.like.create({

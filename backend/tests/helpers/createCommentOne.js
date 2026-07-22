@@ -1,4 +1,4 @@
-const prisma = require('../config/db');
+const prisma = require('../../config/db');
 
 const createCommentOne = async (userId, postId) => {
     return prisma.comment.create({

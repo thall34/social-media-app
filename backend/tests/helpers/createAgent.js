@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('./app');
-const prisma = require('../config/db');
+const app = require('../app');
+const prisma = require('../../config/db');
 const bcrypt = require('bcryptjs');
 
 async function createAgent() {

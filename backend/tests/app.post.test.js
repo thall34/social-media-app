@@ -1,10 +1,10 @@
 const request = require('supertest');
 const app = require('./app');
 const prisma = require('../config/db');
-const { createAgent } = require('./createAgent');
-const createUserOne = require('./createUserOne');
-const createPostOne = require('./createPostOne');
-const createLike = require('./createLike');
+const { createAgent } = require('./helpers/createAgent');
+const createUserOne = require('./helpers/createUserOne');
+const createPostOne = require('./helpers/createPostOne');
+const createLike = require('./helpers/createLike');
 
 beforeEach(async () => {
     await prisma.post.deleteMany({});
