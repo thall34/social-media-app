@@ -58,9 +58,9 @@ Before installing, ensure you have the following software installed:
 
 ## Future improvements
 
-
-Add a catch in the add follow request to user so if the user is already following the peer ID they cannot send a follow request
-Deploy to render or a similar service
-Add unit testing
-Add pagination for posts and users
-Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately
+1. Write 10-15 react tests
+2. Add a catch in the add follow request to user so if the user is already following the peer ID they cannot send a follow request
+3. Add a guest login feature
+4. Add pagination for posts and users
+5. Deploy to render or a similar service
+6. Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately

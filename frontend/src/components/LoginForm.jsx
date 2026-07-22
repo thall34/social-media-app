@@ -24,13 +24,13 @@ function LoginForm({ setError }) {
 
     return (
         <section className='form'>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin} aria-label='login-form'>
                 <h1>Login</h1>
                 <label htmlFor="username">Email:<span className='red'>* required</span></label>
                 <input type="text" name="username" id="username" value={loginData.username} onChange={(e) => handleChange(e, setLoginData)} />
                 <label htmlFor="password">Password:<span className='red'>* required</span></label>
                 <input type="password" name="password" id="password" value={loginData.password} onChange={(e) => handleChange(e, setLoginData)} />
-                <button type="submit">Log In</button>
+                <button type="submit" aria-label='submit'>Log In</button>
             </form>
             <Link to='/user/new'>
                 <button>Register New User</button>
