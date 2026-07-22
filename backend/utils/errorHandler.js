@@ -1,7 +1,7 @@
 const multer = require('multer');
 
 function errorHandler(err, req, res, next) {
-    console.error(err);
+    // console.error(err);
 
     // Multer errors
     if (err instanceof multer.MulterError) {

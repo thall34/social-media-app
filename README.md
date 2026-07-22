@@ -58,7 +58,9 @@ Before installing, ensure you have the following software installed:
 
 ## Future improvements
 
-Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately
+
+Add a catch in the add follow request to user so if the user is already following the peer ID they cannot send a follow request
 Deploy to render or a similar service
-Add unit testing and API tests
+Add unit testing
 Add pagination for posts and users
+Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately

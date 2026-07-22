@@ -162,7 +162,7 @@ async function getPeerPoolForPeer(peerId) {
         },
     });
 
-    return users;
+    return users; 
 };
 
 // fetches a single follow request from database by followed ID and following ID

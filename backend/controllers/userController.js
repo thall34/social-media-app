@@ -27,7 +27,7 @@ function logInUser(req, res, next) {
             };
 
             // return a 200 success response with the logged in user
-            return success(res, 200, 'Successfully logged in', req.user)
+            return success(res, 200, 'Log in successful', req.user)
         });
     }
     );
@@ -66,11 +66,11 @@ async function findUser(req, res, next) {
         const foundUser = await db.getUserById(id);
         // if no user is found, return a 404 failure response
         if (!foundUser) {
-            return next(failure(404, 'Failed finding user'));
+            return next(failure(404, 'User not found'));
         };
 
         // return a 200 success response with the found user
-        return success(res, 200, 'Successfully found user', foundUser);
+        return success(res, 200, 'User found', foundUser);
     } catch (err) {
         next(err);
     };
@@ -103,7 +103,7 @@ async function createUser(req, res, next) {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await db.createNewUser(firstName, lastName, username, hashedPassword, filePath, cloudinaryId, city, birthDate);
         // return a 201 success response with the new user
-        return success(res, 201, 'Successfully created new user', newUser);
+        return success(res, 201, 'User created', newUser);
     } catch (err) {
         next(err);
     };
@@ -120,31 +120,21 @@ async function updateUser(req, res, next) {
     };
 
     try {
-        // looks through database to ensure the user exists before updating
-        const user = await db.getUserById(userId);
-        // if no user is found, return a 404 failure response
-        if (!user) {
-            return next(failure(404, 'Failed finding user'));
-        };
-
-        // if user id does not match the current user, return a 403 failure response
-        if (user.id !== userId) {
-            return next(failure(403, 'Access forbidden'));
-        };
-
         const { firstName, lastName, username, password, city, birthDate } = matchedData(req);
         // if password entry from form is filled in with a new password, re-encrypt the new password and update user
         if (password !== '') {
             const hashedPassword = await bcrypt.hash(password, 10);
             const updatedUser = await db.updateUserById(firstName, lastName, username, hashedPassword, city, birthDate, userId);
             // return a 200 success response with the updated user
-            return success(res, 200, 'Successfully updated user', updatedUser);
+            return success(res, 200, 'User updated', updatedUser);
         };
 
+        // gets user object to extract password
+        const user = await db.getUserById(userId);
         // if password entry from form is left empty, update user with new details but use previous password from found user
         const updatedUser = await db.updateUserById(firstName, lastName, username, user.password, city, birthDate, userId);
         // return a 200 success response with the updated user
-        return success(res, 200, 'Successfully updated user', updatedUser);
+        return success(res, 200, 'User updated', updatedUser);
     } catch (err) {
         next(err);
     };
@@ -156,18 +146,8 @@ async function updateUserProfilePic(req, res, next) {
     let filePath, cloudinaryId;
 
     try {
-        // looks through database to ensure the user exists before updating
+        // gets user object to extract old profile picture details
         const user = await db.getUserById(userId);
-        // if no user is found, return a 404 failure response
-        if (!user) {
-            return next(failure(404, 'Failed finding user'));
-        };
-
-        // if user id does not match the current user, return a 403 failure response
-        if (user.id !== userId) {
-            return next(failure(404, 'Access forbidden'));
-        };
-
         // if no file is uploaded with the form, re-assign the found user's profile pic details
         if (!req.file) {
             filePath = user.profilePicFilePath;
@@ -181,7 +161,7 @@ async function updateUserProfilePic(req, res, next) {
 
         const updatedUser = await db.updateUserProfilePicById(userId, filePath, cloudinaryId);
         // return a 200 success response with the updated user
-        return success(res, 200, 'Successfully updated user', updatedUser);
+        return success(res, 200, 'User updated', updatedUser);
     } catch (err) {
         next(err);
     };
@@ -192,18 +172,6 @@ async function deleteUser(req, res, next) {
     const userId = req.user.id;
 
     try {
-        // looks through database to ensure the user exists before deleting
-        const user = await db.getUserById(userId);
-        // if no user is found, return a 404 failure response
-        if (!user) {
-            return next(failure(404, 'Failed finding user'));
-        };
-
-        // if user id does not match the current user, return a 403 failure response
-        if (user.id !== userId) {
-            return next(failure(403, 'Access forbidden'));
-        };
-
         await db.deleteUserById(userId);
         // return a 204 success response indicating the user was deleted
         return success(res, 204);
@@ -229,7 +197,7 @@ async function getPeerPool(req, res, next) {
     try {
         const users = await db.getPeerPool(userId);
         // return a 200 success response with the found users
-        return success(res, 200, 'Successfully found users', users);
+        return success(res, 200, 'Users found', users);
     } catch (err) {
         next(err);
     };
@@ -240,9 +208,16 @@ async function getPeerPoolForPeer(req, res, next) {
     const id = req.validatedId;
 
     try {
+        // looks through database to ensure the user exists before searching
+        const user = await db.getUserById(id);
+        // if no user is found, return a 404 failure response
+        if (!user) {
+            return next(failure(404, 'User not found'));
+        };
+
         const users = await db.getPeerPoolForPeer(id);
         // return a 200 success response with the found users
-        return success(res, 200, 'Successfully found users', users);
+        return success(res, 200, 'Users found', users);
     } catch (err) {
         next(err);
     };
@@ -260,7 +235,7 @@ async function addFollowRequestToUser(req, res, next) {
     try {
         const request = await db.addFollowRequestToUser(userId, peerId);
         // return a 201 success response with the new request
-        return success(res, 201, 'Successfully sent follow request', request);
+        return success(res, 201, 'Follow request sent', request);
     } catch (err) {
         next(err);
     };
@@ -276,7 +251,7 @@ async function removeFollowRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(userId, peerId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return next(failure(404, 'Failed finding follow request'));
+            return next(failure(404, 'Follow request not found'));
         };
 
         await db.removeFollowRequestFromUser(userId, peerId);
@@ -297,7 +272,7 @@ async function declineFollowRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return next(failure(404, 'Failed finding follow request'));
+            return next(failure(404, 'Follow request not found'));
         };
 
         await db.removeFollowRequestFromUser(peerId, userId);
@@ -314,7 +289,7 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
     const peerId = req.validatedId;
 
     if (userId === peerId) {
-        return next(failure(422, 'Follow requests cannot be linked to yourself'));
+        return next(failure(422, 'Following cannot be linked to yourself'));
     };
 
     try {
@@ -322,13 +297,13 @@ async function addFollowerAndRemoveRequestFromUser(req, res, next) {
         const followRequest = await db.getFollowRequestByIds(peerId, userId);
         // if no follow request is found, return a 404 failure response
         if (!followRequest) {
-            return next(failure(404, 'Failed finding follow request'));
+            return next(failure(404, 'Follow request not found'));
         };
 
         const deleteRequest = await db.removeFollowRequestFromUser(peerId, userId);
         const addRequest = await db.addFollowerToUser(userId, peerId);
         // return a 201 success response with the new follower
-        return success(res, 201, 'Successfully added follower', addRequest);
+        return success(res, 201, 'Follower added', addRequest);
     } catch (err) {
         next(err);
     };
@@ -344,7 +319,7 @@ async function removeFollower(req, res, next) {
         const follower = await db.getFollowerByIds(userId, peerId);
         // if no follower is found, return a 404 failure response
         if (!follower) {
-            return next(failure(404, 'Failed finding follower'));
+            return next(failure(404, 'Follower not found'));
         };
         
         await db.removeFollower(userId, peerId);

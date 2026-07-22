@@ -11,11 +11,11 @@ async function getComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return next(failure(404, 'Failed finding comment'));
+            return next(failure(404, 'Comment not found'));
         };
 
         // return a 200 success response with the found comment
-        return success(res, 200, 'Successfully found comment', comment);
+        return success(res, 200, 'Comment found', comment);
     } catch(err) {
         next(err);
     };
@@ -29,14 +29,14 @@ async function createComment(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return next(failure(404, 'Form fields contain invalid data'));
+        return next(failure(400, 'Form fields contain invalid data'));
     };
 
     try {
         const { text } = matchedData(req);
         const newComment = await db.createNewComment(text, userId, postId);
         // return a 201 success response with the new comment
-        return success(res, 201, 'Successfully created new comment', newComment);
+        return success(res, 201, 'Comment created', newComment);
     } catch(err) {
         next(err);
     };
@@ -50,7 +50,7 @@ async function updateComment(req, res, next) {
 
     // if there are any form validation errors, return a 400 failure response
     if (!errors.isEmpty()) {
-        return next(failure(404, 'Form fields contain invalid data'));
+        return next(failure(400, 'Form fields contain invalid data'));
     };
 
     try {
@@ -58,7 +58,7 @@ async function updateComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return next(failure(404, 'Failed finding comment'));
+            return next(failure(404, 'Comment not found'));
         };
 
         // if comment author does not match the current user, return a 403 failure response
@@ -69,7 +69,7 @@ async function updateComment(req, res, next) {
         const { text } = matchedData(req);
         const updatedComment = await db.updateCommentById(text, id);
         // return a 200 success response with the updated comment
-        return success(res, 200, 'Successfully updated comment', updatedComment);
+        return success(res, 200, 'Updated comment', updatedComment);
     } catch(err) {
         next(err);
     };
@@ -85,7 +85,7 @@ async function deleteComment(req, res, next) {
         const comment = await db.getCommentById(id);
         // if no comment is found, return a 404 failure response
         if (!comment) {
-            return next(failure(404, 'Failed finding comment'));
+            return next(failure(404, 'Comment not found'));
         };
 
         // if comment author does not match the current user, return a 403 failure response
