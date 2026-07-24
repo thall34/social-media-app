@@ -17,6 +17,8 @@ const app = express();
 require('dotenv/config');
 require('./config/passport');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true,
@@ -27,8 +29,8 @@ app.set('trust proxy', 1)
 app.use(session({
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    secure: true,
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   },  
   secret: process.env.SESSION_SECRET, 
   resave: false, 

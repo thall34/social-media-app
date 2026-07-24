@@ -9,6 +9,8 @@ async function getAllPostsForUser() {
         }
       );
 
+      console.log(response);
+
       if (!response.ok) {
         throw new Error('Posts not found');
       };
