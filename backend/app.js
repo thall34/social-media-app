@@ -14,15 +14,15 @@ const errorHandler = require('./utils/errorHandler');
 const PORT = process.env.PORT || 3000
 
 const app = express();
+require('dotenv/config');
+require('./config/passport');
+
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-require('dotenv/config');
-require('./config/passport');
 app.use(session({
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000
