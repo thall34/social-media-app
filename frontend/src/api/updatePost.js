@@ -1,6 +1,6 @@
 async function updatePost(postId, postData) {
     try {
-        const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
