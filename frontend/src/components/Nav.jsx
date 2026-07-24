@@ -34,12 +34,18 @@ function Nav({ user, setError }) {
                     <Link to='/user/network'>
                         <li>Network</li>
                     </Link>
-                    <Link to='/user/update'>
-                        <li>Edit User</li>
-                    </Link>
-                    <li>
-                        <button onClick={handleDeleteUser}>Delete User</button>
-                    </li>
+                    {user.role === 'USER' ? (
+                        <>
+                            <Link to='/user/update'>
+                                <li>Edit User</li>
+                            </Link>
+                            <li>
+                                <button onClick={handleDeleteUser}>Delete User</button>
+                            </li>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                     <li>
                         <button onClick={handleLogout}>Log Out</button>
                     </li>
