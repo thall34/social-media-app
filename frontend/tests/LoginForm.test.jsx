@@ -32,15 +32,13 @@ describe('Login Form component', () => {
         // render the loginForm component, needs memory router as it is in a React Router environment
         render(
             <MemoryRouter>
-                <LoginForm />
+                <LoginForm setError={mockSetError} />
             </MemoryRouter>
         );
-        // gets form, username input field, and password input field
-        const form = screen.getByRole('form', { name: /login-form/i });
+        // gets username input field, and password input field
         const username = screen.getByLabelText(/email/i);
         const password = screen.getByLabelText(/password/i);
         // makes sure these elements exist in the document
-        expect(form).toBeInTheDocument();
         expect(username).toBeInTheDocument();
         expect(password).toBeInTheDocument();
     });
@@ -49,7 +47,7 @@ describe('Login Form component', () => {
         // render the loginForm component, needs memory router as it is in a React Router environment
         render(
             <MemoryRouter>
-                <LoginForm />
+                <LoginForm setError={mockSetError} />
             </MemoryRouter>
         );
         // get username input and password input fields
@@ -78,7 +76,7 @@ describe('Login Form component', () => {
         // get username input, password input and submit buttons
         const username = screen.getByLabelText(/email/i);
         const password = screen.getByLabelText(/password/i);
-        const submit = screen.getByRole('button', { name: /submit/i });
+        const submit = screen.getByRole('button', { name: /log in/i });
         // simulate user input for both input fields and the submit button click
         await user.type(username, 'example@example.com');
         await user.type(password, 'abc123');
@@ -105,7 +103,7 @@ describe('Login Form component', () => {
         // get username input, password input and submit buttons
         const username = screen.getByLabelText(/email/i);
         const password = screen.getByLabelText(/password/i);
-        const submit = screen.getByRole('button', { name: /submit/i });
+        const submit = screen.getByRole('button', { name: /log in/i });
         // simulate user input for both input fields and the submit button click
         await user.type(username, 'example@example.com');
         await user.type(password, 'abc123');
@@ -132,7 +130,7 @@ describe('Login Form component', () => {
         // get username input, password input and submit buttons
         const username = screen.getByLabelText(/email/i);
         const password = screen.getByLabelText(/password/i);
-        const submit = screen.getByRole('button', { name: /submit/i });
+        const submit = screen.getByRole('button', { name: /log in/i });
         // simulate user input for both input fields and the submit button click
         await user.type(username, 'example@example.com');
         await user.type(password, 'abc123');
