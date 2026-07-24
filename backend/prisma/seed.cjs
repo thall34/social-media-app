@@ -3,7 +3,12 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
 
 async function main() {
-    await prisma.user.deleteMany();
+    const userCount = await prisma.user.count();
+    if (userCount > 0) {
+        console.log('Database already seeded. Skipping...');
+        return;
+    };
+    
     const hashedPassword = await bcrypt.hash('123', 10);
     
     const guestUser = await prisma.user.upsert({
