@@ -59,7 +59,6 @@ Before installing, ensure you have the following software installed:
 ## Future improvements
 
 <ol>
-<li>Add a catch in the add follow request to user so if the user is already following the peer ID they cannot send a follow request</li>
 <li>Add a guest login feature</li>
 <li>Add pagination for posts and users</li>
 <li>Deploy to render or a similar service</li>

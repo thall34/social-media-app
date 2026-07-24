@@ -233,6 +233,11 @@ async function addFollowRequestToUser(req, res, next) {
     };
 
     try {
+        const user = await db.getUserById(userId);
+        if (user.following.some(follow => follow.followingUserId === userId)) {
+            return next(failure(422, 'Follow requests cannot be sent to peers you are already following'));
+        };
+        
         const request = await db.addFollowRequestToUser(userId, peerId);
         // return a 201 success response with the new request
         return success(res, 201, 'Follow request sent', request);
