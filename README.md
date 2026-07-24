@@ -1,5 +1,5 @@
 # Social Media App
-The goal of this project was to create a full stack social media app. I decided to use REST APIs in Node.js using Express, PostgreSQL, and Prisma for the backend and React for the frontend.
+The goal of this project was to create a full stack social media app. I decided to use REST APIs in Node.js using Express, PostgreSQL, and Prisma for the backend and React for the frontend. This project was a huge accomplishment as it put all of what i've learned so far in the Odin Project to the test to make a complete full stack project that I am really proud of. I learned a lot about best practices for communication between the front end and back end and optimization in a full stack environment from this project.
 
 ## Features
 1. Single page app that starts on the homepage with a login form if no current user is logged in and register button to create a new user in the database.
@@ -49,11 +49,13 @@ Before installing, ensure you have the following software installed:
 ```SESSION_SECRET=<your_secret>```
 7. **Configure cloudinary variables in your .env file**
 ```CLOUDINARY_CLOUD_NAME=<your-cloud-name> CLOUDINARY_API_KEY=<your-api-key> CLOUDINARY_API_SECRET=<your-api-secret>```
-8. **Start the local server**
+8. **Copy .env.example file in frontend folder and rename it as a .env file**
+```cp ../frontend/.env.example .env ```
+9. **Start the local server**
 ```cd backend -> node app.js```
-9. **Start the React server**
+10. **Start the React server**
 ```cd ../frontend -> npm run dev```
-10. **Navigate to the localhost in your browser**
+11. **Navigate to the localhost in your browser**
 ```http://localhost:5173```
 
 ## Future improvements
@@ -61,6 +63,5 @@ Before installing, ensure you have the following software installed:
 <ol>
 <li>Add a guest login feature</li>
 <li>Add pagination for posts and users</li>
-<li>Deploy to render or a similar service</li>
 <li>Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately</li>
 </ol>
