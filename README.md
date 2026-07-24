@@ -28,7 +28,7 @@ The goal of this project was to create a full stack social media app. I decided 
 10. Users can edit their profile picture and change it for a new one using the update profile picture button under their profile picture on their home or network pages.
 <img src='./screenshots/updatePic.png' alt='user profile picture update page' width='700'>
 
-## Project Setup
+## Local Project Setup
 
 Before installing, ensure you have the following software installed:
 **Git**: [Download Git](https://git-scm.com)
@@ -58,7 +58,11 @@ Before installing, ensure you have the following software installed:
 11. **Navigate to the localhost in your browser**
 ```http://localhost:5173```
 
-## Future improvements
+## Live Preview
+
+https://social-media-app-frontend-6jg7.onrender.com
+
+## Future Improvements
 
 <ol>
 <li>Add a guest login feature</li>
