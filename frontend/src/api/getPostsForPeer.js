@@ -1,6 +1,6 @@
 async function getPostsForPeer(peerId) {
     try {
-      const response = await fetch(`http://localhost:3000/api/posts/peer/${peerId}`,
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/peer/${peerId}`,
         {
           headers: {
             'Content-Type': 'application/json',

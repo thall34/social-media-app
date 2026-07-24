@@ -1,6 +1,6 @@
 async function acceptFollowRequest(senderId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/follow/${senderId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/follow/${senderId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

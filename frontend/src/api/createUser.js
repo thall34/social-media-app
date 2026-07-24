@@ -2,7 +2,7 @@ async function createUser(formElements) {
     const formData = new FormData(formElements);
 
     try {
-        const response = await fetch('http://localhost:3000/api/users/', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/`, {
             method: 'POST',
             body: formData,
         });

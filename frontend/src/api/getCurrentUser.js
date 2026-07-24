@@ -1,6 +1,6 @@
 async function getCurrentUser() {
     try {
-      const response = await fetch('http://localhost:3000/api/users/me',
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/me`,
         {
           headers: {
             'Content-Type': 'application/json',
