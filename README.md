@@ -68,7 +68,7 @@ password: 123
 ## Future Improvements
 
 <ol>
-<li>Add a guest login feature</li>
+<li>Add login as guest button</li>
 <li>Add pagination for posts and users</li>
 <li>Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately</li>
 </ol>
