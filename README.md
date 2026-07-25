@@ -60,7 +60,10 @@ Before installing, ensure you have the following software installed:
 
 ## Live Preview
 
-https://social-media-app-frontend-6jg7.onrender.com
+https://social-media-app-frontend-6jg7.onrender.com  
+### To login as a guest: 
+username: guest@example.com<br> 
+password: 123
 
 ## Future Improvements
 
