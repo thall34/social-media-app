@@ -12,6 +12,7 @@ const errorHandler = require('./utils/errorHandler');
 const PORT = process.env.PORT || 3000
 
 const app = express();
+require('dotenv/config');
 require('./config/passport');
 
 app.use(cors({
