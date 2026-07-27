@@ -31,7 +31,11 @@ function UserNetwork() {
         setFollowerPool(currentUser.followers);
         setFollowedPool(currentUser.following);
       } catch (err) {
-        setError(err);
+        if (err.message === 'Token not found') {
+          setUser(null);
+        } else {
+          setError(err);
+        }
       } finally {
         setLoading(false);
       };
@@ -66,39 +70,39 @@ function UserNetwork() {
       <div className='page'>
         <Header user={user} setError={setError} />
         <main>
-        <section className='user-details'>
+          <section className='user-details'>
             <h1>{user.firstName} {user.lastName}</h1>
-              <Link to={user.profilePicFilePath}>
-                <img src={user.profilePicFilePath} className='image profile' />
-              </Link>
+            <Link to={user.profilePicFilePath}>
+              <img src={user.profilePicFilePath} className='image profile' />
+            </Link>
             <Link to='/user/profile/pic/update'>Update Profile Picture</Link>
             <p>Active since {activeDate.toLocaleDateString('en-CA', { dateStyle: 'medium' })}</p>
             <p>Lives in {user.city}</p>
             <p>Born on {formatBirthday(user.birthDate)}</p>
-        </section>
-        <h3>Users</h3>
-        {peerPool.length > 0 ? (
-          <section className='user-peers'>
-            {peerPool.map((peer) => (
-              <Peer 
-                key={peer.id} 
-                userId={user.id} 
-                peer={peer} 
-                requestSentPool={requestSentPool} 
-                setRequestSentPool={setRequestSentPool} 
-                requestReceivedPool={requestReceivedPool} 
-                setRequestReceivedPool={setRequestReceivedPool}
-                followedPool={followedPool}
-                setFollowedPool={setFollowedPool}
-                followerPool={followerPool}
-                setFollowerPool={setFollowerPool} 
-                setError={setError} 
-              />
-            ))}
           </section>
-        ) : (
-          <></>
-        )}
+          <h3>Users</h3>
+          {peerPool.length > 0 ? (
+            <section className='user-peers'>
+              {peerPool.map((peer) => (
+                <Peer
+                  key={peer.id}
+                  userId={user.id}
+                  peer={peer}
+                  requestSentPool={requestSentPool}
+                  setRequestSentPool={setRequestSentPool}
+                  requestReceivedPool={requestReceivedPool}
+                  setRequestReceivedPool={setRequestReceivedPool}
+                  followedPool={followedPool}
+                  setFollowedPool={setFollowedPool}
+                  followerPool={followerPool}
+                  setFollowerPool={setFollowerPool}
+                  setError={setError}
+                />
+              ))}
+            </section>
+          ) : (
+            <></>
+          )}
         </main>
         <Footer />
       </div>

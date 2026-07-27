@@ -7,6 +7,8 @@ const createPostOne = require('./helpers/createPostOne');
 const createLike = require('./helpers/createLike');
 
 beforeEach(async () => {
+    await prisma.like.deleteMany({});
+    await prisma.comment.deleteMany({});
     await prisma.post.deleteMany({});
     await prisma.user.deleteMany({});
 })

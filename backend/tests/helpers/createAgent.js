@@ -30,10 +30,13 @@ async function createAgent() {
         }
     });
 
-    await agent
+    const res = await agent
         .post('/api/users/login')
         .send({ username, password })
-        .expect(200);
+    
+    const token = res.body.data;
+
+    agent.set('Authorization', `Bearer ${token}`);
 
     return { agent, user };
 };

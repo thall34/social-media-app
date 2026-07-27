@@ -6,7 +6,6 @@ async function authenticateLogin(loginData) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(loginData),
-            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -14,7 +13,7 @@ async function authenticateLogin(loginData) {
         };
 
         const data = await response.json();
-        return data.user;
+        return data.data;
     } catch (err) {
         throw err;
     };

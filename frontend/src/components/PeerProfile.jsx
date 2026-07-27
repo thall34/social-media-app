@@ -8,7 +8,6 @@ import getCurrentUser from '../api/getCurrentUser';
 import getCurrentPeer from '../api/getCurrentPeer';
 import getPeerPoolForPeer from '../api/getPeerPoolForPeer';
 import getPostsForPeer from '../api/getPostsForPeer';
-import logOutUser from '../api/logOutUser';
 import formatBirthday from '../utils/formatBirthday';
 
 function PeerProfile() {
@@ -26,15 +25,6 @@ function PeerProfile() {
     const navigate = useNavigate();
     const { peerId } = useParams();
 
-    async function handleLogout() {
-        try {
-            await logOutUser();
-            navigate('/');
-        } catch (err) {
-            setError(err);
-        };
-    };
-
     useEffect(() => {
         async function initializePage() {
             try {
@@ -51,7 +41,11 @@ function PeerProfile() {
                 setFollowerPool(currentUser.followers);
                 setFollowedPool(currentUser.following);
             } catch (err) {
-                setError(err);
+                if (err.message === 'Token not found') {
+                    setUser(null);
+                } else {
+                    setError(err);
+                }
             } finally {
                 setLoading(false);
             };
@@ -123,8 +117,8 @@ function PeerProfile() {
                         )}
                     </section>
                     <h3>Following</h3>
-                        {peerPool.length > 0 ? (
-                            <section className='user-peers'>
+                    {peerPool.length > 0 ? (
+                        <section className='user-peers'>
                             {peerPool
                                 .filter((peer) => peer.followed.id !== user.id)
                                 .map((peer) => (
@@ -144,14 +138,14 @@ function PeerProfile() {
                                     />
                                 )
                                 )}
-                                </section>
-                        ) : (
-                            <>
-                                <div className='no-followers'>
-                                    <h3>Not following anyone yet</h3>
-                                </div>
-                            </>
-                        )}
+                        </section>
+                    ) : (
+                        <>
+                            <div className='no-followers'>
+                                <h3>Not following anyone yet</h3>
+                            </div>
+                        </>
+                    )}
                 </main>
                 <Footer />
             </div>

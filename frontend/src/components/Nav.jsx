@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router';
-import logOutUser from '../api/logOutUser';
 import deleteUser from '../api/deleteUser';
 
 function Nav({ user, setError }) {
@@ -7,7 +6,7 @@ function Nav({ user, setError }) {
 
     async function handleLogout() {
         try {
-            await logOutUser();
+            localStorage.removeItem('jwt-token');
             navigate('/');
         } catch (err) {
             setError(err);
@@ -17,7 +16,7 @@ function Nav({ user, setError }) {
     async function handleDeleteUser() {
         try {
             const success = await deleteUser();
-            await logOutUser();
+            localStorage.removeItem('jwt-token');
             navigate('/');
         } catch (err) {
             setError(err);

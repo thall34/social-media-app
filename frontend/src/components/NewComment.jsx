@@ -34,7 +34,11 @@ function NewComment() {
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
             } catch (err) {
-                setError(err);
+                if (err.message === 'Token not found') {
+                    setUser(null);
+                } else {
+                    setError(err);
+                }
             } finally {
                 setLoading(false);
             };

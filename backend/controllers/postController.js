@@ -26,6 +26,7 @@ async function getPost(req, res, next) {
 async function getAllPostsForUser(req, res, next) {
     const userId = req.user.id;
 
+
     try {
         const posts = await db.getAllPostsForUserById(userId);
         // returns a 200 success response with the found posts

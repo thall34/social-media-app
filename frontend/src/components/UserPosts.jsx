@@ -22,7 +22,11 @@ function UserPosts() {
         setUser(currentUser);
         setPosts(currentPosts.data);
       } catch (err) {
-        setError(err);
+        if (err.message === 'Token not found') {
+          setUser(null);
+        } else {
+          setError(err);
+        }
       } finally {
         setLoading(false);
       };

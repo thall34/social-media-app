@@ -22,7 +22,11 @@ function App() {
           navigate('/user/posts');
         };
       } catch (err) {
-        setError(err);
+        if (err.message === 'Token not found') {
+          setUser(null);
+        } else {
+          setError(err);
+        }
       } finally {
         setLoading(false);
       };

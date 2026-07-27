@@ -37,7 +37,11 @@ function UpdatePost() {
                 setUser(currentUser);
                 setPostData({ text: currentPost.data.text });
             } catch (err) {
-                setError(err);
+                if (err.message === 'Token not found') {
+                    setUser(null);
+                } else {
+                    setError(err);
+                }
             } finally {
                 setLoading(false);
             };

@@ -113,7 +113,7 @@ describe('UserPosts component', () => {
     });
 
     it('renders a non-authenticated page if user is not found', async () => {
-        getCurrentUser.mockRejectedValue(null);
+        getCurrentUser.mockRejectedValue(new Error('Token not found'));
 
         render(
             <MemoryRouter>

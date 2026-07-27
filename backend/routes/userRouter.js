@@ -8,13 +8,12 @@ const validateLogin = require('../middleware/validateLogin');
 const validateUpdateUser = require('../middleware/validateUpdateUser');
 const uploadProfilePic = require('../middleware/multer');
 
-userRouter.get('/me', userController.sendUserDetails);
+userRouter.get('/me', isAuthenticated, userController.sendUserDetails);
 userRouter.get('/pool', isAuthenticated, userController.getPeerPool);
 userRouter.get('/peer/:id/pool', isAuthenticated, validateId, userController.getPeerPoolForPeer);
 userRouter.get('/peer/:id', isAuthenticated, validateId, userController.findUser);
 userRouter.post('/', uploadProfilePic, validateUser, userController.createUser);
 userRouter.post('/login', validateLogin, userController.logInUser);
-userRouter.post('/logout', userController.logOutUser);
 userRouter.post('/follow-request/:id', isAuthenticated, validateId, userController.addFollowRequestToUser);
 userRouter.post('/follow/:id', isAuthenticated, validateId, userController.addFollowerAndRemoveRequestFromUser);
 userRouter.put('/', isAuthenticated, validateUpdateUser, userController.updateUser);

@@ -1,61 +1,38 @@
 const db = require('../models/userModels');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const { validationResult, matchedData } = require('express-validator');
 const { uploadToCloudinary, cloudinary } = require('../config/cloudinary');
 const success = require('../utils/success');
 const failure = require('../utils/failure');
 
-// logs in user to passport local session 
 function logInUser(req, res, next) {
-    const authenticateUser = passport.authenticate('local', function (err, user, info) {
+    const authenticateUser = passport.authenticate('local', { session: false }, function (err, user, info) {
         if (err) {
             return next(err);
         };
 
-        // if user does not exist, return a 401 failure response
         if (!user) {
-            // return failure(res, 401, info?.message || 'Invalid username or password');
             const error = new Error('Invalid username or password');
             error.status = 401
             return next(error);
         };
 
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
-            };
+        const token = jwt.sign(
+            {
+                id: user.id,
+                username: user.username,
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: '1h',
+            },
+        );
 
-            // return a 200 success response with the logged in user
-            return success(res, 200, 'Log in successful', req.user)
-        });
-    }
-    );
-
-    authenticateUser(req, res, next)
-};
-
-// logs out user from passport local session
-async function logOutUser(req, res, next) {
-    try {
-        req.logout((err) => {
-            if (err) {
-                return next(err);
-            };
-
-            req.session.destroy((err) => {
-                if (err) {
-                    return next(err);
-                };
-
-                res.clearCookie('connect.sid');
-                // return a 204 success response indicating the user is logged out
-                return success(res, 204);
-            });
-        });
-    } catch (err) {
-        next(err);
-    };
+        return success(res, 200, 'Log in successful', token);
+    })
+    authenticateUser(req, res, next);
 };
 
 // obtains a single user from the database by user ID
@@ -321,13 +298,13 @@ async function removeFollower(req, res, next) {
 
     try {
         // looks through database to ensure the follower exists before deleting
-        const follower = await db.getFollowerByIds(userId, peerId);
+        const follower = await db.getFollowerByIds(peerId, userId);
         // if no follower is found, return a 404 failure response
         if (!follower) {
             return next(failure(404, 'Follower not found'));
         };
         
-        await db.removeFollower(userId, peerId);
+        await db.removeFollower(peerId, userId);
         // return a 204 success response indicating the follower was deleted
         return success(res, 204);
     } catch (err) {
@@ -337,7 +314,6 @@ async function removeFollower(req, res, next) {
 
 module.exports = {
     logInUser,
-    logOutUser,
     findUser,
     createUser,
     updateUser,

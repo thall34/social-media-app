@@ -37,7 +37,11 @@ function UpdateComment() {
                 setUser(currentUser);
                 setCommentData({ text: currentComment.data.text });
             } catch (err) {
-                setError(null);
+                if (err.message === 'Token not found') {
+                    setUser(null);
+                } else {
+                    setError(err);
+                }
             } finally {
                 setLoading(false);
             };

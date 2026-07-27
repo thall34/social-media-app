@@ -15,7 +15,8 @@ function LoginForm({ setError }) {
         e.preventDefault();
 
         try {
-            const user = await authenticateLogin(loginData);
+            const token = await authenticateLogin(loginData);
+            localStorage.setItem('jwt-token', token);
             navigate('/user/posts');
         } catch (err) {
             setError(err);

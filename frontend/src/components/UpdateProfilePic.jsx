@@ -32,7 +32,11 @@ function UpdateProfilePic() {
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
             } catch (err) {
-                setError(err);
+                if (err.message === 'Token not found') {
+                    setUser(null);
+                } else {
+                    setError(err);
+                }
             } finally {
                 setLoading(false);
             };
@@ -70,7 +74,7 @@ function UpdateProfilePic() {
                         <form onSubmit={handleUpdate} encType='multipart/form-data'>
                             <h1>Update Profile Picture</h1>
                             <label htmlFor="profilePic">Profile Picture:</label>
-                            <input type="file" name="profilePic" id="profilePic" className='file'/>
+                            <input type="file" name="profilePic" id="profilePic" className='file' />
                             <button type='submit'>Submit Update</button>
                         </form>
                     </section>

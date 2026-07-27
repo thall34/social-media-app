@@ -1,9 +1,19 @@
+import getToken from '../utils/getToken';
+
 async function deleteComment(id) {
     try {
+        const token = getToken();
+
+        if (!token) {
+            throw new Error('Token not found');
+        };
+
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments/${id}`,
             {
                 method: 'DELETE',
-                credentials: 'include',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
             },
         );
 
@@ -12,7 +22,7 @@ async function deleteComment(id) {
         }
 
         return response;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }

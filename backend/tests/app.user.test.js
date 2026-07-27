@@ -9,6 +9,8 @@ const createFollowRequest = require('./helpers/createFollowRequest');
 const { user1, user2 } = require('./helpers/preMadeUserDetails');
 
 beforeEach(async () => {
+    await prisma.comment.deleteMany({});
+    await prisma.post.deleteMany({});
     await prisma.user.deleteMany({});
 })
 
@@ -28,12 +30,12 @@ describe('API Error routing', () => {
 });
 
 describe('GET /api/users/me', () => {
-    it('should return null if user is not logged in', async () => {
+    it('should return with a 401 error if user is not logged in', async () => {
         const res = await request(app)
             .get('/api/users/me')
-            .expect(200);
+            .expect(401);
         
-        expect(res.body).toEqual(null);
+        expect(res.body).toHaveProperty('message', 'Not Authenticated')
     });
 
     it('should return with user if user is logged in', async () => {
@@ -181,22 +183,14 @@ describe('POST /api/users/login', () => {
         expect(res.body).toHaveProperty('message', 'Invalid username or password')
     });
 
-    it('should return a 200 status with user details for the current logged in user if login is valid', async () => {
+    it('should return a 200 status with success message', async () => {
         const newUser = await createUserOne();
         const res = await request(app)
             .post('/api/users/login')
             .send({ username: 'test1@gmail.com', password: 'test1' })
             .expect(200);
 
-        expect(res.body.data.email).toEqual(newUser.email);
-    });
-});
-
-describe('Post /api/users/logout', () => {
-    it('should return a 204 statement', async () => {
-        const res = await request(app)
-            .post('/api/users/logout')
-            .expect(204);
+        expect(res.body.message).toEqual('Log in successful');
     });
 });
 
@@ -419,7 +413,7 @@ describe('DELETE /api/users/follow/:id', () => {
     it('should return with a 204 status if the follower was deleted', async () => {
         const { agent, user } = await createAgent();
         const newUser = await createUserOne();
-        const follow = await createFollow(newUser.id, user.id);
+        const follow = await createFollow(user.id, newUser.id);
         const res = await agent
             .delete(`/api/users/follow/${newUser.id}`)
             .expect(204);
