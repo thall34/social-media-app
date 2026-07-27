@@ -62,13 +62,11 @@ Before installing, ensure you have the following software installed:
 
 https://social-media-app-frontend-6jg7.onrender.com  
 ### To login as a guest: 
-username: guest@example.com<br> 
-password: 123
+Click the guest login button and it will automatically sign you in with the guest account. You will not be able to edit the user details or delete the user but all other features are available.
 
 ## Future Improvements
 
 <ol>
-<li>Add login as guest button</li>
 <li>Add pagination for posts and users</li>
 <li>Add in place comment creation, editing and deleting or figure out how to get it to navigate back appropriately</li>
 </ol>
