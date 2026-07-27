@@ -12,10 +12,7 @@ const errorHandler = require('../utils/errorHandler');
 const PORT = process.env.PORT || 3000
 
 const app = express();
-require('dotenv/config');
 require('../config/passport');
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(cors({
   origin: process.env.CLIENT_URL,

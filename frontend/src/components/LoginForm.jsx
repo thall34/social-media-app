@@ -23,6 +23,16 @@ function LoginForm({ setError }) {
         };
     };
 
+    async function handleGuestLogin() {
+        try {
+            const token = await authenticateLogin({ username: 'guest@example.com', password: '123' });
+            localStorage.setItem('jwt-token', token);
+            navigate('/user/posts');
+        } catch (err) {
+            setError(err);
+        };
+    };
+
     return (
         <section className='form'>
             <form onSubmit={handleLogin}>
@@ -33,6 +43,7 @@ function LoginForm({ setError }) {
                 <input type="password" name="password" id="password" value={loginData.password} onChange={(e) => handleChange(e, setLoginData)} />
                 <button type="submit">Log In</button>
             </form>
+            <button onClick={handleGuestLogin}>Guest Login</button>
             <Link to='/user/new'>
                 <button>Register New User</button>
             </Link>
