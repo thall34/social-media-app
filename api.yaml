@@ -12,7 +12,7 @@ paths:
   /users/me:
     get:
       summary: Get current user
-      description: Returns current req.user or null
+      description: Returns current req.user
       operationId: getCurrentUser
       responses:
         "200":
@@ -20,10 +20,13 @@ paths:
           content:
             application/json:
               schema:
-
-                allOf:
-                  - $ref: "#/components/schemas/UserFull"
-                nullable: true
+                  $ref: "#/components/schemas/UserFull"
+        "401":
+          description: Failure response - Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureResponse"
         "500":
           description: Failure response - Server or database issues
           content:
@@ -275,38 +278,15 @@ paths:
                     type: string
                     example: "User logged in"
                   data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        format: int32
-                        example: 1
-                      email: 
-                        type: string
-                        example: "janedoe@gmail.com"
-                      passwordHash:
-                        type: string
-                        example: "$2b$10$u77X3ecnfcumbsUJIMRaF.f4b7iYr3MDXUdGEtdSYKMCVEJBozuWS"
+                    type: string
+                    example: "jwt-token"
+                        
         "401":
           description: Failure response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailureResponse"
-        "500":
-          description: Failure response - Server or database issues
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailureResponse"
-  /users/logout:
-    post:
-      summary: logs user out of current passport session
-      description: deletes the session and cookie in the database
-      operationId: logOutUser
-      responses:
-        "204":
-          description: User logged out
         "500":
           description: Failure response - Server or database issues
           content:
