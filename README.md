@@ -42,20 +42,26 @@ Before installing, ensure you have the following software installed:
 3. **Install dependencies and navigate back to your project root**
 ```cd ./frontend -> npm install -> cd ../backend -> npm install -> cd ..```
 4. **Copy .env.example file in backend folder and rename it as a .env file**
-```cp ./backend/.env.example .env ```
+```cp ./backend/.env.example ./backend/.env ```
 5. **Open .env file and configure DATABASE_URL using your role name and password**
 ```code ./backend/.env -> DATABASE_URL=postgresql://<your-role-name>:<your-role-password>@localhost:5432/socialpage?schema=public```
-6. **Configure SESSION_SECRET variable in your .env file**
-```SESSION_SECRET=<your_secret>```
+6. **Configure JWT_SECRET variable in your .env file**
+```JWT_SECRET=<your_secret>```
 7. **Configure cloudinary variables in your .env file**
 ```CLOUDINARY_CLOUD_NAME=<your-cloud-name> CLOUDINARY_API_KEY=<your-api-key> CLOUDINARY_API_SECRET=<your-api-secret>```
-8. **Copy .env.example file in frontend folder and rename it as a .env file**
-```cp ../frontend/.env.example .env ```
-9. **Start the local server**
+8. **To be able to run backend tests, copy the .env file into a .env.test file and update the DATABASE_URL**
+```cp ./backend/.env ./backend/.env.test -> DATABASE_URL=postgresql://<your-role-name>:<your-role-password>@localhost:5432/socialpage-test?schema=public```
+9. **Run Prisma commands to create development database**
+```npx prisma migrate dev && npx prisma db seed```
+10. **Run Prisma commands to create test database**
+```dotenv -e .env.test -- npx prisma migrate dev```
+11. **Copy .env.example file in frontend folder and rename it as a .env file**
+```cp ../frontend/.env.example ./frontend/.env ```
+12. **Start the Node server**
 ```cd backend -> node app.js```
-10. **Start the React server**
+13. **Start the React server**
 ```cd ../frontend -> npm run dev```
-11. **Navigate to the localhost in your browser**
+14. **Navigate to the localhost in your browser**
 ```http://localhost:5173```
 
 ## Live Preview
